@@ -413,17 +413,17 @@ input { font-family: var(--sans); }
       <div class="sources">
         <div class="sources-title">CONNECTED DATA SOURCES</div>
         <div class="sources-list">
-          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">Xpansiv CBL</span></div>
-          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CME NYMEX</span></div>
-          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">ICE Endex</span></div>
-          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CIX Exchange</span></div>
-          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">BeZero Ratings</span></div>
-          <div class="source"><span class="source-dot" style="background:#f59e0b"></span><span class="source-name">Verra Registry</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">Xpansiv CBL</span><span class="tt-text" style="width:240px"><div class="tt-title">Xpansiv CBL</div>Κορυφαίο spot marketplace για voluntary carbon credits. 330M+ credits traded. San Francisco, USA.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CME NYMEX</span><span class="tt-text" style="width:240px"><div class="tt-title">CME NYMEX</div>Chicago Mercantile Exchange. Derivatives για carbon και energy markets. Παγκόσμιο benchmark.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">ICE Endex</span><span class="tt-text" style="width:240px"><div class="tt-title">ICE Endex</div>Intercontinental Exchange. Μεγαλύτερο derivatives market για EU ETS allowances (EUA). 20.9M contracts (2025).</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CIX Exchange</span><span class="tt-text" style="width:240px"><div class="tt-title">Climate Impact X</div>Singapore-based exchange. JV: DBS, SGX, Standard Chartered, Temasek. Εστίαση σε ΝΑ Ασία.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">BeZero Ratings</span><span class="tt-text" style="width:240px"><div class="tt-title">BeZero Carbon</div>Ανεξάρτητος οίκος αξιολόγησης carbon credits (A-D rating). Σαν Moody's/S&P για carbon.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:#f59e0b"></span><span class="source-name">Verra Registry</span><span class="tt-text" style="width:240px"><div class="tt-title">Verra VCS Registry</div>Το μεγαλύτερο registry πιστοποίησης (~80% αγοράς). Εκδίδει VCUs. Κίτρινο = delayed feed.</span></div>
         </div>
       </div>
     </div>
     <div class="mkt-right">
-      <div class="ob-header"><div class="ob-title">Order Book</div><div class="ob-sub" id="obSub"></div></div>
+      <div class="ob-header tt"><div class="ob-title">Order Book</div><div class="ob-sub" id="obSub"></div><span class="tt-text"><div class="tt-title">Order Book</div>Αριστερά: Bids (αγοραστές) — πόσα θέλουν να αγοράσουν και σε ποια τιμή. Δεξιά: Asks (πωλητές). Η διαφορά bid-ask είναι το spread.</span></div>
       <div id="orderBook" style="padding:6px 4px"></div>
       <div class="news-header"><span class="news-title">Market Intel</span><span class="pulse-dot" style="--c:#f59e0b"></span></div>
       <div id="newsFeed"></div>
@@ -1039,12 +1039,17 @@ function renderTicker() {
 function renderInstrumentList() {
   const list = document.getElementById('instrumentList');
   const filtered = mktFilter==='all'?liveData:liveData.filter(d=>d.type===mktFilter);
+  const instTypeTips = {
+    "Voluntary":"<div class='tt-title'>Voluntary Market</div>\u0395\u03B8\u03B5\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC carbon credits. \u0395\u03C4\u03B1\u03B9\u03C1\u03B5\u03AF\u03B5\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC\u03B6\u03BF\u03C5\u03BD \u03B3\u03B9\u03B1 ESG/Net-Zero \u03C3\u03C4\u03CC\u03C7\u03BF\u03C5\u03C2. \u03A7\u03B1\u03BC\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B5\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2 \u03B1\u03C0\u03CC compliance.",
+    "Compliance":"<div class='tt-title'>Compliance Market</div>\u03A5\u03C0\u03BF\u03C7\u03C1\u03B5\u03C9\u03C4\u03B9\u03BA\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC. EU ETS, UK ETS, California. \u039D\u03BF\u03BC\u03B9\u03BA\u03AC \u03B4\u03B5\u03C3\u03BC\u03B5\u03C5\u03C4\u03B9\u03BA\u03CC, \u03C5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B5\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2 (~\u20AC100/t).",
+    "Spot VCM":"<div class='tt-title'>Spot VCM</div>\u0386\u03BC\u03B5\u03C3\u03B7 \u03B1\u03B3\u03BF\u03C1\u03B1\u03C0\u03C9\u03BB\u03B7\u03C3\u03AF\u03B1 credits \u03C3\u03C4\u03B7\u03BD \u03B5\u03B8\u03B5\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC (CBL Spot). \u0391\u03C5\u03C4\u03AD\u03C2 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03BF\u03B9 \u03C4\u03B9\u03BC\u03AD\u03C2 \u03C0\u03BF\u03C5 \u03B1\u03BD\u03C4\u03B1\u03B3\u03C9\u03BD\u03B9\u03B6\u03CC\u03BC\u03B1\u03C3\u03C4\u03B5.",
+    "Aviation":"<div class='tt-title'>Aviation (CORSIA)</div>Carbon credits \u03B3\u03B9\u03B1 \u03B1\u03B5\u03C1\u03BF\u03C0\u03BF\u03C1\u03AF\u03B1. \u03A5\u03C0\u03BF\u03C7\u03C1\u03B5\u03C9\u03C4\u03B9\u03BA\u03AE \u03C6\u03AC\u03C3\u03B7 \u03B1\u03C0\u03CC 2027."
+  };
   list.innerHTML = filtered.map(d=>{
     const up = d.ch>=0;
     const sel = d.sym===selectedInst;
     const typeBg = d.type==='Compliance'?'#dbeafe':d.type==='Aviation'?'#e0e7ff':'#dcfce7';
     const typeCol = d.type==='Compliance'?'#1e40af':d.type==='Aviation'?'#4338ca':'#15803d';
-    // sparkline
     const hist = d.hist;
     const mn=Math.min(...hist),mx=Math.max(...hist),rng=mx-mn||1;
     const pts=hist.map((v,i)=>`${(i/(hist.length-1))*320},${28-((v-mn)/rng)*24}`).join(' ');
@@ -1056,7 +1061,7 @@ function renderInstrumentList() {
           <div style="display:flex;align-items:center;gap:6px">
             <span class="inst-dot" style="background:${d.color}"></span>
             <span class="inst-sym">${d.sym}</span>
-            <span class="inst-type" style="background:${typeBg};color:${typeCol}">${d.type}</span>
+            <span class="inst-type tt" style="background:${typeBg};color:${typeCol}">${d.type}<span class="tt-text" style="width:240px">${instTypeTips[d.type]||''}</span></span>
           </div>
           <div class="inst-name">${d.name}</div>
         </div>
@@ -1102,10 +1107,16 @@ function renderMarketCenter() {
   candles.forEach((c,i)=>{const x=i*(cw+g)+g/2,bt=tY(Math.max(c.o,c.cl)),bb=tY(Math.min(c.o,c.cl)),bh=Math.max(bb-bt,1),col=c.up?'#22c55e':'#ef4444';svg+=`<line x1="${x+cw/2}" y1="${tY(c.h)}" x2="${x+cw/2}" y2="${tY(c.l)}" stroke="${col}" stroke-width="1"/><rect x="${x}" y="${bt}" width="${cw}" height="${bh}" rx="1" fill="${col}" opacity=".85"/>`;});
   document.getElementById('candleChart').innerHTML = svg;
 
-  // Stats
+  // Stats with tooltips
+  var statTips = {
+    "24h Volume":"<div class='tt-title'>24h Volume</div>\u039F\u03B3\u03BA\u03BF\u03C2 \u03C3\u03C5\u03BD\u03B1\u03BB\u03BB\u03B1\u03B3\u03CE\u03BD \u03C3\u03B5 \u03C4\u03CC\u03BD\u03BF\u03C5\u03C2 CO\u2082 \u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2. \u03A5\u03C8\u03B7\u03BB\u03CC volume = \u03C5\u03B3\u03B9\u03AE\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC \u03BC\u03B5 \u03C1\u03B5\u03C5\u03C3\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1.",
+    "24h High":"<div class='tt-title'>24h High</div>\u0397 \u03C5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE \u03C3\u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2. \u0394\u03B5\u03AF\u03C7\u03BD\u03B5\u03B9 \u03C4\u03B7\u03BD \u03BA\u03BF\u03C1\u03C5\u03C6\u03AE \u03B6\u03AE\u03C4\u03B7\u03C3\u03B7\u03C2.",
+    "24h Low":"<div class='tt-title'>24h Low</div>\u0397 \u03C7\u03B1\u03BC\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE \u03C3\u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2. \u039A\u03B1\u03BB\u03AE \u03C4\u03B9\u03BC\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC\u03C2.",
+    "Spread":"<div class='tt-title'>Spread</div>\u0394\u03B9\u03B1\u03C6\u03BF\u03C1\u03AC \u03BC\u03B5\u03C4\u03B1\u03BE\u03CD \u03C4\u03B9\u03BC\u03AE\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC\u03C2 (bid) \u03BA\u03B1\u03B9 \u03C0\u03CE\u03BB\u03B7\u03C3\u03B7\u03C2 (ask). \u039C\u03B9\u03BA\u03C1\u03CC\u03C4\u03B5\u03C1\u03BF spread = \u03C0\u03B9\u03BF \u03C1\u03B5\u03C5\u03C3\u03C4\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC."
+  };
   document.getElementById('mktStats').innerHTML = [
     {l:"24h Volume",v:d.vol.toLocaleString()+' t'},{l:"24h High",v:'$'+d.hi.toFixed(2)},{l:"24h Low",v:'$'+d.lo.toFixed(2)},{l:"Spread",v:'$0.10'}
-  ].map(s=>`<div class="mkt-stat"><div class="mkt-stat-label">${s.l}</div><div class="mkt-stat-value">${s.v}</div></div>`).join('');
+  ].map(s=>`<div class="mkt-stat tt"><div class="mkt-stat-label">${s.l}</div><div class="mkt-stat-value">${s.v}</div><span class="tt-text">${statTips[s.l]||''}</span></div>`).join('');
 }
 
 function renderOrderBook() {
