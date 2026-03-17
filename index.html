@@ -231,11 +231,67 @@ input { font-family: var(--sans); }
 .news-tag { font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
 .news-text { font-size: 14px; color: var(--gray-700); line-height: 1.4; }
 
+/* ═══ FLEET MONITOR ═══ */
+.fleet-wrap { display: flex; gap: 0; height: calc(100vh - 124px); }
+.fleet-sidebar { width: 320px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--gray-200); overflow-y: auto; }
+.fleet-sidebar-header { padding: 20px; border-bottom: 1px solid var(--gray-100); }
+.fleet-sidebar-title { font-size: 18px; font-weight: 700; color: var(--green-900); }
+.fleet-sidebar-sub { font-size: 13px; color: var(--gray-400); margin-top: 2px; }
+.owner-item { padding: 16px 20px; cursor: pointer; border-bottom: 1px solid #fafafa; border-left: 4px solid transparent; transition: all .15s; }
+.owner-item:hover { background: var(--green-50); }
+.owner-item.active { background: var(--green-50); border-left-color: var(--green-500); }
+.owner-name { font-size: 15px; font-weight: 700; color: var(--green-900); }
+.owner-meta { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+.owner-stats-row { display: flex; gap: 12px; margin-top: 8px; }
+.owner-stat-mini { font-size: 12px; font-family: var(--mono); padding: 3px 8px; border-radius: 6px; background: var(--gray-50); color: var(--gray-600); }
+.fleet-main { flex: 1; overflow-y: auto; padding: 28px 36px; background: var(--gray-50); }
+.fleet-owner-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.fleet-owner-title { font-size: 28px; font-weight: 800; color: var(--green-900); }
+.fleet-owner-sub { font-size: 15px; color: var(--gray-500); margin-top: 4px; }
+.fleet-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+.fleet-stat-card { background: #fff; border-radius: 14px; padding: 18px 20px; border: 1px solid var(--gray-200); }
+.fleet-stat-label { font-size: 11px; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.fleet-stat-value { font-size: 24px; font-weight: 800; color: var(--green-900); font-family: var(--mono); margin-top: 4px; line-height: 1; }
+.fleet-stat-sub { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+.fleet-stat-card.alert { border-color: #fca5a5; background: #fef2f2; }
+.fleet-stat-card.alert .fleet-stat-value { color: #dc2626; }
+.fleet-stat-card.good { border-color: #86efac; background: #f0fdf4; }
+.fleet-stat-card.good .fleet-stat-value { color: var(--green-700); }
+.vessel-table { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 16px; border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 24px; }
+.vessel-table th { padding: 14px 16px; text-align: left; font-size: 12px; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); }
+.vessel-table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid var(--gray-100); }
+.vessel-table tr:last-child td { border-bottom: none; }
+.vessel-table tr:hover td { background: var(--green-50); }
+.vessel-name { font-weight: 700; color: var(--green-900); font-size: 15px; }
+.vessel-imo { font-family: var(--mono); font-size: 12px; color: var(--gray-400); }
+.route-badge { font-size: 12px; padding: 3px 10px; border-radius: 6px; font-weight: 600; }
+.route-eu { background: #dbeafe; color: #1e40af; }
+.route-intl { background: #f3e8ff; color: #6b21a8; }
+.route-asia { background: #fef3c7; color: #92400e; }
+.compliance-badge { font-size: 12px; padding: 4px 12px; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+.compliance-covered { background: #d1fae5; color: #047857; }
+.compliance-partial { background: #fef3c7; color: #92400e; }
+.compliance-gap { background: #fee2e2; color: #991b1b; }
+.fleet-action-row { display: flex; gap: 14px; margin-bottom: 24px; }
+.fleet-action-card { flex: 1; background: #fff; border-radius: 14px; padding: 20px; border: 1px solid var(--gray-200); transition: all .2s; cursor: pointer; }
+.fleet-action-card:hover { border-color: var(--green-400); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34,197,94,.1); }
+.fleet-action-icon { font-size: 28px; margin-bottom: 8px; }
+.fleet-action-title { font-size: 16px; font-weight: 700; color: var(--green-900); }
+.fleet-action-desc { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+.emission-bar-wrap { width: 100%; height: 8px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
+.emission-bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; }
+.fleet-section-title { font-size: 20px; font-weight: 800; color: var(--green-900); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.yearly-chart-row { display: flex; align-items: flex-end; gap: 6px; height: 100px; padding: 0 4px; }
+.yearly-bar { flex: 1; border-radius: 4px 4px 0 0; transition: height .6s ease; position: relative; min-width: 20px; }
+.yearly-bar-label { font-size: 10px; color: var(--gray-400); text-align: center; margin-top: 4px; font-weight: 600; }
+.yearly-bar:hover .bar-tooltip { display: block; }
+.bar-tooltip { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--green-900); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; font-family: var(--mono); margin-bottom: 4px; }
+
 /* Responsive */
 @media (max-width: 1024px) {
   .stats-grid, .invest-grid { grid-template-columns: 1fr 1fr; }
   .credits-grid { grid-template-columns: 1fr; }
-  .mkt-left, .mkt-right { display: none; }
+  .mkt-left, .mkt-right, .fleet-sidebar { display: none; }
   .nav-btn span.hide-mobile { display: none; }
 }
 </style>
@@ -255,6 +311,7 @@ input { font-family: var(--sans); }
     <button class="nav-btn active" data-section="marketplace" onclick="switchSection('marketplace')">🛒 <span class="hide-mobile">Marketplace</span></button>
     <button class="nav-btn" data-section="invest" onclick="switchSection('invest')">📈 <span class="hide-mobile">Invest</span></button>
     <button class="nav-btn" data-section="markets" onclick="switchSection('markets')">◉ <span class="hide-mobile">Live Markets</span></button>
+    <button class="nav-btn" data-section="fleet" onclick="switchSection('fleet')">🚢 <span class="hide-mobile">Fleet Monitor</span></button>
     <button class="nav-btn" data-section="guide" onclick="switchSection('guide')">📚 <span class="hide-mobile">Guide</span></button>
   </nav>
   <div class="header-right">
@@ -361,6 +418,29 @@ input { font-family: var(--sans); }
       <div id="orderBook" style="padding:6px 4px"></div>
       <div class="news-header"><span class="news-title">Market Intel</span><span class="pulse-dot" style="--c:#f59e0b"></span></div>
       <div id="newsFeed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 5: FLEET MONITOR ═══ -->
+<div class="section-flex" id="sec-fleet">
+  <div class="fleet-wrap">
+    <div class="fleet-sidebar">
+      <div class="fleet-sidebar-header">
+        <div class="fleet-sidebar-title">🚢 Shipowners</div>
+        <div class="fleet-sidebar-sub">Select owner to view fleet</div>
+        <div style="margin-top:10px">
+          <input type="text" id="ownerSearch" placeholder="Search owner..." oninput="renderOwnerList()" style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--gray-200);font-size:14px;outline:none;font-family:var(--sans);color:var(--green-900)">
+        </div>
+      </div>
+      <div id="ownerList"></div>
+    </div>
+    <div class="fleet-main" id="fleetMain">
+      <div style="text-align:center;padding:80px 40px;color:var(--gray-400)">
+        <div style="font-size:64px;margin-bottom:16px">🚢</div>
+        <div style="font-size:22px;font-weight:700;color:var(--green-900);margin-bottom:8px">Fleet Emissions Monitor</div>
+        <div style="font-size:16px;line-height:1.6;max-width:500px;margin:0 auto">Επιλέξτε πλοιοκτήτη για να δείτε αναλυτικά: εκπομπές ανά πλοίο, compliance status, κόστος EU ETS/IMO και carbon credit requirements.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -493,7 +573,7 @@ why: `
 
 platform: `
 <div style="font-size:32px;font-weight:800;color:var(--green-900);margin-bottom:24px">💻 Η Πλατφόρμα GreenCreditX</div>
-<div style="font-size:17px;color:#555;margin-bottom:28px;line-height:1.6">Η πλατφόρμα έχει <strong>τρία βασικά sections</strong> + αυτόν τον οδηγό:</div>
+<div style="font-size:17px;color:#555;margin-bottom:28px;line-height:1.6">Η πλατφόρμα έχει <strong>τέσσερα βασικά sections</strong> + αυτόν τον οδηγό:</div>
 <div style="display:grid;gap:20px">
   <div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;padding:28px">
     <div style="font-size:22px;font-weight:700;color:var(--green-900);margin-bottom:12px">🛒 Marketplace — Αγορά Credits</div>
@@ -1028,6 +1108,227 @@ function tickLiveData() {
 // ═══════════════════════════════════════════════
 // ANIMATED STATS
 // ═══════════════════════════════════════════════
+// FLEET MONITOR DATA
+// ═══════════════════════════════════════════════
+const VESSEL_TYPES = ['Bulk Carrier','Container','Tanker','LNG Carrier','RoRo','General Cargo'];
+const ROUTES_POOL = [
+  {name:'Piraeus → Rotterdam',type:'EU',region:'eu',nm:3100},
+  {name:'Singapore → Piraeus',type:'INTL',region:'intl',nm:6200},
+  {name:'Shanghai → Hamburg',type:'INTL',region:'intl',nm:10500},
+  {name:'Rotterdam → Antwerp',type:'EU',region:'eu',nm:180},
+  {name:'Jeddah → Piraeus',type:'INTL',region:'intl',nm:1500},
+  {name:'Mumbai → Singapore',type:'ASIA',region:'asia',nm:2800},
+  {name:'Busan → Los Angeles',type:'INTL',region:'intl',nm:5500},
+  {name:'Barcelona → Genoa',type:'EU',region:'eu',nm:450},
+  {name:'Houston → Rotterdam',type:'INTL',region:'intl',nm:5000},
+  {name:'Durban → Shanghai',type:'INTL',region:'intl',nm:7200},
+  {name:'Manila → Yokohama',type:'ASIA',region:'asia',nm:1800},
+  {name:'Santos → Algeciras',type:'INTL',region:'intl',nm:5200},
+];
+const VESSEL_NAMES_POOL = ['Olympia','Athena','Poseidon','Aegean Star','Hera','Artemis','Helios','Kronos','Electra','Thetis','Orion','Calypso','Triton','Andromeda','Phoenix','Pegasus','Atlas','Nereus','Delphi','Koronis','Sparta','Mykonos','Ithaca','Rhodes','Naxos','Lesvos','Samos','Chios','Crete','Patmos'];
+
+function generateFleet(count, ownerIdx) {
+  const vessels = [];
+  for(let i=0; i<count; i++) {
+    const type = VESSEL_TYPES[Math.floor(Math.random()*VESSEL_TYPES.length)];
+    const gt = type==='Container'?Math.floor(Math.random()*60000)+30000:type==='Tanker'?Math.floor(Math.random()*80000)+20000:type==='LNG Carrier'?Math.floor(Math.random()*40000)+70000:Math.floor(Math.random()*40000)+15000;
+    const route = ROUTES_POOL[Math.floor(Math.random()*ROUTES_POOL.length)];
+    const annualEmissions = Math.floor(gt*0.35 + Math.random()*15000);
+    const euPct = route.region==='eu'?1:route.region==='intl'?0.4+Math.random()*0.2:0;
+    const euEmissions = Math.floor(annualEmissions*euPct);
+    const creditsOwned = Math.floor(euEmissions*(0.3+Math.random()*0.6));
+    const nameIdx = (ownerIdx*7+i*3)%VESSEL_NAMES_POOL.length;
+    vessels.push({
+      name: 'M/V '+VESSEL_NAMES_POOL[nameIdx],
+      imo: '9'+(300000+ownerIdx*1000+i*73).toString(),
+      type, gt, route,
+      annualEmissions, euEmissions, creditsOwned,
+      gap: Math.max(0, euEmissions - creditsOwned),
+      voyages: Math.floor(Math.random()*8)+4,
+      cii: ['A','B','B','C','C','D'][Math.floor(Math.random()*6)],
+      status: Math.random()>0.15?'Active':'In Port',
+      monthlyEmissions: Array.from({length:12},()=>Math.floor(annualEmissions/12*(0.7+Math.random()*0.6)))
+    });
+  }
+  return vessels;
+}
+
+const SHIPOWNERS = [
+  {name:'Olympia Maritime Corp.',hq:'Piraeus, Greece',vessels:generateFleet(8,0),contact:'operations@olympia-maritime.gr',flag:'🇬🇷'},
+  {name:'Aegean Bulk Carriers',hq:'Athens, Greece',vessels:generateFleet(6,1),contact:'fleet@aegeanbulk.com',flag:'🇬🇷'},
+  {name:'Poseidon Tankers Ltd.',hq:'Limassol, Cyprus',vessels:generateFleet(5,2),contact:'compliance@poseidontankers.cy',flag:'🇨🇾'},
+  {name:'Hellenic Star Shipping',hq:'Piraeus, Greece',vessels:generateFleet(7,3),contact:'carbon@hellenicstar.gr',flag:'🇬🇷'},
+  {name:'Atlas Navigation SA',hq:'Monaco',vessels:generateFleet(4,4),contact:'ops@atlasnav.mc',flag:'🇲🇨'},
+  {name:'Mediterranean Lines',hq:'Genoa, Italy',vessels:generateFleet(6,5),contact:'ets@medlines.it',flag:'🇮🇹'},
+  {name:'Black Sea Shipping',hq:'Istanbul, Turkey',vessels:generateFleet(5,6),contact:'fleet@bsshipping.com.tr',flag:'🇹🇷'},
+  {name:'Nordic Transport AS',hq:'Oslo, Norway',vessels:generateFleet(4,7),contact:'green@nordictransport.no',flag:'🇳🇴'},
+  {name:'Eastern Pacific Maritime',hq:'Singapore',vessels:generateFleet(9,8),contact:'carbon@epm.sg',flag:'🇸🇬'},
+  {name:'Caspian Shipping Group',hq:'Dubai, UAE',vessels:generateFleet(3,9),contact:'ops@caspiangp.ae',flag:'🇦🇪'},
+  {name:'Ionic Carriers SA',hq:'Piraeus, Greece',vessels:generateFleet(5,10),contact:'ets@ioniccarriers.gr',flag:'🇬🇷'},
+  {name:'Pacific Horizon Ltd.',hq:'Hong Kong',vessels:generateFleet(7,11),contact:'fleet@pacifichorizon.hk',flag:'🇭🇰'},
+  {name:'Adriatic Bulk SpA',hq:'Naples, Italy',vessels:generateFleet(4,12),contact:'carbon@adriaticbulk.it',flag:'🇮🇹'},
+  {name:'Thessaloniki Maritime',hq:'Thessaloniki, Greece',vessels:generateFleet(6,13),contact:'ops@thesmar.gr',flag:'🇬🇷'},
+  {name:'Golden Eagle Tankers',hq:'London, UK',vessels:generateFleet(5,14),contact:'compliance@goldeneagle.co.uk',flag:'🇬🇧'},
+  {name:'Bosphorus Carriers',hq:'Istanbul, Turkey',vessels:generateFleet(4,15),contact:'fleet@bosphorus-carriers.tr',flag:'🇹🇷'},
+  {name:'Liberian Star Corp.',hq:'Monrovia, Liberia',vessels:generateFleet(6,16),contact:'ops@liberianstar.lr',flag:'🇱🇷'},
+  {name:'Suez Canal Shipping',hq:'Alexandria, Egypt',vessels:generateFleet(3,17),contact:'carbon@suezshipping.eg',flag:'🇪🇬'},
+  {name:'Maldive Ocean Lines',hq:'Malé, Maldives',vessels:generateFleet(2,18),contact:'ops@maldiveocean.mv',flag:'🇲🇻'},
+  {name:'Baltic Dry Partners',hq:'Copenhagen, Denmark',vessels:generateFleet(5,19),contact:'ets@balticdry.dk',flag:'🇩🇰'},
+  {name:'Corinthian Shipping SA',hq:'Piraeus, Greece',vessels:generateFleet(4,20),contact:'fleet@corinthianship.gr',flag:'🇬🇷'},
+  {name:'Strait Maritime LLC',hq:'Dubai, UAE',vessels:generateFleet(3,21),contact:'ops@straitmaritime.ae',flag:'🇦🇪'},
+  {name:'Oceanic Ventures Ltd.',hq:'Bermuda',vessels:generateFleet(5,22),contact:'carbon@oceanicventures.bm',flag:'🇧🇲'},
+];
+
+let selectedOwner = null;
+
+function renderOwnerList() {
+  const search = (document.getElementById('ownerSearch')?.value||'').toLowerCase();
+  const list = document.getElementById('ownerList');
+  const filtered = SHIPOWNERS.filter(o=>o.name.toLowerCase().includes(search)||o.hq.toLowerCase().includes(search));
+  var html = '';
+  for(var i=0;i<filtered.length;i++){
+    var o = filtered[i];
+    var totalE = o.vessels.reduce(function(s,v){return s+v.annualEmissions;},0);
+    var totalGap = o.vessels.reduce(function(s,v){return s+v.gap;},0);
+    var isActive = selectedOwner===o.name;
+    var gapStyle = totalGap>0?'background:#fee2e2;color:#991b1b':'background:#d1fae5;color:#047857';
+    var gapText = totalGap>0?'Gap: '+(totalGap/1000).toFixed(1)+'K':'✓ Covered';
+    html += '<div class="owner-item'+(isActive?' active':'')+'" onclick="selectOwner(\''+o.name.replace(/'/g,"\\'")+'\')">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center"><div class="owner-name">'+o.flag+' '+o.name+'</div></div>'
+      +'<div class="owner-meta">'+o.hq+' · '+o.vessels.length+' vessels</div>'
+      +'<div class="owner-stats-row">'
+      +'<span class="owner-stat-mini">'+(totalE/1000).toFixed(0)+'K tCO₂</span>'
+      +'<span class="owner-stat-mini" style="'+gapStyle+'">'+gapText+'</span>'
+      +'</div></div>';
+  }
+  list.innerHTML = html;
+}
+
+function selectOwner(name) {
+  selectedOwner = name;
+  renderOwnerList();
+  renderFleetMain();
+}
+
+function renderFleetMain() {
+  const owner = SHIPOWNERS.find(o=>o.name===selectedOwner);
+  if(!owner) return;
+  const main = document.getElementById('fleetMain');
+  const v = owner.vessels;
+  const totalEmissions = v.reduce((s,x)=>s+x.annualEmissions,0);
+  const totalEU = v.reduce((s,x)=>s+x.euEmissions,0);
+  const totalCredits = v.reduce((s,x)=>s+x.creditsOwned,0);
+  const totalGap = v.reduce((s,x)=>s+x.gap,0);
+  const euCost = Math.round(totalEU*100);
+  const imoCost = Math.round(totalEmissions*380);
+  const ourCost = Math.round(totalGap*22);
+  const savings = Math.round(totalGap*100) - ourCost;
+  const coveragePct = totalEU>0?Math.round(totalCredits/totalEU*100):0;
+  const MONTHS = ['Ιαν','Φεβ','Μαρ','Απρ','Μαϊ','Ιουν','Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'];
+  const monthly = Array(12).fill(0);
+  v.forEach(function(vessel){vessel.monthlyEmissions.forEach(function(e,mi){monthly[mi]+=e;});});
+  const maxMonth = Math.max.apply(null, monthly);
+
+  const coverClass = coveragePct>=90?'good':coveragePct>=50?'':'alert';
+  const gapClass2 = totalGap>0?'alert':'good';
+  const gapVal = totalGap>0?(totalGap/1000).toFixed(1)+'K':'✓ 0';
+  const gapSub = totalGap>0?'Credits needed':'Fully covered';
+  const yr = new Date().getFullYear();
+
+  // Build monthly chart
+  var chartBars = '';
+  for(var mi=0;mi<12;mi++){
+    var h = maxMonth>0?Math.max(4, Math.round(monthly[mi]/maxMonth*90)):4;
+    chartBars += '<div style="flex:1;text-align:center"><div class="yearly-bar" style="height:'+h+'px;background:linear-gradient(180deg,var(--green-400),var(--green-600));margin:0 auto;width:80%"><div class="bar-tooltip">'+(monthly[mi]/1000).toFixed(1)+'K tCO₂</div></div><div class="yearly-bar-label">'+MONTHS[mi]+'</div></div>';
+  }
+
+  // Build vessel rows
+  var sorted = v.slice().sort(function(a,b){return b.gap-a.gap;});
+  var vesselRows = '';
+  for(var vi=0;vi<sorted.length;vi++){
+    var vessel = sorted[vi];
+    var gc = vessel.gap===0?'compliance-covered':vessel.gap<vessel.euEmissions*0.3?'compliance-partial':'compliance-gap';
+    var gl = vessel.gap===0?'✓ Covered':vessel.gap<vessel.euEmissions*0.3?'Partial':'Gap';
+    var cc = vessel.cii==='A'?'#047857':vessel.cii==='B'?'#16a34a':vessel.cii==='C'?'#f59e0b':'#dc2626';
+    var rc = vessel.route.region==='eu'?'route-eu':vessel.route.region==='asia'?'route-asia':'route-intl';
+    var ep = vessel.annualEmissions>0?Math.round(vessel.euEmissions/vessel.annualEmissions*100):0;
+    var stColor = vessel.status==='Active'?'var(--green-600)':'var(--gray-400)';
+    var stDot = vessel.status==='Active'?'var(--green-500)':'var(--gray-300)';
+    var gapText = vessel.gap>0?' · '+vessel.gap.toLocaleString()+' t':'';
+    vesselRows += '<tr>'
+      +'<td><div class="vessel-name">'+vessel.name+'</div><div class="vessel-imo">IMO '+vessel.imo+'</div></td>'
+      +'<td><div style="font-weight:600;font-size:13px">'+vessel.type+'</div><div style="font-family:var(--mono);font-size:12px;color:var(--gray-400)">'+vessel.gt.toLocaleString()+' GT</div></td>'
+      +'<td><span class="route-badge '+rc+'">'+vessel.route.type+'</span><div style="font-size:12px;color:var(--gray-500);margin-top:2px">'+vessel.route.name+'</div></td>'
+      +'<td><div style="font-family:var(--mono);font-weight:700;font-size:15px">'+vessel.annualEmissions.toLocaleString()+'</div><div style="margin-top:4px"><div class="emission-bar-wrap"><div class="emission-bar-fill" style="width:'+ep+'%;background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div><div style="font-size:11px;color:var(--gray-400);margin-top:2px">'+ep+'% EU scope</div></td>'
+      +'<td style="font-family:var(--mono);font-weight:700;color:#1e40af">'+vessel.euEmissions.toLocaleString()+'</td>'
+      +'<td style="font-family:var(--mono);font-weight:600;color:var(--green-700)">'+vessel.creditsOwned.toLocaleString()+'</td>'
+      +'<td><span class="compliance-badge '+gc+'">'+gl+gapText+'</span></td>'
+      +'<td><span style="font-weight:800;font-size:16px;color:'+cc+'">'+vessel.cii+'</span></td>'
+      +'<td><span style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:'+stColor+'"><span style="width:7px;height:7px;border-radius:50%;background:'+stDot+'"></span>'+vessel.status+'</span></td>'
+      +'</tr>';
+  }
+
+  // Stats counts
+  var gt5k = v.filter(function(x){return x.gt>5000;}).length;
+  var ciiAB = v.filter(function(x){return x.cii==='A'||x.cii==='B';}).length;
+  var ciiD = v.filter(function(x){return x.cii==='D';}).length;
+  var activeV = v.filter(function(x){return x.status==='Active';}).length;
+  var covColor = coveragePct>=80?'var(--green-700)':'#dc2626';
+  var covBar = coveragePct>=80?'linear-gradient(90deg,var(--green-400),var(--green-500))':'linear-gradient(90deg,#f87171,#dc2626)';
+  var covW = Math.min(100,coveragePct);
+
+  main.innerHTML = ''
+    +'<div class="fleet-owner-header"><div>'
+    +'<div class="fleet-owner-title">'+owner.flag+' '+owner.name+'</div>'
+    +'<div class="fleet-owner-sub">'+owner.hq+' · '+v.length+' vessels · '+owner.contact+'</div>'
+    +'</div><div style="display:flex;gap:10px">'
+    +'<button class="buy-btn" onclick="switchSection(\'marketplace\')" style="font-size:14px;padding:10px 20px">🛒 Buy Credits</button>'
+    +'<button style="padding:10px 20px;border-radius:12px;border:1px solid var(--green-500);background:var(--green-50);color:var(--green-700);font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">📄 Export Report</button>'
+    +'</div></div>'
+
+    +'<div class="fleet-stats">'
+    +'<div class="fleet-stat-card"><div class="fleet-stat-label">Total Emissions</div><div class="fleet-stat-value">'+(totalEmissions/1000).toFixed(1)+'K</div><div class="fleet-stat-sub">tCO₂e / year</div></div>'
+    +'<div class="fleet-stat-card"><div class="fleet-stat-label">EU ETS Scope</div><div class="fleet-stat-value">'+(totalEU/1000).toFixed(1)+'K</div><div class="fleet-stat-sub">tCO₂e under EU ETS</div></div>'
+    +'<div class="fleet-stat-card '+coverClass+'"><div class="fleet-stat-label">Coverage</div><div class="fleet-stat-value">'+coveragePct+'%</div><div class="fleet-stat-sub">'+totalCredits.toLocaleString()+' credits owned</div></div>'
+    +'<div class="fleet-stat-card '+gapClass2+'"><div class="fleet-stat-label">Credit Gap</div><div class="fleet-stat-value">'+gapVal+'</div><div class="fleet-stat-sub">'+gapSub+'</div></div>'
+    +'<div class="fleet-stat-card"><div class="fleet-stat-label">EU ETS Cost</div><div class="fleet-stat-value">€'+(euCost/1e6).toFixed(1)+'M</div><div class="fleet-stat-sub">@€100/t (spot)</div></div>'
+    +'</div>'
+
+    +'<div class="fleet-action-row">'
+    +'<div class="fleet-action-card" onclick="switchSection(\'marketplace\')"><div class="fleet-action-icon">🛒</div><div class="fleet-action-title">Buy '+totalGap.toLocaleString()+' Credits</div><div class="fleet-action-desc">Cover gap via GreenCreditX @ ~$22/t → save €'+(savings/1e6).toFixed(1)+'M vs EU ETS spot</div></div>'
+    +'<div class="fleet-action-card"><div class="fleet-action-icon">📋</div><div class="fleet-action-title">Pre-Purchase Agreement</div><div class="fleet-action-desc">Lock in '+(yr+1)+'-'+(yr+3)+' supply at fixed price — long-term savings</div></div>'
+    +'<div class="fleet-action-card" onclick="switchSection(\'invest\')"><div class="fleet-action-icon">🌳</div><div class="fleet-action-title">Invest in Production</div><div class="fleet-action-desc">Produce own credits at $8-12/t — maximum savings for '+owner.name+'</div></div>'
+    +'</div>'
+
+    +'<div class="fleet-section-title">📊 Monthly Emissions ('+yr+')</div>'
+    +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px;margin-bottom:24px"><div class="yearly-chart-row">'+chartBars+'</div></div>'
+
+    +'<div class="fleet-section-title">🚢 Vessel Details</div>'
+    +'<table class="vessel-table"><thead><tr><th>Vessel</th><th>Type / GT</th><th>Route</th><th>Annual tCO₂</th><th>EU ETS tCO₂</th><th>Credits</th><th>Gap</th><th>CII</th><th>Status</th></tr></thead><tbody>'+vesselRows+'</tbody></table>'
+
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px">'
+    +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">'
+    +'<div class="fleet-section-title" style="margin-bottom:10px">💰 Cost Comparison (Annual)</div>'
+    +'<div style="display:flex;flex-direction:column;gap:10px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fef2f2;border-radius:10px;border:1px solid #fca5a5"><span style="font-size:14px;font-weight:600;color:#991b1b">EU ETS Spot (€100/t)</span><span style="font-family:var(--mono);font-weight:800;font-size:18px;color:#dc2626">€'+(euCost/1e6).toFixed(2)+'M</span></div>'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fef3c7;border-radius:10px;border:1px solid #fde68a"><span style="font-size:14px;font-weight:600;color:#92400e">IMO 2027+ ($380/t)</span><span style="font-family:var(--mono);font-weight:800;font-size:18px;color:#b45309">$'+(imoCost/1e6).toFixed(2)+'M</span></div>'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--green-50);border-radius:10px;border:1px solid var(--green-200)"><span style="font-size:14px;font-weight:600;color:var(--green-700)">GreenCreditX ($22/t)</span><span style="font-family:var(--mono);font-weight:800;font-size:18px;color:var(--green-700)">$'+(ourCost/1e3).toFixed(0)+'K</span></div>'
+    +'<div style="text-align:center;padding:10px;background:linear-gradient(135deg,var(--green-50),#ecfdf5);border-radius:10px"><span style="font-size:18px;font-weight:800;color:var(--green-700)">Savings: €'+(savings/1e6).toFixed(1)+'M vs EU ETS</span></div>'
+    +'</div></div>'
+
+    +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">'
+    +'<div class="fleet-section-title" style="margin-bottom:10px">📋 Compliance Summary</div>'
+    +'<div style="display:flex;flex-direction:column;gap:10px">'
+    +'<div style="padding:14px;background:var(--gray-50);border-radius:10px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:14px;font-weight:600">EU ETS Coverage</span><span style="font-family:var(--mono);font-weight:800;color:'+covColor+'">'+coveragePct+'%</span></div><div class="emission-bar-wrap" style="height:12px"><div class="emission-bar-fill" style="width:'+covW+'%;background:'+covBar+'"></div></div></div>'
+    +'<div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--gray-100)"><span style="font-size:14px;color:var(--gray-500)">Vessels &gt;5,000 GT (EU ETS)</span><span style="font-weight:700;font-size:15px">'+gt5k+' / '+v.length+'</span></div>'
+    +'<div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--gray-100)"><span style="font-size:14px;color:var(--gray-500)">CII A or B rated</span><span style="font-weight:700;font-size:15px;color:var(--green-700)">'+ciiAB+' vessels</span></div>'
+    +'<div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--gray-100)"><span style="font-size:14px;color:var(--gray-500)">CII D rated (attention)</span><span style="font-weight:700;font-size:15px;color:#dc2626">'+ciiD+' vessels</span></div>'
+    +'<div style="display:flex;justify-content:space-between;padding:12px 14px"><span style="font-size:14px;color:var(--gray-500)">Active voyages</span><span style="font-weight:700;font-size:15px">'+activeV+' / '+v.length+'</span></div>'
+    +'</div></div></div>';
+}
+
+// ═══════════════════════════════════════════════
+// STATS ANIMATION
 function animateStats() {
   const targets = [{el:'stat1',v:17200,fmt:v=>v.toLocaleString()},{el:'stat2',v:23,fmt:v=>v},{el:'stat3',v:847,fmt:v=>'$'+v+'K'}];
   let step=0; const steps=40;
@@ -1052,6 +1353,7 @@ function init() {
   renderMarketCenter();
   renderOrderBook();
   renderNews();
+  renderOwnerList();
   animateStats();
   setInterval(tickLiveData, 2500);
 }
