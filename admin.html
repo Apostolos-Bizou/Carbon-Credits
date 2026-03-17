@@ -65,7 +65,7 @@ table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;fo
 
 <script>
 /* ═══ ALL JS IN HEAD ═══ */
-var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
+var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
 
 function showPanel(id){
   document.querySelectorAll('[data-panel]').forEach(function(p){p.style.display='none'});
@@ -171,6 +171,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
       <button class="ni" onclick="showPanel('bpbuilder')"><span class="ic">📋</span> Business Plans</button>
       <button class="ni" onclick="showPanel('countries')"><span class="ic">🌍</span> Countries</button>
       <button class="ni" onclick="showPanel('content')"><span class="ic">📝</span> Content Pages</button>
+      <button class="ni" onclick="showPanel('guide')"><span class="ic">📚</span> Guide Pages<span class="bg">7</span></button>
     </div>
     <div class="ns"><div class="ns-t">Live Markets</div>
       <button class="ni" onclick="showPanel('datasources')"><span class="ic">📡</span> Data Sources</button>
@@ -259,6 +260,41 @@ document.addEventListener('DOMContentLoaded',initAdmin);
         </tbody></table></div></div>
     </div>
 
+    <!-- GUIDE PAGES -->
+    <div data-panel id="p-guide" style="display:none">
+      <div class="as">
+        <div class="ast"><div class="al">Guide Pages</div><div class="av2">7</div><div class="ac">Active on website</div></div>
+        <div class="ast"><div class="al">Total Words</div><div class="av2">~3,200</div><div class="ac">Greek content</div></div>
+        <div class="ast"><div class="al">Glossary Terms</div><div class="av2">17</div></div>
+        <div class="ast"><div class="al">Last Updated</div><div class="av2">Today</div><div class="ac">March 2026</div></div>
+      </div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Guide Sections</div><div class="ct-s">Educational content shown in the Guide tab on the website</div></div><button class="btn bp bsm">+ Add Section</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Order</th><th>Section</th><th>Tab Label</th><th>Content Length</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">1</td><td style="font-weight:600">Τι είναι τα Carbon Credits;</td><td class="tm">Εισαγωγή</td><td>~450 λέξεις</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('intro')">Edit</button></td></tr>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">2</td><td style="font-weight:600">Κατηγορίες Carbon Credits</td><td class="tm">Κατηγορίες</td><td>~300 λέξεις</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('types')">Edit</button></td></tr>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">3</td><td style="font-weight:600">Αξιολόγηση Ποιότητας (Ratings)</td><td class="tm">Ratings</td><td>~350 λέξεις</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('ratings')">Edit</button></td></tr>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">4</td><td style="font-weight:600">Πώς Δημιουργούνται; Δασοφύτευση & Πιστοποίηση</td><td class="tm">Πώς Δημιουργούνται</td><td>~500 λέξεις</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('how')">Edit</button></td></tr>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">5</td><td style="font-weight:600">Γιατί Χρειάζονται; Ναυτιλία & Ρυθμίσεις</td><td class="tm">Γιατί Χρειάζονται</td><td>~400 λέξεις</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('why')">Edit</button></td></tr>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">6</td><td style="font-weight:600">Η Πλατφόρμα GreenCreditX</td><td class="tm">Η Πλατφόρμα</td><td>~600 λέξεις</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('platform')">Edit</button></td></tr>
+          <tr><td style="font-weight:700;font-size:18px;color:var(--g700);text-align:center">7</td><td style="font-weight:600">Γλωσσάριο Όρων</td><td class="tm">Γλωσσάριο</td><td>17 όροι</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openGuideEditor('glossary')">Edit</button></td></tr>
+        </tbody></table></div></div>
+
+      <div class="cd" style="margin-top:20px"><div class="ch"><div><div class="ct-t">Glossary Terms Manager</div><div class="ct-s">Manage terms shown in the Glossary section</div></div><button class="btn bp bsm">+ Add Term</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Term</th><th>Explanation (Greek)</th><th>Actions</th></tr></thead><tbody>
+          <tr><td style="font-weight:700;font-family:var(--mono)">tCO₂e</td><td>Τόνοι ισοδύναμου CO₂ — η μονάδα μέτρησης</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">VCU</td><td>Verified Carbon Unit — το επίσημο credit του Verra</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">Vintage</td><td>Η χρονιά έκδοσης του credit</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">ARR</td><td>Afforestation, Reforestation & Revegetation — φύτευση δέντρων</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">EU ETS</td><td>Ευρωπαϊκό Σύστημα Εμπορίας Εκπομπών — υποχρεωτικό</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">ROI</td><td>Return on Investment — πόσο κερδίζεις ως % της επένδυσης</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">Break-even</td><td>Το σημείο που τα έσοδα καλύπτουν την επένδυση</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">CAPEX / OPEX</td><td>Κεφαλαιουχικές δαπάνες / Λειτουργικά έξοδα</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">Order Book</td><td>Bids (αγοραστές) + Asks (πωλητές) σε real-time</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">Spread</td><td>Διαφορά τιμής αγοράς - πώλησης</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          <tr><td style="font-weight:700;font-family:var(--mono)">Avg Discount</td><td>Πόσο φθηνότερα αγοράζετε vs τιμή αγοράς</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+        </tbody></table></div></div>
+    </div>
+
     <!-- DATA SOURCES -->
     <div data-panel id="p-datasources" style="display:none">
       <div class="as">
@@ -280,8 +316,8 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <div data-panel id="p-users" style="display:none">
       <div class="cd"><div class="ch"><div><div class="ct-t">Users</div></div><button class="btn bp bsm">+ Add User</button></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-          <tr><td style="font-weight:600">TPA Admin</td><td class="tm">admin@tpa-services.com</td><td><span style="padding:3px 10px;border-radius:7px;background:var(--g100);color:var(--g700);font-size:12px;font-weight:600">Super Admin</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Operations</td><td class="tm">ops@tpa-services.com</td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Editor</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
+          <tr><td style="font-weight:600">TPA Admin</td><td class="tm"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0362676e6a6d437773622e706671756a6066702d606c6e">[email&#160;protected]</a></td><td><span style="padding:3px 10px;border-radius:7px;background:var(--g100);color:var(--g700);font-size:12px;font-weight:600">Super Admin</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
+          <tr><td style="font-weight:600">Operations</td><td class="tm"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c736c6f5c686c7d316f796e6a757f796f327f7371">[email&#160;protected]</a></td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Editor</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
         </tbody></table></div></div>
     </div>
 
@@ -388,6 +424,37 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <button class="btn bp" onclick="saveBP()">✅ Publish Business Plan</button>
   </div>
 </div></div>
+
+<!-- GUIDE EDITOR MODAL -->
+<div class="mo" id="geMo"><div class="md" style="max-width:960px"><div class="mh"><div class="mt" id="geTitle">Edit Guide Section</div><button class="mc" onclick="closeGE()">×</button></div>
+  <div class="mb">
+    <div class="fg" style="margin-bottom:20px">
+      <div class="fgp"><label class="fl">Section Title</label><input class="fi" id="ge-title" style="font-size:18px;font-weight:600"></div>
+      <div class="fgp"><label class="fl">Tab Label (short)</label><input class="fi" id="ge-label"></div>
+    </div>
+    <div class="fgp" style="margin-bottom:20px">
+      <label class="fl">Content (HTML supported)</label>
+      <textarea class="fi" id="ge-content" style="min-height:300px;font-family:var(--mono);font-size:14px;line-height:1.6"></textarea>
+      <div style="font-size:12px;color:var(--x400);margin-top:4px">Supports HTML tags: &lt;strong&gt;, &lt;div&gt;, &lt;table&gt;, &lt;span&gt; etc. Preview on the live site.</div>
+    </div>
+    <div class="fg">
+      <div class="fgp"><label class="fl">Status</label><select class="fi"><option>Published</option><option>Draft</option><option>Hidden</option></select></div>
+      <div class="fgp"><label class="fl">Order</label><input class="fi" type="number" min="1" max="20" value="1"></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn bs" onclick="closeGE()">Cancel</button><button class="btn bs" style="color:var(--g700)">Preview</button><button class="btn bp" onclick="closeGE()">✅ Publish</button></div>
+</div></div>
+
+<script>
+function openGuideEditor(id){
+  document.getElementById('geMo').classList.add('show');
+  var titles={intro:'Τι είναι τα Carbon Credits;',types:'Κατηγορίες Carbon Credits',ratings:'Αξιολόγηση Ποιότητας',how:'Πώς Δημιουργούνται',why:'Γιατί Χρειάζονται',platform:'Η Πλατφόρμα GreenCreditX',glossary:'Γλωσσάριο Όρων'};
+  document.getElementById('geTitle').textContent='Edit: '+(titles[id]||id);
+  document.getElementById('ge-title').value=titles[id]||'';
+  document.getElementById('ge-label').value=id;
+}
+function closeGE(){document.getElementById('geMo').classList.remove('show')}
+</script>
 
 </body>
 </html>
