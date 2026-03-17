@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenCreditX — Carbon Credit Exchange</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0; --green-300: #86efac;
+  --green-400: #4ade80; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d;
+  --green-800: #166534; --green-900: #14532d;
+  --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db;
+  --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151;
+  --mono: 'DM Mono', monospace; --sans: 'Outfit', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: #fafdf9; color: #1a2e1a; overflow-x: hidden; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 2px; }
+button { font-family: var(--sans); cursor: pointer; }
+input { font-family: var(--sans); }
+
+/* Animations */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: .3; } 50% { transform: scale(2.2); opacity: 0; } }
+@keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes flash-green { 0% { background: rgba(34,197,94,.15); } 100% { background: transparent; } }
+@keyframes flash-red { 0% { background: rgba(239,68,68,.15); } 100% { background: transparent; } }
+.fade-in { animation: fadeIn .4s ease both; }
+
+/* Header */
+.header { background: rgba(255,255,255,.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--green-100); padding: 0 28px; position: sticky; top: 0; z-index: 100; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 36px; height: 36px; border-radius: 11px; background: linear-gradient(135deg, var(--green-500), var(--green-700)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 15px; font-weight: 800; box-shadow: 0 2px 12px rgba(34,197,94,.3); }
+.logo-text { font-size: 17px; font-weight: 700; color: var(--green-900); letter-spacing: -.3px; }
+.logo-text span { color: var(--green-500); }
+.logo-sub { font-size: 9px; color: var(--gray-500); font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; }
+
+/* Nav */
+.nav { display: flex; gap: 3px; background: var(--green-50); border-radius: 12px; padding: 3px; }
+.nav-btn { display: flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 9px; border: none; font-size: 13px; font-weight: 600; background: transparent; color: var(--gray-400); transition: all .2s; }
+.nav-btn.active { background: #fff; color: var(--green-700); box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.nav-btn:hover:not(.active) { color: var(--gray-600); }
+
+/* Header right */
+.header-right { display: flex; align-items: center; gap: 10px; }
+.live-badge { display: flex; align-items: center; gap: 5px; }
+.pulse-dot { position: relative; display: inline-flex; width: 7px; height: 7px; }
+.pulse-dot::before { content: ''; position: absolute; inset: -2px; border-radius: 50%; background: var(--green-500); opacity: .3; animation: pulse 2s ease-in-out infinite; }
+.pulse-dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green-500); }
+.live-text { font-size: 10px; color: var(--green-500); font-weight: 600; }
+.user-badge { display: flex; align-items: center; gap: 6px; padding: 5px 12px 5px 5px; border-radius: 9px; background: var(--green-50); border: 1px solid var(--green-100); }
+.user-avatar { width: 28px; height: 28px; border-radius: 7px; background: linear-gradient(135deg, var(--green-300), var(--green-400)); display: flex; align-items: center; justify-content: center; color: var(--green-900); font-size: 11px; font-weight: 700; }
+.cart-btn { position: relative; background: transparent; border: 1px solid var(--gray-200); border-radius: 10px; padding: 7px 12px; display: flex; align-items: center; gap: 5px; color: var(--gray-700); font-size: 12px; font-weight: 600; }
+.cart-count { position: absolute; top: -4px; right: -4px; background: var(--green-500); color: #fff; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+/* Ticker */
+.ticker { background: var(--green-900); padding: 5px 0; overflow: hidden; }
+.ticker-track { display: flex; gap: 28px; animation: scroll 50s linear infinite; white-space: nowrap; padding-left: 100%; }
+.ticker-item { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; }
+.ticker-sym { color: var(--green-300); font-weight: 700; }
+.ticker-price { color: #fff; font-family: var(--mono); font-weight: 500; }
+.ticker-chg { font-family: var(--mono); font-weight: 600; }
+.ticker-up { color: var(--green-400); }
+.ticker-dn { color: #fca5a5; }
+
+/* Sections */
+.section { display: none; }
+.section.active { display: block; }
+.section-flex { display: none; }
+.section-flex.active { display: flex; }
+
+/* Container */
+.container { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
+
+/* Stats grid */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: #fff; border-radius: 14px; padding: 16px 18px; border: 1px solid var(--gray-200); transition: all .3s; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(34,197,94,.08); }
+.stat-label { font-size: 10px; color: var(--gray-400); font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+.stat-value { font-size: 26px; font-weight: 800; color: var(--green-900); letter-spacing: -1px; line-height: 1; margin-top: 4px; }
+.stat-sub { font-size: 10px; color: var(--gray-500); margin-top: 2px; }
+
+/* Filters */
+.filters { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; }
+.search-box { flex: 1; display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 9px 14px; }
+.search-box input { border: none; outline: none; width: 100%; font-size: 13px; color: #1a2e1a; background: transparent; }
+.filter-btn { padding: 9px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid var(--gray-200); background: #fff; color: var(--gray-500); transition: all .2s; white-space: nowrap; }
+.filter-btn.active { border-color: var(--green-500); background: var(--green-50); color: var(--green-700); }
+
+/* Credit cards grid */
+.credits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.credit-card { background: #fff; border-radius: 14px; border: 1px solid var(--gray-200); overflow: hidden; transition: all .3s; }
+.credit-card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(34,197,94,.1); border-color: var(--green-300); }
+.credit-inner { padding: 16px 18px; }
+.credit-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.credit-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.credit-id { font-size: 10px; font-family: var(--mono); color: var(--gray-400); }
+.rating { padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: 700; font-family: var(--mono); letter-spacing: .4px; }
+.rating-a { background: #d1fae5; color: #047857; border: 1px solid #6ee7b7; }
+.rating-aplus { background: #d1fae5; color: #047857; border: 1px solid #6ee7b7; }
+.rating-aminus { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+.rating-aa { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+.rating-bbbplus { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.rating-bbb { background: #fefce8; color: #a16207; border: 1px solid #fde68a; }
+.type-badge { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: var(--gray-100); color: var(--gray-500); font-weight: 500; }
+.credit-name { font-size: 14px; font-weight: 700; color: var(--green-900); }
+.credit-price { font-size: 20px; font-weight: 800; color: var(--green-700); font-family: var(--mono); line-height: 1; }
+.credit-price-sub { font-size: 9px; color: var(--gray-500); }
+.credit-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); margin-bottom: 10px; }
+.detail-label { font-size: 9px; color: var(--gray-400); text-transform: uppercase; letter-spacing: .4px; }
+.detail-value { font-size: 13px; font-weight: 700; color: #1a2e1a; }
+.detail-value.mono { font-family: var(--mono); }
+.credit-bottom { display: flex; justify-content: space-between; align-items: center; }
+.sdg-badges { display: flex; gap: 2px; }
+.sdg { width: 18px; height: 18px; border-radius: 3px; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 800; }
+.trend { font-size: 10px; color: var(--green-600); font-weight: 600; }
+.buy-area { display: flex; align-items: center; gap: 6px; }
+.qty-input { width: 62px; padding: 5px 6px; border-radius: 7px; border: 1px solid var(--gray-200); font-size: 12px; font-family: var(--mono); text-align: center; outline: none; color: var(--green-900); }
+.buy-btn { padding: 7px 14px; border-radius: 8px; border: none; background: linear-gradient(135deg, var(--green-500), var(--green-600)); color: #fff; font-weight: 700; font-size: 11px; box-shadow: 0 2px 8px rgba(34,197,94,.3); transition: all .2s; }
+.buy-btn:hover { transform: scale(1.03); }
+
+/* Cart sidebar */
+.cart-sidebar { width: 300px; flex-shrink: 0; background: #fff; border-radius: 14px; border: 1px solid var(--gray-200); padding: 18px; align-self: flex-start; position: sticky; top: 96px; box-shadow: 0 4px 20px rgba(0,0,0,.05); }
+.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.cart-title { font-size: 14px; font-weight: 700; color: var(--green-900); }
+.cart-close { background: none; border: none; color: var(--gray-400); font-size: 16px; cursor: pointer; }
+.cart-empty { text-align: center; padding: 28px 0; color: var(--gray-400); }
+.cart-item { padding: 10px; border-radius: 8px; background: var(--gray-50); margin-bottom: 6px; position: relative; }
+.cart-item-rm { position: absolute; top: 6px; right: 6px; background: none; border: none; color: var(--gray-300); font-size: 12px; cursor: pointer; }
+.cart-item-name { font-size: 11px; font-weight: 700; color: var(--green-900); }
+.cart-item-sub { font-size: 10px; color: var(--gray-500); }
+.cart-item-row { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+.cart-item-qty { font-size: 11px; font-family: var(--mono); color: var(--gray-500); }
+.cart-item-total { font-size: 13px; font-weight: 700; color: var(--green-700); font-family: var(--mono); }
+.cart-footer { border-top: 2px solid var(--green-50); margin-top: 10px; padding-top: 10px; }
+.cart-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
+.order-btn { width: 100%; padding: 12px; border-radius: 10px; border: none; background: linear-gradient(135deg, var(--green-500), var(--green-600)); color: #fff; font-weight: 700; font-size: 13px; box-shadow: 0 4px 14px rgba(34,197,94,.3); transition: all .2s; }
+.order-btn:hover { transform: translateY(-1px); }
+
+/* ═══ INVEST ═══ */
+.invest-header { margin-bottom: 20px; }
+.invest-title { font-size: 22px; font-weight: 800; color: var(--green-900); }
+.invest-sub { font-size: 13px; color: var(--gray-500); }
+.invest-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.invest-card { background: #fff; border-radius: 16px; border: 1px solid var(--gray-200); overflow: hidden; transition: all .3s; }
+.invest-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,.1); border-color: var(--green-300); }
+.invest-phase { background: linear-gradient(135deg, var(--green-50), #ecfdf5); padding: 10px 18px; border-bottom: 1px solid var(--green-100); display: flex; justify-content: space-between; align-items: center; }
+.phase-badge { font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 700; background: var(--green-100); color: var(--green-700); }
+.risk-badge { font-size: 10px; padding: 2px 8px; border-radius: 5px; font-weight: 600; }
+.invest-body { padding: 18px; }
+.invest-name { font-size: 16px; font-weight: 700; color: var(--green-900); margin-bottom: 4px; }
+.invest-info { font-size: 11px; color: var(--gray-500); margin-bottom: 14px; }
+.funding-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.progress-ring { position: relative; width: 72px; height: 72px; }
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; color: var(--green-900); font-family: var(--mono); }
+.funding-details { flex: 1; }
+.funding-bar { height: 6px; background: var(--green-50); border-radius: 3px; overflow: hidden; margin: 4px 0; }
+.funding-fill { height: 100%; background: linear-gradient(90deg, var(--green-300), var(--green-500)); border-radius: 3px; transition: width 1s ease; }
+.invest-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 10px 0; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); margin-bottom: 12px; }
+.invest-bottom { display: flex; justify-content: space-between; align-items: center; }
+.milestone-label { font-size: 9px; color: var(--gray-400); }
+.milestone-value { font-size: 11px; font-weight: 600; color: var(--green-900); }
+.invest-btn { padding: 8px 16px; border-radius: 9px; border: none; background: linear-gradient(135deg, var(--green-500), var(--green-600)); color: #fff; font-weight: 700; font-size: 12px; box-shadow: 0 2px 10px rgba(34,197,94,.3); transition: all .2s; }
+.invest-btn:hover { transform: scale(1.03); }
+
+/* ═══ MARKETS ═══ */
+.markets-wrap { max-width: 1400px; margin: 0 auto; display: flex; }
+.mkt-left { width: 290px; flex-shrink: 0; border-right: 1px solid var(--gray-200); background: #fff; height: calc(100vh - 94px); overflow-y: auto; }
+.mkt-filters { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); display: flex; gap: 3px; flex-wrap: wrap; }
+.mkt-filter-btn { padding: 3px 8px; border-radius: 5px; font-size: 9px; font-weight: 600; border: 1px solid var(--gray-200); background: transparent; color: var(--gray-400); text-transform: uppercase; letter-spacing: .3px; transition: all .15s; }
+.mkt-filter-btn.active { border-color: var(--green-500); background: var(--green-50); color: var(--green-700); }
+.instrument { padding: 9px 12px; cursor: pointer; border-bottom: 1px solid #f9fafb; border-left: 3px solid transparent; transition: all .15s; }
+.instrument:hover { background: #fafdf9; }
+.instrument.selected { border-left-color: var(--green-500); background: var(--green-50); }
+.inst-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.inst-sym { font-size: 12px; font-weight: 700; color: var(--green-900); }
+.inst-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+.inst-type { font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+.inst-name { font-size: 9px; color: var(--gray-400); margin-top: 1px; }
+.inst-price { font-size: 14px; font-weight: 800; font-family: var(--mono); color: var(--green-900); transition: color .3s; }
+.inst-chg { font-size: 9px; font-weight: 600; font-family: var(--mono); }
+.up { color: var(--green-600); }
+.dn { color: #dc2626; }
+
+.mkt-center { flex: 1; padding: 14px 18px; }
+.sel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.sel-sym { font-size: 20px; font-weight: 800; color: var(--green-900); }
+.sel-name { font-size: 12px; color: var(--gray-500); }
+.sel-exch { font-size: 9px; color: var(--gray-400); margin-left: 16px; }
+.sel-price { font-size: 32px; font-weight: 800; font-family: var(--mono); color: var(--green-900); line-height: 1; letter-spacing: -1px; }
+.sel-change { font-size: 13px; font-weight: 700; font-family: var(--mono); margin-top: 2px; }
+.chart-box { background: #fff; border-radius: 12px; border: 1px solid var(--gray-200); padding: 14px; margin-bottom: 14px; }
+.tf-btns { display: flex; gap: 6px; margin-bottom: 10px; }
+.tf-btn { padding: 3px 8px; border-radius: 5px; font-size: 9px; font-weight: 600; font-family: var(--mono); border: 1px solid var(--gray-200); background: transparent; color: var(--gray-400); cursor: pointer; }
+.tf-btn.active { border-color: var(--green-500); background: var(--green-50); color: var(--green-700); }
+.chart-stats { font-size: 9px; color: var(--gray-400); }
+.chart-stats span { color: var(--green-900); font-weight: 600; font-family: var(--mono); }
+.mkt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+.mkt-stat { background: #fff; border-radius: 9px; padding: 10px 12px; border: 1px solid var(--gray-100); }
+.mkt-stat-label { font-size: 8px; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.mkt-stat-value { font-size: 16px; font-weight: 800; color: var(--green-900); font-family: var(--mono); margin-top: 2px; }
+.sources { background: linear-gradient(135deg, var(--green-50), #ecfdf5); border-radius: 10px; padding: 12px 14px; border: 1px solid var(--green-100); }
+.sources-title { font-size: 10px; font-weight: 700; color: var(--green-700); margin-bottom: 6px; }
+.sources-list { display: flex; gap: 14px; flex-wrap: wrap; }
+.source { display: flex; align-items: center; gap: 4px; }
+.source-dot { width: 5px; height: 5px; border-radius: 50%; }
+.source-name { font-size: 9px; font-weight: 600; color: var(--green-900); }
+
+.mkt-right { width: 250px; flex-shrink: 0; border-left: 1px solid var(--gray-200); background: #fff; height: calc(100vh - 94px); overflow-y: auto; }
+.ob-header { padding: 10px 12px; border-bottom: 1px solid var(--gray-100); }
+.ob-title { font-size: 11px; font-weight: 700; color: var(--green-900); }
+.ob-sub { font-size: 8px; color: var(--gray-400); }
+.ob-row { display: flex; height: 18px; align-items: center; font-size: 10px; font-family: var(--mono); gap: 2px; padding: 0 8px; }
+.ob-bid { color: var(--green-500); font-weight: 600; width: 50px; text-align: right; }
+.ob-ask { color: #ef4444; font-weight: 600; width: 50px; }
+.ob-sep { width: 6px; text-align: center; color: var(--gray-200); font-size: 7px; }
+.ob-size { flex: 1; font-size: 9px; color: var(--gray-500); }
+.ob-spread { display: flex; justify-content: center; margin-top: 6px; padding: 4px; background: var(--green-50); border-radius: 4px; font-size: 9px; color: var(--green-700); font-weight: 600; }
+.news-header { padding: 10px 12px; border-top: 1px solid var(--gray-100); border-bottom: 1px solid var(--gray-100); display: flex; align-items: center; gap: 5px; }
+.news-title { font-size: 11px; font-weight: 700; color: var(--green-900); }
+.news-item { padding: 7px 12px; border-bottom: 1px solid #fafafa; cursor: pointer; transition: background .15s; }
+.news-item:hover { background: var(--green-50); }
+.news-meta { display: flex; align-items: center; gap: 5px; margin-bottom: 2px; }
+.news-time { font-size: 8px; color: var(--gray-300); font-family: var(--mono); }
+.news-tag { font-size: 7px; padding: 1px 4px; border-radius: 3px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+.news-text { font-size: 10px; color: var(--gray-700); line-height: 1.3; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .stats-grid, .invest-grid { grid-template-columns: 1fr 1fr; }
+  .credits-grid { grid-template-columns: 1fr; }
+  .mkt-left, .mkt-right { display: none; }
+  .nav-btn span.hide-mobile { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">G</div>
+    <div>
+      <div class="logo-text">GreenCredit<span>X</span></div>
+      <div class="logo-sub">Carbon Credit Exchange</div>
+    </div>
+  </div>
+  <nav class="nav" id="nav">
+    <button class="nav-btn active" data-section="marketplace" onclick="switchSection('marketplace')">🛒 <span class="hide-mobile">Marketplace</span></button>
+    <button class="nav-btn" data-section="invest" onclick="switchSection('invest')">📈 <span class="hide-mobile">Invest</span></button>
+    <button class="nav-btn" data-section="markets" onclick="switchSection('markets')">◉ <span class="hide-mobile">Live Markets</span></button>
+  </nav>
+  <div class="header-right">
+    <button class="cart-btn" id="cartToggle" onclick="toggleCart()" style="display:flex">🛒 <span class="cart-count" id="cartCount" style="display:none">0</span></button>
+    <div class="live-badge"><span class="pulse-dot"></span><span class="live-text">LIVE</span></div>
+    <div class="user-badge"><div class="user-avatar">TP</div><div><div style="font-size:11px;font-weight:600;color:var(--green-900)">TPA Services</div><div style="font-size:9px;color:var(--gray-500)">Admin</div></div></div>
+  </div>
+</header>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
+<!-- ═══ SECTION 1: MARKETPLACE ═══ -->
+<div class="section active" id="sec-marketplace">
+  <div class="container" style="display:flex;gap:20px">
+    <div style="flex:1;min-width:0">
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Credits Traded</div><div class="stat-value" id="stat1">0</div><div class="stat-sub">tCO₂e YTD</div></div>
+        <div class="stat-card"><div class="stat-label">Active Clients</div><div class="stat-value" id="stat2">0</div><div class="stat-sub">Shipowners</div></div>
+        <div class="stat-card"><div class="stat-label">Client Savings</div><div class="stat-value" id="stat3">$0K</div><div class="stat-sub">vs Market</div></div>
+        <div class="stat-card"><div class="stat-label">Avg Discount</div><div class="stat-value">34%</div><div class="stat-sub">Below Spot</div></div>
+      </div>
+      <div class="filters">
+        <div class="search-box"><span>🔍</span><input type="text" placeholder="Search projects, IDs..." oninput="filterCredits()"></div>
+        <button class="filter-btn active" data-type="all" onclick="setTypeFilter(this,'all')">All</button>
+        <button class="filter-btn" data-type="ARR" onclick="setTypeFilter(this,'ARR')">ARR</button>
+        <button class="filter-btn" data-type="Blue Carbon" onclick="setTypeFilter(this,'Blue Carbon')">Blue Carbon</button>
+        <button class="filter-btn" data-type="REDD+" onclick="setTypeFilter(this,'REDD+')">REDD+</button>
+      </div>
+      <div class="credits-grid" id="creditsGrid"></div>
+    </div>
+    <div class="cart-sidebar" id="cartSidebar" style="display:none">
+      <div class="cart-header"><div class="cart-title">Order Summary</div><button class="cart-close" onclick="toggleCart()">×</button></div>
+      <div id="cartContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2: INVEST ═══ -->
+<div class="section" id="sec-invest">
+  <div class="container">
+    <div class="invest-header">
+      <div class="invest-title">Investment Opportunities</div>
+      <div class="invest-sub">Fund reforestation projects · Earn returns from carbon credit production</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Total Pipeline</div><div class="stat-value">€43.7M</div><div class="stat-sub">4 Active Projects</div></div>
+      <div class="stat-card"><div class="stat-label">Capital Raised</div><div class="stat-value">€14.0M</div><div class="stat-sub">32% of Target</div></div>
+      <div class="stat-card"><div class="stat-label">Active Investors</div><div class="stat-value">49</div><div class="stat-sub">Across all projects</div></div>
+      <div class="stat-card"><div class="stat-label">Projected Credits</div><div class="stat-value">10,455</div><div class="stat-sub">tCO₂e/year capacity</div></div>
+    </div>
+    <div class="invest-grid" id="investGrid"></div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3: LIVE MARKETS ═══ -->
+<div class="section-flex" id="sec-markets">
+  <div class="markets-wrap">
+    <div class="mkt-left">
+      <div class="mkt-filters" id="mktFilters"></div>
+      <div id="instrumentList"></div>
+    </div>
+    <div class="mkt-center">
+      <div class="sel-header">
+        <div><div style="display:flex;align-items:center;gap:8px"><span class="inst-dot" id="selDot"></span><span class="sel-sym" id="selSym"></span><span class="sel-name" id="selName"></span></div><div class="sel-exch" id="selExch"></div></div>
+        <div style="text-align:right"><div class="sel-price" id="selPrice"></div><div class="sel-change" id="selChange"></div></div>
+      </div>
+      <div class="chart-box">
+        <div style="display:flex;align-items:center">
+          <div class="tf-btns"><button class="tf-btn">1m</button><button class="tf-btn">5m</button><button class="tf-btn">15m</button><button class="tf-btn active">1H</button><button class="tf-btn">4H</button><button class="tf-btn">1D</button><button class="tf-btn">1W</button></div>
+          <span style="flex:1"></span>
+          <span class="chart-stats" id="chartStats"></span>
+        </div>
+        <svg id="candleChart" width="100%" height="180" style="display:block;margin-top:8px"></svg>
+      </div>
+      <div class="mkt-stats" id="mktStats"></div>
+      <div class="sources">
+        <div class="sources-title">CONNECTED DATA SOURCES</div>
+        <div class="sources-list">
+          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">Xpansiv CBL</span></div>
+          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CME NYMEX</span></div>
+          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">ICE Endex</span></div>
+          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CIX Exchange</span></div>
+          <div class="source"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">BeZero Ratings</span></div>
+          <div class="source"><span class="source-dot" style="background:#f59e0b"></span><span class="source-name">Verra Registry</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mkt-right">
+      <div class="ob-header"><div class="ob-title">Order Book</div><div class="ob-sub" id="obSub"></div></div>
+      <div id="orderBook" style="padding:6px 4px"></div>
+      <div class="news-header"><span class="news-title">Market Intel</span><span class="pulse-dot" style="--c:#f59e0b"></span></div>
+      <div id="newsFeed"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+const CREDITS = [
+  {id:"VCS-2847",project:"Mindanao Reforestation Alliance",type:"ARR",rating:"A",vintage:2025,available:2400,price:22.50,origin:"Philippines",sdgs:[13,15,1],trend:"+12%"},
+  {id:"VCS-3102",project:"Caraga Forest Restoration",type:"ARR",rating:"BBB+",vintage:2025,available:1800,price:19.80,origin:"Philippines",sdgs:[13,15,8],trend:"+8%"},
+  {id:"GS-1455",project:"Borneo Mangrove Conservation",type:"Blue Carbon",rating:"AA",vintage:2024,available:3200,price:28.40,origin:"Indonesia",sdgs:[13,14,15],trend:"+18%"},
+  {id:"VCS-2991",project:"Davao Native Species Program",type:"ARR",rating:"A-",vintage:2025,available:1500,price:21.20,origin:"Philippines",sdgs:[13,15,2],trend:"+10%"},
+  {id:"VCS-3250",project:"Visayas Agroforestry Initiative",type:"ARR",rating:"BBB",vintage:2024,available:900,price:17.60,origin:"Philippines",sdgs:[13,15,1],trend:"+6%"},
+  {id:"GS-1522",project:"Sulawesi Peatland Restoration",type:"REDD+",rating:"A+",vintage:2025,available:4100,price:31.50,origin:"Indonesia",sdgs:[13,15,6],trend:"+22%"},
+];
+
+const INVESTMENTS = [
+  {id:"INV-001",name:"Mindanao 5,000ha ARR Project",phase:"Phase 2 — Planting",target:19000000,raised:7200000,roi:"18-24%",timeline:"2025-2030",min:50000,investors:14,next:"Verra PDD Submission Q2 2026",risk:"Medium",type:"Equity",ha:5000,credits:4250},
+  {id:"INV-002",name:"Bukidnon Highland Expansion",phase:"Phase 1 — Land Acquisition",target:8500000,raised:2100000,roi:"15-20%",timeline:"2026-2031",min:25000,investors:8,next:"Site Survey Q1 2026",risk:"Medium-High",type:"Equity",ha:2500,credits:2125},
+  {id:"INV-003",name:"Palawan Blue Carbon Mangroves",phase:"Phase 1 — Feasibility",target:12000000,raised:850000,roi:"22-30%",timeline:"2026-2032",min:100000,investors:5,next:"Environmental Impact Assessment",risk:"High",type:"Joint Venture",ha:3000,credits:2550},
+  {id:"INV-004",name:"Caraga Region Phase II",phase:"Phase 3 — Certification",target:4200000,raised:3800000,roi:"12-16%",timeline:"2024-2029",min:25000,investors:22,next:"Verra Validation Audit Q1 2026",risk:"Low",type:"Revenue Share",ha:1800,credits:1530},
+];
+
+const INSTRUMENTS = [
+  {sym:"GEO",name:"Global Emissions Offset",exch:"CME/CBL",base:1.85,type:"Voluntary",color:"#22c55e"},
+  {sym:"N-GEO",name:"Nature-Based GEO",exch:"CME/CBL",base:3.42,type:"Voluntary",color:"#16a34a"},
+  {sym:"C-GEO",name:"Core GEO (Tech)",exch:"CME/CBL",base:1.15,type:"Voluntary",color:"#059669"},
+  {sym:"EUA",name:"EU Allowance",exch:"ICE/EEX",base:68.20,type:"Compliance",color:"#2563eb"},
+  {sym:"UKA",name:"UK Allowance",exch:"ICE",base:42.50,type:"Compliance",color:"#7c3aed"},
+  {sym:"CCA",name:"California Carbon",exch:"ICE",base:38.90,type:"Compliance",color:"#0891b2"},
+  {sym:"ARR-A",name:"ARR (A-rated)",exch:"CBL Spot",base:24.00,type:"Spot VCM",color:"#15803d"},
+  {sym:"ARR-BBB",name:"ARR (BBB+)",exch:"CBL Spot",base:19.50,type:"Spot VCM",color:"#4ade80"},
+  {sym:"REDD",name:"REDD+ (A-rated)",exch:"CBL Spot",base:18.50,type:"Spot VCM",color:"#10b981"},
+  {sym:"BLUE",name:"Blue Carbon",exch:"CIX/CBL",base:29.30,type:"Spot VCM",color:"#06b6d4"},
+  {sym:"ACCU",name:"Australian CCU",exch:"CBL",base:32.10,type:"Compliance",color:"#f59e0b"},
+  {sym:"CORSIA",name:"CORSIA Phase 1",exch:"CBL/ACE",base:4.20,type:"Aviation",color:"#6366f1"},
+];
+
+const NEWS = [
+  {time:"14:32",text:"EU ETS Maritime reaches 100% phase-in 2026 — full compliance ahead",tag:"Regulatory",hot:true},
+  {time:"13:15",text:"Sylvera upgrades ARR credits outlook to Positive",tag:"Rating"},
+  {time:"12:48",text:"IMO NZF adoption rescheduled Oct 2026 — earliest force Mar 2028",tag:"IMO",hot:true},
+  {time:"11:20",text:"Xpansiv CBL: Record 4.2M tCO₂e in single session",tag:"Volume"},
+  {time:"10:05",text:"UK ETS Maritime expansion confirmed July 2026",tag:"Regulatory"},
+  {time:"09:30",text:"Verra quality label for ARR — first issuances 2026",tag:"Registry"},
+  {time:"08:45",text:"Philippines DENR approves 3 new Mindanao zones",tag:"Supply"},
+];
+
+const OB = {
+  bids:[{p:23.95,s:450},{p:23.90,s:800},{p:23.85,s:1200},{p:23.80,s:600},{p:23.75,s:2000},{p:23.70,s:350}],
+  asks:[{p:24.05,s:300},{p:24.10,s:550},{p:24.15,s:750},{p:24.20,s:1100},{p:24.25,s:400},{p:24.30,s:1800}],
+};
+
+const SDG_COLORS = {1:"#E5243B",2:"#DDA63A",6:"#26BDE2",8:"#A21942",13:"#3F7E44",14:"#0A97D9",15:"#56C02B"};
+const RATING_CLASS = {"AA":"rating-aa","A+":"rating-aplus","A":"rating-a","A-":"rating-aminus","BBB+":"rating-bbbplus","BBB":"rating-bbb"};
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let cart = [];
+let cartVisible = false;
+let currentSection = "marketplace";
+let typeFilter = "all";
+let mktFilter = "all";
+let selectedInst = "ARR-A";
+let liveData = INSTRUMENTS.map(i=>({...i,price:i.base,prev:i.base,ch:0,chPct:0,hi:i.base*1.02,lo:i.base*0.98,vol:Math.floor(Math.random()*50000)+5000,hist:Array.from({length:60},()=>i.base+(Math.random()-.5)*i.base*.04)}));
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function switchSection(id) {
+  currentSection = id;
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.section===id));
+  document.querySelectorAll('.section,.section-flex').forEach(s=>{
+    s.classList.remove('active');
+    if(s.id==='sec-'+id) s.classList.add('active');
+  });
+  document.getElementById('cartToggle').style.display = id==='marketplace'?'flex':'none';
+}
+
+// ═══════════════════════════════════════════════
+// MARKETPLACE
+// ═══════════════════════════════════════════════
+function renderCredits() {
+  const search = document.querySelector('.search-box input')?.value?.toLowerCase()||'';
+  const grid = document.getElementById('creditsGrid');
+  const filtered = CREDITS.filter(c=>{
+    const ms = c.project.toLowerCase().includes(search)||c.id.toLowerCase().includes(search);
+    const mt = typeFilter==='all'||c.type===typeFilter;
+    return ms&&mt;
+  });
+  grid.innerHTML = filtered.map((c,i)=>`
+    <div class="credit-card fade-in" style="animation-delay:${i*.05}s">
+      <div class="credit-inner">
+        <div class="credit-top">
+          <div>
+            <div class="credit-meta">
+              <span class="credit-id">${c.id}</span>
+              <span class="rating ${RATING_CLASS[c.rating]||'rating-bbb'}">${c.rating}</span>
+              <span class="type-badge">${c.type}</span>
+            </div>
+            <div class="credit-name">${c.project}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="credit-price">$${c.price.toFixed(2)}</div>
+            <div class="credit-price-sub">per tCO₂e</div>
+          </div>
+        </div>
+        <div class="credit-details">
+          <div><div class="detail-label">Available</div><div class="detail-value mono">${c.available.toLocaleString()}</div></div>
+          <div><div class="detail-label">Vintage</div><div class="detail-value">${c.vintage}</div></div>
+          <div><div class="detail-label">Origin</div><div class="detail-value">${c.origin}</div></div>
+        </div>
+        <div class="credit-bottom">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="sdg-badges">${c.sdgs.map(s=>`<div class="sdg" style="background:${SDG_COLORS[s]}">${s}</div>`).join('')}</div>
+            <span class="trend">${c.trend}</span>
+          </div>
+          <div class="buy-area">
+            <input type="number" class="qty-input" value="100" min="10" max="${c.available}" step="10" id="qty-${c.id}">
+            <button class="buy-btn" onclick="addToCart('${c.id}')">Buy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setTypeFilter(btn, type) {
+  typeFilter = type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===type));
+  renderCredits();
+}
+function filterCredits() { renderCredits(); }
+
+// ═══════════════════════════════════════════════
+// CART
+// ═══════════════════════════════════════════════
+function addToCart(id) {
+  const credit = CREDITS.find(c=>c.id===id);
+  const qty = parseInt(document.getElementById('qty-'+id)?.value)||100;
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty+=qty; else cart.push({...credit,qty});
+  cartVisible=true;
+  renderCart();
+}
+function removeFromCart(id) { cart=cart.filter(c=>c.id!==id); renderCart(); }
+function toggleCart() { cartVisible=!cartVisible; renderCart(); }
+function renderCart() {
+  const sidebar = document.getElementById('cartSidebar');
+  const countEl = document.getElementById('cartCount');
+  sidebar.style.display = cartVisible?'block':'none';
+  countEl.style.display = cart.length>0?'flex':'none';
+  countEl.textContent = cart.length;
+  const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const content = document.getElementById('cartContent');
+  if(cart.length===0) {
+    content.innerHTML = '<div class="cart-empty"><div style="font-size:28px;margin-bottom:6px">🌱</div><div style="font-size:12px">Cart is empty</div></div>';
+    return;
+  }
+  content.innerHTML = cart.map(c=>`
+    <div class="cart-item">
+      <button class="cart-item-rm" onclick="removeFromCart('${c.id}')">×</button>
+      <div class="cart-item-name">${c.project}</div>
+      <div class="cart-item-sub">${c.id} · ${c.type}</div>
+      <div class="cart-item-row">
+        <span class="cart-item-qty">${c.qty} × $${c.price.toFixed(2)}</span>
+        <span class="cart-item-total">$${(c.qty*c.price).toLocaleString()}</span>
+      </div>
+    </div>
+  `).join('')+`
+    <div class="cart-footer">
+      <div class="cart-row"><span style="font-size:12px;color:var(--gray-500)">Total</span><span style="font-size:15px;font-weight:700;font-family:var(--mono);color:var(--green-900)">$${total.toLocaleString()}</span></div>
+      <div class="cart-row" style="margin-bottom:12px"><span style="font-size:11px;color:var(--green-600);font-weight:600">Savings</span><span style="font-size:11px;font-family:var(--mono);color:var(--green-600);font-weight:600">~34% below spot</span></div>
+      <button class="order-btn">Place Order — $${total.toLocaleString()}</button>
+      <div style="font-size:9px;color:var(--gray-400);text-align:center;margin-top:6px">Verra Registry transfer · Retirement certificates included</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════
+// INVESTMENTS
+// ═══════════════════════════════════════════════
+function renderInvestments() {
+  const grid = document.getElementById('investGrid');
+  grid.innerHTML = INVESTMENTS.map((inv,idx)=>{
+    const pct = Math.round(inv.raised/inv.target*100);
+    const rc = inv.risk==='Low'?'#22c55e':inv.risk==='Medium'?'#f59e0b':inv.risk==='Medium-High'?'#f97316':'#ef4444';
+    const r = 31, circ = 2*Math.PI*r, off = circ-pct/100*circ;
+    return `
+    <div class="invest-card fade-in" style="animation-delay:${idx*.08}s">
+      <div class="invest-phase">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:10px;font-family:var(--mono);color:var(--gray-400)">${inv.id}</span>
+          <span class="phase-badge">${inv.phase}</span>
+        </div>
+        <span class="risk-badge" style="background:${rc}15;color:${rc};border:1px solid ${rc}30">${inv.risk} Risk</span>
+      </div>
+      <div class="invest-body">
+        <div class="invest-name">${inv.name}</div>
+        <div class="invest-info">${inv.type} · ${inv.timeline} · ${inv.ha.toLocaleString()} hectares</div>
+        <div class="funding-row">
+          <div class="progress-ring">
+            <svg width="72" height="72"><circle cx="36" cy="36" r="${r}" fill="none" stroke="var(--green-50)" stroke-width="5"/><circle cx="36" cy="36" r="${r}" fill="none" stroke="var(--green-500)" stroke-width="5" stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round" style="transition:stroke-dashoffset 1s"/></svg>
+            <div class="pct">${pct}%</div>
+          </div>
+          <div class="funding-details">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11px;color:var(--gray-500)">Raised</span><span style="font-size:13px;font-weight:700;color:var(--green-700);font-family:var(--mono)">€${(inv.raised/1e6).toFixed(1)}M</span></div>
+            <div class="funding-bar"><div class="funding-fill" style="width:${pct}%"></div></div>
+            <div style="display:flex;justify-content:space-between"><span style="font-size:10px;color:var(--gray-400)">Target</span><span style="font-size:11px;font-weight:600;color:var(--green-900);font-family:var(--mono)">€${(inv.target/1e6).toFixed(1)}M</span></div>
+          </div>
+        </div>
+        <div class="invest-metrics">
+          <div><div class="detail-label">Projected ROI</div><div class="detail-value" style="color:var(--green-700)">${inv.roi}</div></div>
+          <div><div class="detail-label">Credits/Year</div><div class="detail-value">${inv.credits.toLocaleString()} t</div></div>
+          <div><div class="detail-label">Investors</div><div class="detail-value">${inv.investors}</div></div>
+        </div>
+        <div class="invest-bottom">
+          <div><div class="milestone-label">NEXT MILESTONE</div><div class="milestone-value">${inv.next}</div></div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="text-align:right"><div class="milestone-label">MIN INVEST</div><div style="font-size:13px;font-weight:700;color:var(--green-900);font-family:var(--mono)">€${(inv.min/1000).toFixed(0)}K</div></div>
+            <button class="invest-btn">Invest</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// LIVE MARKETS
+// ═══════════════════════════════════════════════
+function renderTicker() {
+  const t = document.getElementById('ticker');
+  const items = [...liveData,...liveData].map(d=>`
+    <span class="ticker-item">
+      <span class="ticker-sym">${d.sym}</span>
+      <span class="ticker-price">$${d.price.toFixed(2)}</span>
+      <span class="ticker-chg ${d.ch>=0?'ticker-up':'ticker-dn'}">${d.ch>=0?'▲':'▼'}${Math.abs(d.chPct).toFixed(2)}%</span>
+    </span>
+  `).join('');
+  t.innerHTML = items;
+}
+
+function renderInstrumentList() {
+  const list = document.getElementById('instrumentList');
+  const filtered = mktFilter==='all'?liveData:liveData.filter(d=>d.type===mktFilter);
+  list.innerHTML = filtered.map(d=>{
+    const up = d.ch>=0;
+    const sel = d.sym===selectedInst;
+    const typeBg = d.type==='Compliance'?'#dbeafe':d.type==='Aviation'?'#e0e7ff':'#dcfce7';
+    const typeCol = d.type==='Compliance'?'#1e40af':d.type==='Aviation'?'#4338ca':'#15803d';
+    // sparkline
+    const hist = d.hist;
+    const mn=Math.min(...hist),mx=Math.max(...hist),rng=mx-mn||1;
+    const pts=hist.map((v,i)=>`${(i/(hist.length-1))*256},${18-((v-mn)/rng)*16}`).join(' ');
+    const col = up?'#22c55e':'#ef4444';
+    return `
+    <div class="instrument ${sel?'selected':''}" onclick="selectInstrument('${d.sym}')">
+      <div class="inst-top">
+        <div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <span class="inst-dot" style="background:${d.color}"></span>
+            <span class="inst-sym">${d.sym}</span>
+            <span class="inst-type" style="background:${typeBg};color:${typeCol}">${d.type}</span>
+          </div>
+          <div class="inst-name">${d.name}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="inst-price"${d.price!==d.prev?` style="color:${up?'#16a34a':'#dc2626'}"`:''}}>$${d.price.toFixed(2)}</div>
+          <div class="inst-chg ${up?'up':'dn'}">${up?'+':''}${d.chPct.toFixed(2)}%</div>
+        </div>
+      </div>
+      <svg width="256" height="20" style="display:block;margin-top:3px">
+        <polyline points="0,20 ${pts} 256,20" fill="${col}10" stroke="none"/>
+        <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>`;
+  }).join('');
+}
+
+function selectInstrument(sym) { selectedInst=sym; renderMarketCenter(); renderInstrumentList(); }
+
+function renderMarketCenter() {
+  const d = liveData.find(x=>x.sym===selectedInst)||liveData[0];
+  const up = d.ch>=0;
+  document.getElementById('selDot').style.background = d.color;
+  document.getElementById('selSym').textContent = d.sym;
+  document.getElementById('selName').textContent = d.name;
+  document.getElementById('selExch').textContent = d.exch+' · Updated 2.5s';
+  document.getElementById('selPrice').textContent = '$'+d.price.toFixed(2);
+  const chEl = document.getElementById('selChange');
+  chEl.textContent = `${up?'▲':'▼'} $${Math.abs(d.ch).toFixed(2)} (${up?'+':''}${d.chPct.toFixed(2)}%)`;
+  chEl.className = 'sel-change '+(up?'up':'dn');
+  document.getElementById('chartStats').innerHTML = `H:<span>$${d.hi.toFixed(2)}</span> L:<span>$${d.lo.toFixed(2)}</span> Vol:<span>${d.vol.toLocaleString()}</span>`;
+  document.getElementById('obSub').textContent = d.sym+' · '+d.exch;
+
+  // Candle chart
+  const hist = d.hist;
+  const candles = [];
+  for(let i=0;i<hist.length-1;i+=2){const o=hist[i],cl=hist[i+1]||o;candles.push({o,cl,h:Math.max(o,cl)*1.002,l:Math.min(o,cl)*.998,up:cl>=o});}
+  const all=candles.flatMap(c=>[c.h,c.l]);
+  const mn=Math.min(...all),mx=Math.max(...all),rng=mx-mn||1;
+  const W=460,H=170,cw=W/candles.length*.6,g=W/candles.length*.4;
+  const tY=v=>H-6-((v-mn)/rng)*(H-12);
+  let svg='';
+  [0,.25,.5,.75,1].forEach(p=>{const v=mn+rng*p,y=tY(v);svg+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#f0fdf4" stroke-width="1"/><text x="${W-2}" y="${y-3}" text-anchor="end" font-size="8" fill="#9ca3af" font-family="'DM Mono',monospace">$${v.toFixed(2)}</text>`;});
+  candles.forEach((c,i)=>{const x=i*(cw+g)+g/2,bt=tY(Math.max(c.o,c.cl)),bb=tY(Math.min(c.o,c.cl)),bh=Math.max(bb-bt,1),col=c.up?'#22c55e':'#ef4444';svg+=`<line x1="${x+cw/2}" y1="${tY(c.h)}" x2="${x+cw/2}" y2="${tY(c.l)}" stroke="${col}" stroke-width="1"/><rect x="${x}" y="${bt}" width="${cw}" height="${bh}" rx="1" fill="${col}" opacity=".85"/>`;});
+  document.getElementById('candleChart').innerHTML = svg;
+
+  // Stats
+  document.getElementById('mktStats').innerHTML = [
+    {l:"24h Volume",v:d.vol.toLocaleString()+' t'},{l:"24h High",v:'$'+d.hi.toFixed(2)},{l:"24h Low",v:'$'+d.lo.toFixed(2)},{l:"Spread",v:'$0.10'}
+  ].map(s=>`<div class="mkt-stat"><div class="mkt-stat-label">${s.l}</div><div class="mkt-stat-value">${s.v}</div></div>`).join('');
+}
+
+function renderOrderBook() {
+  const el = document.getElementById('orderBook');
+  let html = '<div style="display:flex;font-size:8px;font-weight:600;color:var(--gray-400);margin-bottom:4px;padding:0 4px"><span style="flex:1">SIZE</span><span style="width:50px;text-align:right">BID</span><span style="width:6px"></span><span style="width:50px">ASK</span><span style="flex:1;text-align:right">SIZE</span></div>';
+  OB.bids.forEach((b,i)=>{
+    const a=OB.asks[i];
+    html+=`<div class="ob-row"><div class="ob-size" style="text-align:left">${b.s}</div><div class="ob-bid">${b.p.toFixed(2)}</div><div class="ob-sep">│</div><div class="ob-ask">${a?a.p.toFixed(2):''}</div><div class="ob-size" style="text-align:right">${a?a.s:''}</div></div>`;
+  });
+  html+='<div class="ob-spread">Spread: $0.10 (0.42%)</div>';
+  el.innerHTML = html;
+}
+
+function renderNews() {
+  const el = document.getElementById('newsFeed');
+  const tagColors={Regulatory:{bg:'#fef3c7',c:'#92400e'},IMO:{bg:'#fee2e2',c:'#991b1b'},Rating:{bg:'#dbeafe',c:'#1e40af'},Volume:{bg:'#f0fdf4',c:'#15803d'},Registry:{bg:'#ecfdf5',c:'#047857'},Supply:{bg:'#f0fdf4',c:'#15803d'}};
+  el.innerHTML = NEWS.map(n=>{
+    const tc=tagColors[n.tag]||{bg:'#f3f4f6',c:'#6b7280'};
+    return `<div class="news-item"><div class="news-meta"><span class="news-time">${n.time}</span><span class="news-tag" style="background:${tc.bg};color:${tc.c}">${n.tag}</span>${n.hot?'<span style="font-size:7px">🔥</span>':''}</div><div class="news-text">${n.text}</div></div>`;
+  }).join('');
+}
+
+function renderMktFilters() {
+  const el = document.getElementById('mktFilters');
+  el.innerHTML = ['all','Spot VCM','Compliance','Voluntary','Aviation'].map(f=>`<button class="mkt-filter-btn ${mktFilter===f?'active':''}" onclick="setMktFilter('${f}')">${f==='all'?'All':f}</button>`).join('');
+}
+function setMktFilter(f) { mktFilter=f; renderMktFilters(); renderInstrumentList(); }
+
+// ═══════════════════════════════════════════════
+// LIVE DATA SIMULATION
+// ═══════════════════════════════════════════════
+function tickLiveData() {
+  liveData = liveData.map(d=>{
+    const np = Math.round((d.price+(Math.random()-.48)*.003*d.price)*100)/100;
+    const ch = Math.round((np-d.base)*100)/100;
+    return {...d,prev:d.price,price:np,ch,chPct:Math.round(ch/d.base*10000)/100,hi:Math.max(d.hi,np),lo:Math.min(d.lo,np),vol:d.vol+Math.floor(Math.random()*100),hist:[...d.hist.slice(1),np]};
+  });
+  renderTicker();
+  if(currentSection==='markets') {
+    renderInstrumentList();
+    renderMarketCenter();
+  }
+}
+
+// ═══════════════════════════════════════════════
+// ANIMATED STATS
+// ═══════════════════════════════════════════════
+function animateStats() {
+  const targets = [{el:'stat1',v:17200,fmt:v=>v.toLocaleString()},{el:'stat2',v:23,fmt:v=>v},{el:'stat3',v:847,fmt:v=>'$'+v+'K'}];
+  let step=0; const steps=40;
+  const iv=setInterval(()=>{
+    step++;const p=1-Math.pow(1-step/steps,3);
+    targets.forEach(t=>{document.getElementById(t.el).textContent=t.fmt(Math.round(t.v*p));});
+    if(step>=steps)clearInterval(iv);
+  },37);
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+function init() {
+  renderCredits();
+  renderCart();
+  renderInvestments();
+  renderTicker();
+  renderMktFilters();
+  renderInstrumentList();
+  renderMarketCenter();
+  renderOrderBook();
+  renderNews();
+  animateStats();
+  setInterval(tickLiveData, 2500);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
