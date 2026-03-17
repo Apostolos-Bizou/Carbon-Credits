@@ -1445,35 +1445,81 @@ function buildUploadCenter(owner, vessels) {
 // ═══════════════════════════════════════════════
 // FLEET LIVE MAP
 // ═══════════════════════════════════════════════
-var PORT_COORDS = {
-  'Piraeus':[37.9475,23.6367],'Rotterdam':[51.9225,4.47917],'Singapore':[1.2644,103.8198],'Shanghai':[31.3602,121.588],
-  'Hamburg':[53.5461,9.9690],'Antwerp':[51.2194,4.4025],'Jeddah':[21.4858,39.1925],'Mumbai':[19.0760,72.8777],
-  'Busan':[35.1028,129.0403],'Los Angeles':[33.7395,-118.2731],'Barcelona':[41.3588,2.1590],'Genoa':[44.4056,8.9463],
-  'Houston':[29.7604,-95.3698],'Durban':[-29.8587,31.0218],'Manila':[14.5176,120.9822],'Yokohama':[35.4437,139.6380],
-  'Santos':[-23.9608,-46.3331],'Algeciras':[36.1274,-5.4536],'Istanbul':[41.0082,28.9784],
-  'Limassol':[34.6786,33.0413],'Monaco':[43.7384,7.4246],'Oslo':[59.9139,10.7522],'Dubai':[25.2769,55.2962],
-  'Hong_Kong':[22.3193,114.1694],'Naples':[40.8518,14.2681],'Thessaloniki':[40.6401,22.9444],
-  'London':[51.5074,-0.1278],'Copenhagen':[55.6761,12.5683],'Alexandria':[31.2001,29.9187],
-  'Monrovia':[6.3156,-10.8074],'Male':[4.1755,73.5093],'Bermuda':[32.2949,-64.7840],
+// Sea-route waypoints (all guaranteed at sea)
+var SEA_ROUTES = {
+  'Piraeus \u2192 Rotterdam': [
+    [37.50,23.50],[37.20,21.00],[36.80,16.00],[37.50,11.50],[38.20,6.00],[36.20,-4.00],[36.50,-6.50],[43.00,-9.50],[47.50,-6.00],[49.50,-3.00],[51.00,1.50],[51.90,3.80]
+  ],
+  'Singapore \u2192 Piraeus': [
+    [1.20,104.00],[4.50,98.00],[7.00,80.00],[12.50,51.00],[12.80,43.50],[15.00,42.00],[21.00,39.00],[27.50,34.00],[32.00,30.00],[34.50,26.00],[36.50,23.50]
+  ],
+  'Shanghai \u2192 Hamburg': [
+    [31.00,122.50],[27.00,120.00],[20.00,115.00],[10.00,107.00],[1.20,104.00],[5.00,80.00],[12.50,50.00],[15.00,42.00],[32.00,30.00],[36.00,15.00],[36.20,-5.00],[43.00,-9.50],[48.00,-5.50],[50.50,0.00],[53.50,8.00]
+  ],
+  'Rotterdam \u2192 Antwerp': [
+    [51.90,3.80],[51.60,3.90],[51.40,4.00],[51.25,4.20]
+  ],
+  'Jeddah \u2192 Piraeus': [
+    [21.40,39.10],[24.00,36.50],[27.50,34.00],[30.50,32.20],[32.00,30.00],[33.50,27.50],[35.00,25.00],[36.50,23.50]
+  ],
+  'Mumbai \u2192 Singapore': [
+    [18.90,72.50],[15.00,73.00],[10.00,76.00],[6.00,80.00],[4.00,90.00],[2.50,98.00],[1.20,104.00]
+  ],
+  'Busan \u2192 Los Angeles': [
+    [35.00,129.50],[37.00,140.00],[40.00,155.00],[42.00,170.00],[40.00,-170.00],[38.00,-150.00],[35.50,-130.00],[33.80,-118.50]
+  ],
+  'Barcelona \u2192 Genoa': [
+    [41.30,2.30],[41.50,3.50],[42.00,5.00],[42.80,6.50],[43.50,7.50],[44.20,8.80]
+  ],
+  'Houston \u2192 Rotterdam': [
+    [28.80,-94.50],[26.00,-88.00],[24.50,-83.00],[27.00,-77.00],[32.00,-68.00],[38.00,-50.00],[43.00,-30.00],[48.00,-10.00],[50.00,-2.00],[51.90,3.80]
+  ],
+  'Durban \u2192 Shanghai': [
+    [-29.50,31.50],[-28.00,35.00],[-20.00,42.00],[-12.00,48.00],[0.00,55.00],[5.00,70.00],[5.00,85.00],[1.20,104.00],[10.00,110.00],[20.00,115.00],[28.00,121.00],[31.00,122.50]
+  ],
+  'Manila \u2192 Yokohama': [
+    [14.50,121.00],[18.00,122.00],[22.00,125.00],[27.00,130.00],[32.00,135.00],[35.30,139.60]
+  ],
+  'Santos \u2192 Algeciras': [
+    [-24.00,-46.00],[-20.00,-38.00],[-10.00,-30.00],[0.00,-25.00],[10.00,-20.00],[20.00,-18.00],[28.00,-14.00],[34.00,-8.00],[36.10,-5.50]
+  ]
 };
 
 function getVesselSimPosition(vessel, ownerIdx, vesselIdx) {
-  var route = vessel.route.name;
-  var parts = route.split(' \u2192 ');
-  var from = parts[0] ? parts[0].replace(/ /g,'_') : 'Piraeus';
-  var to = parts[1] ? parts[1].replace(/ /g,'_') : 'Rotterdam';
-  var c1 = PORT_COORDS[from] || PORT_COORDS['Piraeus'];
-  var c2 = PORT_COORDS[to] || PORT_COORDS['Rotterdam'];
-  // Simulate position along route with some randomness based on indices
-  var seed = (ownerIdx * 7 + vesselIdx * 13 + 42) % 100;
-  var progress = seed / 100;
-  // Add slight random offset for realism
-  var jitterLat = ((ownerIdx * 3 + vesselIdx * 7) % 20 - 10) * 0.1;
-  var jitterLon = ((ownerIdx * 5 + vesselIdx * 11) % 20 - 10) * 0.1;
-  var lat = c1[0] + (c2[0] - c1[0]) * progress + jitterLat;
-  var lon = c1[1] + (c2[1] - c1[1]) * progress + jitterLon;
-  // Calculate bearing for ship icon rotation
-  var bearing = Math.atan2(c2[1]-c1[1], c2[0]-c1[0]) * 180 / Math.PI;
+  var routeName = vessel.route.name;
+  var waypoints = SEA_ROUTES[routeName];
+  if (!waypoints || waypoints.length < 2) {
+    // Fallback: generic mid-ocean positions
+    var fallbackPositions = [
+      [36.50, 12.00],[34.00, 28.00],[38.00, -8.00],[25.00, 56.00],[5.00, 78.00],
+      [42.00, -30.00],[15.00, 45.00],[30.00, 60.00],[10.00, 100.00],[40.00, 145.00],
+      [33.00, -125.00],[48.00, -5.00],[20.00, -18.00],[28.00, 34.00],[45.00, 5.00],
+      [-5.00, 50.00],[8.00, 82.00],[37.00, 20.00],[50.00, 2.00],[22.00, 120.00]
+    ];
+    var idx = (ownerIdx * 7 + vesselIdx * 13) % fallbackPositions.length;
+    return { lat: fallbackPositions[idx][0], lon: fallbackPositions[idx][1], bearing: 45, progress: 0.5 };
+  }
+  
+  // Pick a position along the route based on owner+vessel index
+  var seed = (ownerIdx * 7 + vesselIdx * 13 + 37) % 97;
+  var progress = seed / 97;
+  var totalSegments = waypoints.length - 1;
+  var exactSegment = progress * totalSegments;
+  var segIdx = Math.min(Math.floor(exactSegment), totalSegments - 1);
+  var segProgress = exactSegment - segIdx;
+  
+  var p1 = waypoints[segIdx];
+  var p2 = waypoints[segIdx + 1];
+  var lat = p1[0] + (p2[0] - p1[0]) * segProgress;
+  var lon = p1[1] + (p2[1] - p1[1]) * segProgress;
+  
+  // Small jitter to avoid overlapping (kept small, max ~0.3 degrees = ~30km at sea)
+  var jLat = ((ownerIdx * 3 + vesselIdx * 5) % 7 - 3) * 0.1;
+  var jLon = ((ownerIdx * 5 + vesselIdx * 3) % 7 - 3) * 0.1;
+  lat += jLat;
+  lon += jLon;
+  
+  var bearing = Math.atan2(p2[1] - p1[1], p2[0] - p1[0]) * 180 / Math.PI;
   return { lat: lat, lon: lon, bearing: bearing, progress: progress };
 }
 
