@@ -7,339 +7,387 @@
 <title>GreenCreditX — Admin Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--green-50:#f0fdf4;--green-100:#dcfce7;--green-200:#bbf7d0;--green-300:#86efac;--green-400:#4ade80;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;--green-800:#166534;--green-900:#14532d;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--mono:'DM Mono',monospace;--sans:'Outfit',sans-serif;--sidebar:300px}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:18px}
-body{font-family:var(--sans);background:var(--gray-50);color:var(--gray-800);display:flex;min-height:100vh;font-size:1rem}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px}
+:root{--g50:#f0fdf4;--g100:#dcfce7;--g200:#bbf7d0;--g300:#86efac;--g400:#4ade80;--g500:#22c55e;--g600:#16a34a;--g700:#15803d;--g900:#14532d;--x50:#f9fafb;--x100:#f3f4f6;--x200:#e5e7eb;--x300:#d1d5db;--x400:#9ca3af;--x500:#6b7280;--x700:#374151;--x800:#1f2937;--mono:'DM Mono',monospace;--sans:'Outfit',sans-serif;--sb:300px}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:17px}body{font-family:var(--sans);background:var(--x50);color:var(--x800);display:flex;min-height:100vh}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--x300);border-radius:3px}
 button{font-family:var(--sans);cursor:pointer}input,textarea,select{font-family:var(--sans)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeIn .3s ease both}
-.sidebar{width:var(--sidebar);background:var(--green-900);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
-.sidebar-logo{padding:32px 28px;border-bottom:1px solid rgba(255,255,255,.1)}.sidebar-logo h1{font-size:24px;font-weight:700}.sidebar-logo h1 span{color:var(--green-400)}.sidebar-logo p{font-size:13px;color:var(--green-300);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
-.sidebar-nav{flex:1;padding:20px 0;overflow-y:auto}.nav-section{padding:0 22px;margin-bottom:12px}.nav-section-title{font-size:12px;color:var(--green-400);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;padding:0 4px}
-.nav-item{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;color:rgba(255,255,255,.6);font-size:16px;font-weight:500;cursor:pointer;transition:all .2s;margin-bottom:3px;border:none;background:none;width:100%;text-align:left}.nav-item:hover{color:#fff;background:rgba(255,255,255,.08)}.nav-item.active{color:#fff;background:rgba(34,197,94,.2);font-weight:600}.nav-item .icon{font-size:20px;width:28px;text-align:center}.nav-item .badge{margin-left:auto;background:var(--green-500);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px}
-.sidebar-footer{padding:24px 28px;border-top:1px solid rgba(255,255,255,.1)}.sidebar-footer .user{display:flex;align-items:center;gap:12px}.sidebar-footer .avatar{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--green-400),var(--green-500));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green-900)}.sidebar-footer .name{font-size:16px;font-weight:600}.sidebar-footer .role{font-size:13px;color:var(--green-300)}
-.main{margin-left:var(--sidebar);flex:1;min-height:100vh}
-.topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:0 48px;height:80px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}.topbar h2{font-size:26px;font-weight:700;color:var(--green-900)}.topbar .sub{font-size:15px;color:var(--gray-400);margin-left:14px}
-.topbar-actions{display:flex;gap:12px;align-items:center}
-.btn{padding:12px 26px;border-radius:12px;font-size:16px;font-weight:600;border:none;transition:all .2s}.btn-primary{background:linear-gradient(135deg,var(--green-500),var(--green-600));color:#fff;box-shadow:0 2px 10px rgba(34,197,94,.25)}.btn-primary:hover{transform:translateY(-1px)}.btn-secondary{background:#fff;color:var(--gray-700);border:1px solid var(--gray-200)}.btn-danger{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}.btn-sm{padding:9px 18px;font-size:14px;border-radius:10px}
-.content{padding:36px 48px}
-.panel{display:none}.panel.active{display:block}
-.card{background:#fff;border-radius:18px;border:1px solid var(--gray-200);margin-bottom:24px;overflow:hidden}.card-header{padding:24px 28px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center}.card-title{font-size:20px;font-weight:700;color:var(--green-900)}.card-subtitle{font-size:15px;color:var(--gray-400)}.card-body{padding:28px}
-table{width:100%;border-collapse:collapse}th{padding:16px 20px;font-size:14px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;text-align:left;background:var(--gray-50);border-bottom:1px solid var(--gray-200)}td{padding:18px 20px;font-size:16px;border-bottom:1px solid var(--gray-100);vertical-align:middle}tr:hover td{background:var(--green-50)}.td-mono{font-family:var(--mono);font-weight:500;font-size:15px}.td-price{font-family:var(--mono);font-weight:700;color:var(--green-700);font-size:18px}.status-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px}.status-live{background:var(--green-500)}.status-draft{background:var(--gray-300)}.status-paused{background:#f59e0b}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.form-group{display:flex;flex-direction:column;gap:8px}.form-group.full{grid-column:1/-1}.form-label{font-size:15px;font-weight:600;color:var(--gray-700)}.form-input{padding:14px 18px;border:1px solid var(--gray-200);border-radius:12px;font-size:16px;color:var(--gray-800);outline:none;transition:border .2s}.form-input:focus{border-color:var(--green-500);box-shadow:0 0 0 3px rgba(34,197,94,.1)}textarea.form-input{min-height:150px;resize:vertical;line-height:1.6}select.form-input{cursor:pointer}.form-actions{display:flex;gap:12px;margin-top:24px;padding-top:24px;border-top:1px solid var(--gray-100)}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}.modal-overlay.show{display:flex}.modal{background:#fff;border-radius:22px;width:90%;max-width:900px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}.modal-header{padding:28px 32px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center}.modal-title{font-size:24px;font-weight:700;color:var(--green-900)}.modal-close{background:none;border:none;font-size:28px;color:var(--gray-400);cursor:pointer}.modal-body{padding:32px}.modal-footer{padding:24px 32px;border-top:1px solid var(--gray-100);display:flex;justify-content:flex-end;gap:12px}
-.editor-toolbar{display:flex;gap:6px;padding:10px;background:var(--gray-50);border:1px solid var(--gray-200);border-bottom:none;border-radius:12px 12px 0 0}.editor-toolbar button{padding:8px 14px;border:none;background:transparent;color:var(--gray-600);font-size:16px;border-radius:6px;font-weight:600}.editor-toolbar button:hover{background:var(--gray-200)}.editor-area{border:1px solid var(--gray-200);border-radius:0 0 12px 12px;min-height:250px;padding:20px;font-size:16px;line-height:1.7;outline:none;color:var(--gray-800)}
-.source-card{background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:24px;display:flex;align-items:center;gap:20px;transition:all .2s}.source-card:hover{border-color:var(--green-300);box-shadow:0 4px 16px rgba(34,197,94,.08)}.source-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}.source-info{flex:1}.source-name{font-size:18px;font-weight:700;color:var(--green-900)}.source-desc{font-size:14px;color:var(--gray-400)}.source-status{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
-.toggle{position:relative;width:52px;height:28px;border-radius:14px;border:none;cursor:pointer;transition:background .3s}.toggle.on{background:var(--green-500)}.toggle.off{background:var(--gray-300)}.toggle::after{content:'';position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;top:2px;transition:left .3s;box-shadow:0 1px 3px rgba(0,0,0,.15)}.toggle.on::after{left:26px}.toggle.off::after{left:2px}
-.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:32px}.admin-stat{background:#fff;border-radius:16px;padding:24px;border:1px solid var(--gray-200)}.admin-stat .label{font-size:14px;color:var(--gray-400);font-weight:500;text-transform:uppercase;letter-spacing:.5px}.admin-stat .value{font-size:38px;font-weight:800;color:var(--green-900);margin-top:6px}.admin-stat .change{font-size:15px;color:var(--green-600);font-weight:600;margin-top:4px}
-.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--gray-100);border-radius:14px;padding:5px;width:fit-content}.tab{padding:12px 24px;border-radius:10px;font-size:16px;font-weight:600;border:none;background:transparent;color:var(--gray-400);transition:all .2s}.tab.active{background:#fff;color:var(--green-700);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* Sidebar */
+.sb{width:var(--sb);background:var(--g900);color:#fff;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50}
+.sb-logo{padding:28px 24px;border-bottom:1px solid rgba(255,255,255,.1)}.sb-logo h1{font-size:22px;font-weight:700}.sb-logo h1 span{color:var(--g400)}.sb-logo p{font-size:12px;color:var(--g300);font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-top:3px}
+.sb-nav{flex:1;padding:18px 0;overflow-y:auto}.ns{padding:0 20px;margin-bottom:10px}.ns-t{font-size:11px;color:var(--g400);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;padding:0 4px}
+.ni{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:11px;color:rgba(255,255,255,.6);font-size:15px;font-weight:500;transition:all .2s;margin-bottom:2px;border:none;background:none;width:100%;text-align:left}.ni:hover{color:#fff;background:rgba(255,255,255,.08)}.ni.on{color:#fff;background:rgba(34,197,94,.2);font-weight:600}.ni .ic{font-size:18px;width:26px;text-align:center}.ni .bg{margin-left:auto;background:var(--g500);color:#fff;font-size:11px;font-weight:700;padding:2px 9px;border-radius:10px}
+.sb-ft{padding:22px 24px;border-top:1px solid rgba(255,255,255,.1)}.sb-ft .u{display:flex;align-items:center;gap:10px}.sb-ft .av{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,var(--g400),var(--g500));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--g900)}.sb-ft .nm{font-size:15px;font-weight:600}.sb-ft .rl{font-size:12px;color:var(--g300)}
+
+/* Main */
+.mn{margin-left:var(--sb);flex:1;min-height:100vh}
+.tb{background:#fff;border-bottom:1px solid var(--x200);padding:0 44px;height:76px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}.tb h2{font-size:24px;font-weight:700;color:var(--g900)}.tb .su{font-size:14px;color:var(--x400);margin-left:12px}
+.ct{padding:32px 44px}
+
+/* Buttons */
+.btn{padding:11px 24px;border-radius:11px;font-size:15px;font-weight:600;border:none;transition:all .2s}.bp{background:linear-gradient(135deg,var(--g500),var(--g600));color:#fff;box-shadow:0 2px 10px rgba(34,197,94,.25)}.bp:hover{transform:translateY(-1px)}.bs{background:#fff;color:var(--x700);border:1px solid var(--x200)}.bd{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}.bsm{padding:8px 16px;font-size:13px;border-radius:9px}
+
+/* Cards & Tables */
+.cd{background:#fff;border-radius:16px;border:1px solid var(--x200);margin-bottom:22px;overflow:hidden}.ch{padding:22px 26px;border-bottom:1px solid var(--x100);display:flex;justify-content:space-between;align-items:center}.ct-t{font-size:19px;font-weight:700;color:var(--g900)}.ct-s{font-size:14px;color:var(--x400)}.cb{padding:26px}
+table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;font-weight:600;color:var(--x400);text-transform:uppercase;letter-spacing:.5px;text-align:left;background:var(--x50);border-bottom:1px solid var(--x200)}td{padding:16px 18px;font-size:15px;border-bottom:1px solid var(--x100)}tr:hover td{background:var(--g50)}.tm{font-family:var(--mono);font-weight:500;font-size:14px}.tp{font-family:var(--mono);font-weight:700;color:var(--g700);font-size:17px}
+.sd{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:7px}.sl{background:var(--g500)}.sdr{background:var(--x300)}.sp{background:#f59e0b}
+
+/* Forms */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:18px}.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}.fgp{display:flex;flex-direction:column;gap:7px}.fgp.full{grid-column:1/-1}
+.fl{font-size:14px;font-weight:600;color:var(--x700)}.fi{padding:12px 16px;border:1px solid var(--x200);border-radius:11px;font-size:15px;color:var(--x800);outline:none;transition:border .2s}.fi:focus{border-color:var(--g500);box-shadow:0 0 0 3px rgba(34,197,94,.1)}textarea.fi{min-height:100px;resize:vertical;line-height:1.5}select.fi{cursor:pointer}
+.fa{display:flex;gap:10px;margin-top:20px;padding-top:20px;border-top:1px solid var(--x100)}
+
+/* Modal */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);z-index:200;align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px}.mo.show{display:flex}
+.md{background:#fff;border-radius:20px;width:100%;max-width:960px;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.mh{padding:24px 28px;border-bottom:1px solid var(--x100);display:flex;justify-content:space-between;align-items:center}.mt{font-size:22px;font-weight:700;color:var(--g900)}.mc{background:none;border:none;font-size:26px;color:var(--x400)}.mb{padding:28px}.mf{padding:20px 28px;border-top:1px solid var(--x100);display:flex;justify-content:flex-end;gap:10px}
+
+/* Stats */
+.as{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:28px}.ast{background:#fff;border-radius:14px;padding:22px;border:1px solid var(--x200)}.ast .al{font-size:13px;color:var(--x400);font-weight:500;text-transform:uppercase;letter-spacing:.5px}.ast .av2{font-size:34px;font-weight:800;color:var(--g900);margin-top:5px}.ast .ac{font-size:14px;color:var(--g600);font-weight:600;margin-top:3px}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:22px;background:var(--x100);border-radius:12px;padding:4px;width:fit-content}.tab{padding:11px 22px;border-radius:9px;font-size:15px;font-weight:600;border:none;background:transparent;color:var(--x400);transition:all .2s}.tab.on{background:#fff;color:var(--g700);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+/* Sources */
+.sc{background:#fff;border-radius:14px;border:1px solid var(--x200);padding:22px;display:flex;align-items:center;gap:18px;transition:all .2s}.sc:hover{border-color:var(--g300)}.si{width:52px;height:52px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px}.sn{font-size:17px;font-weight:700;color:var(--g900)}.sde{font-size:13px;color:var(--x400)}
+.tg{position:relative;width:50px;height:26px;border-radius:13px;border:none;transition:background .3s}.tg.on{background:var(--g500)}.tg.off{background:var(--x300)}.tg::after{content:'';position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:2px;transition:left .3s;box-shadow:0 1px 3px rgba(0,0,0,.15)}.tg.on::after{left:26px}.tg.off::after{left:2px}
+
+/* BP Builder special */
+.bp-section{border:1px solid var(--x200);border-radius:14px;padding:22px;margin-bottom:18px;background:#fff}
+.bp-section-title{font-size:17px;font-weight:700;color:var(--g900);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.bp-add-row{display:flex;gap:8px;margin-top:10px}
+.bp-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;padding:8px 10px;background:var(--x50);border-radius:8px}
+.bp-row input,.bp-row select{flex:1}
+.bp-row-rm{background:none;border:none;color:var(--x300);font-size:18px;cursor:pointer;padding:0 4px}.bp-row-rm:hover{color:#dc2626}
+.bp-help{font-size:12px;color:var(--x400);margin-top:4px}
 </style>
 
-<!-- ═══ ALL JAVASCRIPT IN HEAD ═══ -->
 <script>
-const pageTitles={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},investments:{t:'Investments',s:'Manage projects, funding, and content'},countries:{t:'Countries & Regions',s:'Land base locations for investments'},content:{t:'Content Pages',s:'Business plans, presentations, and guides'},datasources:{t:'Data Sources',s:'API connections and live market feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Manage admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
+/* ═══ ALL JS IN HEAD ═══ */
+var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
 
 function showPanel(id){
-  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
-  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
-  var panel=document.getElementById('panel-'+id);
-  if(panel)panel.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(function(n){if(n.getAttribute('onclick')&&n.getAttribute('onclick').indexOf("'"+id+"'")>-1)n.classList.add('active')});
-  var info=pageTitles[id]||{t:id,s:''};
-  document.getElementById('pageTitle').textContent=info.t;
-  document.getElementById('pageSub').textContent=info.s;
-  var topBtn=document.getElementById('topAction');
-  if(id==='marketplace'||id==='investments'){topBtn.style.display='block';topBtn.textContent='+ Add New'}else{topBtn.style.display='none'}
+  document.querySelectorAll('[data-panel]').forEach(function(p){p.style.display='none'});
+  var el=document.getElementById('p-'+id);if(el)el.style.display='block';
+  document.querySelectorAll('.ni').forEach(function(n){n.classList.remove('on')});
+  document.querySelectorAll('.ni').forEach(function(n){if(n.getAttribute('onclick')&&n.getAttribute('onclick').indexOf("'"+id+"'")>-1)n.classList.add('on')});
+  var info=PT[id]||{t:id,s:''};document.getElementById('pgT').textContent=info.t;document.getElementById('pgS').textContent=info.s;
 }
 
-var credits=[
-  {id:"VCS-2847",name:"Mindanao Reforestation Alliance",type:"ARR",rating:"A",price:22.50,available:2400,vintage:2025,origin:"Philippines",status:"live"},
-  {id:"VCS-3102",name:"Caraga Forest Restoration",type:"ARR",rating:"BBB+",price:19.80,available:1800,vintage:2025,origin:"Philippines",status:"live"},
-  {id:"GS-1455",name:"Borneo Mangrove Conservation",type:"Blue Carbon",rating:"AA",price:28.40,available:3200,vintage:2024,origin:"Indonesia",status:"live"},
-  {id:"VCS-2991",name:"Davao Native Species Program",type:"ARR",rating:"A-",price:21.20,available:1500,vintage:2025,origin:"Philippines",status:"live"},
-  {id:"VCS-3250",name:"Visayas Agroforestry Initiative",type:"ARR",rating:"BBB",price:17.60,available:900,vintage:2024,origin:"Philippines",status:"draft"},
-  {id:"GS-1522",name:"Sulawesi Peatland Restoration",type:"REDD+",rating:"A+",price:31.50,available:4100,vintage:2025,origin:"Indonesia",status:"live"}
-];
+/* Credits */
+var creds=[{id:"VCS-2847",nm:"Mindanao Reforestation Alliance",tp:"ARR",rt:"A",pr:22.50,av:2400,vn:2025,og:"Philippines",st:"live"},{id:"VCS-3102",nm:"Caraga Forest Restoration",tp:"ARR",rt:"BBB+",pr:19.80,av:1800,vn:2025,og:"Philippines",st:"live"},{id:"GS-1455",nm:"Borneo Mangrove Conservation",tp:"Blue Carbon",rt:"AA",pr:28.40,av:3200,vn:2024,og:"Indonesia",st:"live"},{id:"VCS-2991",nm:"Davao Native Species",tp:"ARR",rt:"A-",pr:21.20,av:1500,vn:2025,og:"Philippines",st:"live"},{id:"VCS-3250",nm:"Visayas Agroforestry",tp:"ARR",rt:"BBB",pr:17.60,av:900,vn:2024,og:"Philippines",st:"draft"},{id:"GS-1522",nm:"Sulawesi Peatland",tp:"REDD+",rt:"A+",pr:31.50,av:4100,vn:2025,og:"Indonesia",st:"live"}];
 
-function renderCreditsTable(){
-  var tb=document.getElementById('creditsTable');if(!tb)return;
-  tb.innerHTML=credits.map(function(c){
-    var sc=c.status==='live'?'status-live':'status-draft';
-    return '<tr><td><span class="status-dot '+sc+'"></span>'+c.status.charAt(0).toUpperCase()+c.status.slice(1)+'</td><td class="td-mono">'+c.id+'</td><td style="font-weight:600">'+c.name+'</td><td>'+c.type+'</td><td>'+c.rating+'</td><td class="td-price">$'+c.price.toFixed(2)+'</td><td class="td-mono">'+c.available.toLocaleString()+'</td><td>'+c.vintage+'</td><td>'+c.origin+'</td><td><button class="btn btn-secondary btn-sm" onclick="openCreditModal(\''+c.id+'\')">Edit</button> <button class="btn btn-danger btn-sm">Delete</button></td></tr>';
-  }).join('');
+function rCreds(){var tb=document.getElementById('credTb');if(!tb)return;tb.innerHTML=creds.map(function(c){return '<tr><td><span class="sd '+(c.st==='live'?'sl':'sdr')+'"></span>'+(c.st==='live'?'Live':'Draft')+'</td><td class="tm">'+c.id+'</td><td style="font-weight:600">'+c.nm+'</td><td>'+c.tp+'</td><td>'+c.rt+'</td><td class="tp">$'+c.pr.toFixed(2)+'</td><td class="tm">'+c.av.toLocaleString()+'</td><td>'+c.vn+'</td><td>'+c.og+'</td><td><button class="btn bs bsm" onclick="openCM(\''+c.id+'\')">Edit</button> <button class="btn bd bsm">Del</button></td></tr>'}).join('')}
+
+function openCM(id){document.getElementById('cmMo').classList.add('show')}
+function closeCM(){document.getElementById('cmMo').classList.remove('show')}
+
+/* Investments */
+var invs=[{id:"INV-001",nm:"Mindanao 5,000ha ARR",co:"Philippines",rg:"Mindanao — Caraga",ph:"Phase 2",ra:7.2,tg:19,st:"live",bp:true},{id:"INV-002",nm:"Bukidnon Highland",co:"Philippines",rg:"Mindanao — Bukidnon",ph:"Phase 1",ra:2.1,tg:8.5,st:"live",bp:false},{id:"INV-003",nm:"Palawan Blue Carbon",co:"Philippines",rg:"Palawan",ph:"Phase 1",ra:0.85,tg:12,st:"live",bp:false},{id:"INV-004",nm:"Caraga Phase II",co:"Philippines",rg:"Mindanao — Caraga",ph:"Phase 3",ra:3.8,tg:4.2,st:"live",bp:true},{id:"INV-005",nm:"Davao Gulf Coastal",co:"Philippines",rg:"Mindanao — Davao",ph:"Phase 1",ra:0.42,tg:6.8,st:"draft",bp:false},{id:"INV-006",nm:"W. Kalimantan Peatland",co:"Indonesia",rg:"Kalimantan",ph:"Phase 2",ra:9.5,tg:22,st:"live",bp:false},{id:"INV-007",nm:"Sulawesi Mangrove",co:"Indonesia",rg:"Sulawesi",ph:"Phase 1",ra:3.2,tg:15,st:"live",bp:false},{id:"INV-008",nm:"Sumatra Rainforest",co:"Indonesia",rg:"Sumatra",ph:"Phase 2",ra:18.5,tg:28,st:"live",bp:false},{id:"INV-009",nm:"Sabah Rainforest",co:"Malaysia",rg:"Sabah",ph:"Phase 1",ra:1.1,tg:10,st:"draft",bp:false},{id:"INV-010",nm:"Sarawak Peat Swamp",co:"Malaysia",rg:"Sarawak",ph:"Phase 2",ra:5.8,tg:14,st:"live",bp:false}];
+var invF='all';
+
+function setIT(btn,f){invF=f;document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});btn.classList.add('on');rInvs()}
+
+function rInvs(){var fl=invF==='all'?invs:invs.filter(function(i){return i.co===invF});var tb=document.getElementById('invTb');if(!tb)return;
+tb.innerHTML=fl.map(function(v){var pc=Math.round(v.ra/v.tg*100);return '<tr><td><span class="sd '+(v.st==='live'?'sl':'sdr')+'"></span>'+(v.st==='live'?'Live':'Draft')+'</td><td class="tm">'+v.id+'</td><td style="font-weight:600">'+v.nm+'</td><td>'+v.co+'</td><td>'+v.rg+'</td><td>'+v.ph+'</td><td class="tp">\u20AC'+v.ra+'M <span style="font-size:12px;color:var(--x400)">('+pc+'%)</span></td><td class="tm">\u20AC'+v.tg+'M</td><td>'+(v.bp?'<span style="color:var(--g600)">\u2713 Published</span>':'<span style="color:#f59e0b">\u26A0 Missing</span>')+'</td><td><button class="btn bs bsm">Edit</button> <button class="btn bp bsm" onclick="openBPBuilder(\''+v.id+'\')">'+( v.bp?'\u270F\uFE0F Edit Plan':'\u2795 Create Plan')+'</button></td></tr>'}).join('')}
+
+/* BP Builder */
+var bpMetrics=[],bpWhy=[],bpScenarios=[],bpCosts=[],bpCashflow=[],bpAdvantages=[],bpRisks=[],bpPartners=[],bpTimeline=[],bpSteps=[];
+
+function openBPBuilder(id){
+  var inv=invs.find(function(i){return i.id===id});
+  document.getElementById('bp-project-name').textContent=inv?inv.nm:'New Project';
+  document.getElementById('bp-project-id').textContent=id;
+  bpMetrics=[{l:'',v:''},{l:'',v:''}];bpScenarios=[{n:'',p:'',r:'',b:''}];bpCosts=[{i:'',a:''}];bpCashflow=[{y:2025,cx:0,ox:0,cr:0,rv:0}];bpWhy=[''];bpAdvantages=[{t:'',d:''}];bpRisks=[{r:'',m:''}];bpPartners=[{n:'',r:''}];bpTimeline=[{p:'',d:'',c:'',o:''}];bpSteps=[''];
+  if(inv&&inv.bp){/* Pre-fill with sample data for INV-001 */
+    bpMetrics=[{l:'Έκταση',v:'5,000 εκτάρια'},{l:'Επένδυση',v:'€19.0M'},{l:'Πρώτα Credits',v:'2028'},{l:'Παραγωγή 2029',v:'3,400 τόνοι'},{l:'Πλήρης Δυναμικότητα',v:'4,250 τ/έτος'},{l:'Break-even',v:'2034 (@$40)'},{l:'Κόστος Παραγωγής',v:'$8-12/τόνο'},{l:'Κόστος Γης',v:'₱50K-250K/ha'}];
+    bpWhy=['1.2 εκατ. εκτάρια διαθέσιμα (DENR)','Χαμηλό κόστος γης στο Mindanao','Κυβερνητική δέσμευση 75% μείωση','Υπάρχοντα Verra projects','Συνέργειες TPA services','Πρόσβαση σε 20+ πλοιοκτήτες'];
+    bpScenarios=[{n:'Απαισιόδοξο',p:'$10',r:'€40K',b:'2040+'},{n:'Συντηρητικό',p:'$20',r:'€80K',b:'~2035'},{n:'Βάση',p:'$40',r:'€160K',b:'2034'},{n:'Αισιόδοξο',p:'$80',r:'€320K',b:'2032'}];
+    bpCosts=[{i:'Γη (5,000 ha @€2,500/ha)',a:'€12,500,000'},{i:'Φύτευση & Εγκατάσταση',a:'€5,000,000'},{i:'Πιστοποίηση & Διαχείριση',a:'€2,000,000'},{i:'Σύνολο CAPEX',a:'€19,500,000'}];
+    bpSteps=['Διερεύνηση ενδιαφέροντος πλοιοκτητών','Επιλογή strategic partner','Site visit Mindanao','Pre-purchase agreements'];
+  }
+  renderBPBuilder();
+  document.getElementById('bpMo').classList.add('show');
+}
+function closeBPB(){document.getElementById('bpMo').classList.remove('show')}
+
+function renderBPBuilder(){
+  // Metrics
+  document.getElementById('bp-metrics').innerHTML=bpMetrics.map(function(m,i){return '<div class="bp-row"><input class="fi" placeholder="Label (π.χ. Έκταση)" value="'+m.l+'" oninput="bpMetrics['+i+'].l=this.value"><input class="fi" placeholder="Value (π.χ. 5,000 ha)" value="'+m.v+'" oninput="bpMetrics['+i+'].v=this.value"><button class="bp-row-rm" onclick="bpMetrics.splice('+i+',1);renderBPBuilder()">\u00D7</button></div>'}).join('');
+  // Why
+  document.getElementById('bp-why').innerHTML=bpWhy.map(function(w,i){return '<div class="bp-row"><input class="fi" style="flex:1" placeholder="Λόγος #'+(i+1)+'" value="'+w+'" oninput="bpWhy['+i+']=this.value"><button class="bp-row-rm" onclick="bpWhy.splice('+i+',1);renderBPBuilder()">\u00D7</button></div>'}).join('');
+  // Scenarios
+  document.getElementById('bp-scenarios').innerHTML=bpScenarios.map(function(s,i){return '<div class="bp-row"><input class="fi" placeholder="Σενάριο" value="'+s.n+'" oninput="bpScenarios['+i+'].n=this.value" style="flex:1"><input class="fi" placeholder="Τιμή" value="'+s.p+'" oninput="bpScenarios['+i+'].p=this.value" style="flex:.6"><input class="fi" placeholder="Έσοδα" value="'+s.r+'" oninput="bpScenarios['+i+'].r=this.value" style="flex:.6"><input class="fi" placeholder="Break-even" value="'+s.b+'" oninput="bpScenarios['+i+'].b=this.value" style="flex:.6"><button class="bp-row-rm" onclick="bpScenarios.splice('+i+',1);renderBPBuilder()">\u00D7</button></div>'}).join('');
+  // Costs
+  document.getElementById('bp-costs').innerHTML=bpCosts.map(function(c,i){return '<div class="bp-row"><input class="fi" placeholder="Κόστος item" value="'+c.i+'" oninput="bpCosts['+i+'].i=this.value" style="flex:1.5"><input class="fi" placeholder="Ποσό" value="'+c.a+'" oninput="bpCosts['+i+'].a=this.value" style="flex:1"><button class="bp-row-rm" onclick="bpCosts.splice('+i+',1);renderBPBuilder()">\u00D7</button></div>'}).join('');
+  // Steps
+  document.getElementById('bp-steps').innerHTML=bpSteps.map(function(s,i){return '<div class="bp-row"><span style="color:var(--g500);font-weight:700;font-size:14px;width:24px;text-align:center">'+(i+1)+'</span><input class="fi" style="flex:1" placeholder="Βήμα #'+(i+1)+'" value="'+s+'" oninput="bpSteps['+i+']=this.value"><button class="bp-row-rm" onclick="bpSteps.splice('+i+',1);renderBPBuilder()">\u00D7</button></div>'}).join('');
 }
 
-function openCreditModal(id){document.getElementById('creditModal').classList.add('show');document.getElementById('creditModalTitle').textContent=id?'Edit Credit':'Add New Credit';if(id){var c=credits.find(function(x){return x.id===id});if(c){document.getElementById('cm-id').value=c.id;document.getElementById('cm-name').value=c.name;document.getElementById('cm-price').value=c.price;document.getElementById('cm-available').value=c.available}}}
-function closeCreditModal(){document.getElementById('creditModal').classList.remove('show')}
-function saveCreditModal(){closeCreditModal()}
+function addMetric(){bpMetrics.push({l:'',v:''});renderBPBuilder()}
+function addWhy(){bpWhy.push('');renderBPBuilder()}
+function addScenario(){bpScenarios.push({n:'',p:'',r:'',b:''});renderBPBuilder()}
+function addCost(){bpCosts.push({i:'',a:''});renderBPBuilder()}
+function addStep(){bpSteps.push('');renderBPBuilder()}
 
-var investments=[
-  {id:"INV-001",name:"Mindanao 5,000ha ARR",country:"Philippines",region:"Mindanao — Caraga",phase:"Phase 2",raised:7.2,target:19,status:"live",hasContent:true},
-  {id:"INV-002",name:"Bukidnon Highland",country:"Philippines",region:"Mindanao — Bukidnon",phase:"Phase 1",raised:2.1,target:8.5,status:"live",hasContent:true},
-  {id:"INV-003",name:"Palawan Blue Carbon",country:"Philippines",region:"Palawan",phase:"Phase 1",raised:0.85,target:12,status:"live",hasContent:false},
-  {id:"INV-004",name:"Caraga Region Phase II",country:"Philippines",region:"Mindanao — Caraga",phase:"Phase 3",raised:3.8,target:4.2,status:"live",hasContent:true},
-  {id:"INV-005",name:"Davao Gulf Coastal",country:"Philippines",region:"Mindanao — Davao",phase:"Phase 1",raised:0.42,target:6.8,status:"draft",hasContent:false},
-  {id:"INV-006",name:"West Kalimantan Peatland",country:"Indonesia",region:"Kalimantan",phase:"Phase 2",raised:9.5,target:22,status:"live",hasContent:true},
-  {id:"INV-007",name:"Sulawesi Mangrove",country:"Indonesia",region:"Sulawesi",phase:"Phase 1",raised:3.2,target:15,status:"live",hasContent:true},
-  {id:"INV-008",name:"Sumatra Rainforest",country:"Indonesia",region:"Sumatra",phase:"Phase 2",raised:18.5,target:28,status:"live",hasContent:true},
-  {id:"INV-009",name:"Sabah Rainforest",country:"Malaysia",region:"Sabah — Borneo",phase:"Phase 1",raised:1.1,target:10,status:"draft",hasContent:false},
-  {id:"INV-010",name:"Sarawak Peat Swamp",country:"Malaysia",region:"Sarawak — Borneo",phase:"Phase 2",raised:5.8,target:14,status:"live",hasContent:true}
-];
-
-var invTabFilter='all';
-function setInvTab(btn,country){invTabFilter=country;document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});btn.classList.add('active');renderInvestTable()}
-
-function renderInvestTable(){
-  var filtered=invTabFilter==='all'?investments:investments.filter(function(i){return i.country===invTabFilter});
-  var tb=document.getElementById('investTable');if(!tb)return;
-  tb.innerHTML=filtered.map(function(inv){
-    var sc=inv.status==='live'?'status-live':'status-draft';var pct=Math.round(inv.raised/inv.target*100);
-    return '<tr><td><span class="status-dot '+sc+'"></span>'+(inv.status==='live'?'Live':'Draft')+'</td><td class="td-mono">'+inv.id+'</td><td style="font-weight:600">'+inv.name+'</td><td>'+inv.country+'</td><td>'+inv.region+'</td><td>'+inv.phase+'</td><td class="td-price">\u20AC'+inv.raised+'M <span style="font-size:13px;color:var(--gray-400)">('+pct+'%)</span></td><td class="td-mono">\u20AC'+inv.target+'M</td><td>'+(inv.hasContent?'<span style="color:var(--green-600)">\u2713 Published</span>':'<span style="color:#f59e0b">\u26A0 Missing</span>')+'</td><td><button class="btn btn-secondary btn-sm">Edit</button> <button class="btn btn-secondary btn-sm" onclick="openContentEditor(\''+inv.id+'\')">Content</button></td></tr>';
-  }).join('');
+function saveBP(){
+  alert('Business Plan saved successfully!\n\nIn production this saves to database and publishes to the live website.\n\nMetrics: '+bpMetrics.length+'\nReasons: '+bpWhy.length+'\nScenarios: '+bpScenarios.length+'\nCosts: '+bpCosts.length+'\nSteps: '+bpSteps.length);
+  closeBPB();
 }
 
-function renderCountries(){
-  var countries=[
-    {flag:"\uD83C\uDDF5\uD83C\uDDED",name:"Philippines",regions:["Mindanao \u2014 Caraga","Mindanao \u2014 Bukidnon","Mindanao \u2014 Davao","Palawan","Visayas"],projects:5,ha:"14,800",landCost:"\u20AC850-3,200/ha"},
-    {flag:"\uD83C\uDDEE\uD83C\uDDE9",name:"Indonesia",regions:["Kalimantan","Sulawesi","Sumatra"],projects:3,ha:"24,500",landCost:"\u20AC300-1,200/ha"},
-    {flag:"\uD83C\uDDF2\uD83C\uDDFE",name:"Malaysia",regions:["Sabah \u2014 Borneo","Sarawak \u2014 Borneo"],projects:2,ha:"9,000",landCost:"\u20AC500-1,500/ha"}
-  ];
-  var el=document.getElementById('countriesContent');if(!el)return;
-  el.innerHTML=countries.map(function(c){
-    return '<div style="border:1px solid var(--gray-200);border-radius:16px;padding:28px;margin-bottom:20px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><div style="display:flex;align-items:center;gap:14px"><span style="font-size:36px">'+c.flag+'</span><div><div style="font-size:22px;font-weight:700;color:var(--green-900)">'+c.name+'</div><div style="font-size:15px;color:var(--gray-400)">'+c.projects+' projects \u00B7 '+c.ha+' hectares \u00B7 Land: '+c.landCost+'</div></div></div><div style="display:flex;gap:10px"><button class="btn btn-secondary btn-sm">Edit</button><button class="btn btn-primary btn-sm">+ Add Region</button></div></div><div style="display:flex;gap:10px;flex-wrap:wrap">'+c.regions.map(function(r){return '<span style="padding:10px 18px;border-radius:10px;background:var(--green-50);border:1px solid var(--green-100);font-size:15px;font-weight:600;color:var(--green-700)">\uD83D\uDCCD '+r+'</span>'}).join('')+'</div></div>';
-  }).join('');
-}
+/* Countries */
+function rCountries(){var el=document.getElementById('coContent');if(!el)return;
+var cos=[{f:"\uD83C\uDDF5\uD83C\uDDED",n:"Philippines",rg:["Mindanao \u2014 Caraga","Mindanao \u2014 Bukidnon","Mindanao \u2014 Davao","Palawan","Visayas"],pr:5,ha:"14,800"},{f:"\uD83C\uDDEE\uD83C\uDDE9",n:"Indonesia",rg:["Kalimantan","Sulawesi","Sumatra"],pr:3,ha:"24,500"},{f:"\uD83C\uDDF2\uD83C\uDDFE",n:"Malaysia",rg:["Sabah \u2014 Borneo","Sarawak \u2014 Borneo"],pr:2,ha:"9,000"}];
+el.innerHTML=cos.map(function(c){return '<div style="border:1px solid var(--x200);border-radius:14px;padding:24px;margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="display:flex;align-items:center;gap:12px"><span style="font-size:34px">'+c.f+'</span><div><div style="font-size:20px;font-weight:700;color:var(--g900)">'+c.n+'</div><div style="font-size:14px;color:var(--x400)">'+c.pr+' projects \u00B7 '+c.ha+' ha</div></div></div><div style="display:flex;gap:8px"><button class="btn bs bsm">Edit</button><button class="btn bp bsm">+ Region</button></div></div><div style="display:flex;gap:8px;flex-wrap:wrap">'+c.rg.map(function(r){return '<span style="padding:9px 16px;border-radius:9px;background:var(--g50);border:1px solid var(--g100);font-size:14px;font-weight:600;color:var(--g700)">\uD83D\uDCCD '+r+'</span>'}).join('')+'</div></div>'}).join('')}
 
-function renderSources(){
-  var sources=[
-    {icon:"\uD83D\uDCCA",bg:"#dcfce7",name:"Xpansiv CBL",desc:"Spot VCM exchange",status:"Connected",on:true,feed:"WebSocket",cost:"$800/mo"},
-    {icon:"\uD83D\uDCC8",bg:"#dbeafe",name:"CME NYMEX",desc:"GEO futures via Globex API",status:"Connected",on:true,feed:"REST + WS",cost:"$650/mo"},
-    {icon:"\uD83D\uDD35",bg:"#e0e7ff",name:"ICE Endex",desc:"EUA, UKA carbon allowances",status:"Connected",on:true,feed:"REST API",cost:"$500/mo"},
-    {icon:"\uD83C\uDF0F",bg:"#d1fae5",name:"CIX Exchange",desc:"Nature-based & blue carbon",status:"Connected",on:true,feed:"REST API",cost:"$300/mo"},
-    {icon:"\u2B50",bg:"#fef3c7",name:"BeZero Carbon Ratings",desc:"Project quality ratings (A to D)",status:"Connected",on:true,feed:"REST API",cost:"$200/mo"},
-    {icon:"\u2705",bg:"#ecfdf5",name:"Verra Registry",desc:"Credit issuance & tracking",status:"Sync Mode",on:false,feed:"Batch Sync",cost:"Free"}
-  ];
-  var el=document.getElementById('sourcesGrid');if(!el)return;
-  el.innerHTML=sources.map(function(s){
-    return '<div class="source-card"><div class="source-icon" style="background:'+s.bg+'">'+s.icon+'</div><div class="source-info"><div class="source-name">'+s.name+'</div><div class="source-desc">'+s.desc+'</div><div style="display:flex;gap:18px;margin-top:8px;font-size:13px;color:var(--gray-400)"><span>Feed: <strong style="color:var(--gray-600)">'+s.feed+'</strong></span><span>Cost: <strong style="color:var(--gray-600)">'+s.cost+'</strong></span></div></div><div style="display:flex;flex-direction:column;align-items:center;gap:8px"><button class="toggle '+(s.on?'on':'off')+'" onclick="this.classList.toggle(\'on\');this.classList.toggle(\'off\')"></button><span class="source-status" style="color:'+(s.on?'var(--green-600)':'#f59e0b')+'">'+s.status+'</span></div></div>';
-  }).join('');
-}
+/* Sources */
+function rSources(){var el=document.getElementById('srcGrid');if(!el)return;
+var ss=[{i:"\uD83D\uDCCA",bg:"#dcfce7",n:"Xpansiv CBL",d:"Spot VCM exchange",s:"Connected",on:true,f:"WebSocket",c:"$800/mo"},{i:"\uD83D\uDCC8",bg:"#dbeafe",n:"CME NYMEX",d:"GEO futures",s:"Connected",on:true,f:"REST+WS",c:"$650/mo"},{i:"\uD83D\uDD35",bg:"#e0e7ff",n:"ICE Endex",d:"EUA, UKA allowances",s:"Connected",on:true,f:"REST",c:"$500/mo"},{i:"\uD83C\uDF0F",bg:"#d1fae5",n:"CIX Exchange",d:"Nature & blue carbon",s:"Connected",on:true,f:"REST",c:"$300/mo"},{i:"\u2B50",bg:"#fef3c7",n:"BeZero Ratings",d:"Quality ratings",s:"Connected",on:true,f:"REST",c:"$200/mo"},{i:"\u2705",bg:"#ecfdf5",n:"Verra Registry",d:"Credit tracking",s:"Sync",on:false,f:"Batch",c:"Free"}];
+el.innerHTML=ss.map(function(s){return '<div class="sc"><div class="si" style="background:'+s.bg+'">'+s.i+'</div><div style="flex:1"><div class="sn">'+s.n+'</div><div class="sde">'+s.d+'</div><div style="display:flex;gap:16px;margin-top:6px;font-size:12px;color:var(--x400)"><span>Feed: <b style="color:var(--x700)">'+s.f+'</b></span><span>Cost: <b style="color:var(--x700)">'+s.c+'</b></span></div></div><div style="display:flex;flex-direction:column;align-items:center;gap:6px"><button class="tg '+(s.on?'on':'off')+'" onclick="this.classList.toggle(\'on\');this.classList.toggle(\'off\')"></button><span style="font-size:14px;font-weight:600;color:'+(s.on?'var(--g600)':'#f59e0b')+'">'+s.s+'</span></div></div>'}).join('')}
 
-function renderInstrumentsTable(){
-  var insts=[
-    {sym:"GEO",name:"Global Emissions Offset",exch:"CME/CBL",type:"Voluntary",base:1.85,feed:"Xpansiv CBL",on:true},
-    {sym:"N-GEO",name:"Nature-Based GEO",exch:"CME/CBL",type:"Voluntary",base:3.42,feed:"Xpansiv CBL",on:true},
-    {sym:"C-GEO",name:"Core GEO (Tech)",exch:"CME/CBL",type:"Voluntary",base:1.15,feed:"CME NYMEX",on:true},
-    {sym:"EUA",name:"EU Allowance",exch:"ICE/EEX",type:"Compliance",base:68.20,feed:"ICE Endex",on:true},
-    {sym:"UKA",name:"UK Allowance",exch:"ICE",type:"Compliance",base:42.50,feed:"ICE Endex",on:true},
-    {sym:"CCA",name:"California Carbon",exch:"ICE",type:"Compliance",base:38.90,feed:"ICE Endex",on:true},
-    {sym:"ARR-A",name:"ARR (A-rated)",exch:"CBL Spot",type:"Spot VCM",base:24.00,feed:"Xpansiv CBL",on:true},
-    {sym:"ARR-BBB",name:"ARR (BBB+)",exch:"CBL Spot",type:"Spot VCM",base:19.50,feed:"Xpansiv CBL",on:true},
-    {sym:"REDD",name:"REDD+ (A-rated)",exch:"CBL Spot",type:"Spot VCM",base:18.50,feed:"Xpansiv CBL",on:true},
-    {sym:"BLUE",name:"Blue Carbon",exch:"CIX/CBL",type:"Spot VCM",base:29.30,feed:"CIX Exchange",on:true},
-    {sym:"ACCU",name:"Australian CCU",exch:"CBL",type:"Compliance",base:32.10,feed:"Xpansiv CBL",on:true},
-    {sym:"CORSIA",name:"CORSIA Phase 1",exch:"CBL/ACE",type:"Aviation",base:4.20,feed:"Xpansiv CBL",on:true}
-  ];
-  var tb=document.getElementById('instrumentsTable');if(!tb)return;
-  tb.innerHTML=insts.map(function(i){
-    var typeBg=i.type==='Compliance'?'#dbeafe':'var(--green-50)';var typeCol=i.type==='Compliance'?'#1e40af':'var(--green-700)';
-    return '<tr><td><span class="status-dot '+(i.on?'status-live':'status-paused')+'"></span>'+(i.on?'Active':'Paused')+'</td><td style="font-weight:700;font-family:var(--mono)">'+i.sym+'</td><td>'+i.name+'</td><td class="td-mono">'+i.exch+'</td><td><span style="padding:4px 12px;border-radius:8px;font-size:13px;font-weight:600;background:'+typeBg+';color:'+typeCol+'">'+i.type+'</span></td><td class="td-price">$'+i.base.toFixed(2)+'</td><td style="font-size:14px;color:var(--gray-500)">'+i.feed+'</td><td><button class="btn btn-secondary btn-sm">Edit</button></td></tr>';
-  }).join('');
-}
+/* Instruments */
+function rInsts(){var tb=document.getElementById('instTb');if(!tb)return;
+var ii=[{s:"GEO",n:"Global Emissions Offset",e:"CME/CBL",t:"Voluntary",b:1.85,f:"Xpansiv CBL"},{s:"N-GEO",n:"Nature-Based GEO",e:"CME/CBL",t:"Voluntary",b:3.42,f:"Xpansiv CBL"},{s:"EUA",n:"EU Allowance",e:"ICE/EEX",t:"Compliance",b:68.20,f:"ICE Endex"},{s:"ARR-A",n:"ARR (A-rated)",e:"CBL Spot",t:"Spot VCM",b:24.00,f:"Xpansiv CBL"},{s:"BLUE",n:"Blue Carbon",e:"CIX/CBL",t:"Spot VCM",b:29.30,f:"CIX Exchange"},{s:"CORSIA",n:"CORSIA Phase 1",e:"CBL/ACE",t:"Aviation",b:4.20,f:"Xpansiv CBL"}];
+tb.innerHTML=ii.map(function(i){var bg=i.t==='Compliance'?'#dbeafe':'var(--g50)';var cl=i.t==='Compliance'?'#1e40af':'var(--g700)';return '<tr><td><span class="sd sl"></span>Active</td><td style="font-weight:700;font-family:var(--mono)">'+i.s+'</td><td>'+i.n+'</td><td class="tm">'+i.e+'</td><td><span style="padding:3px 10px;border-radius:7px;font-size:12px;font-weight:600;background:'+bg+';color:'+cl+'">'+i.t+'</span></td><td class="tp">$'+i.b.toFixed(2)+'</td><td style="font-size:13px;color:var(--x500)">'+i.f+'</td><td><button class="btn bs bsm">Edit</button></td></tr>'}).join('')}
 
-function openContentEditor(pageId){document.getElementById('contentModal').classList.add('show');document.getElementById('contentModalTitle').textContent='Edit Content \u2014 '+pageId}
-function closeContentEditor(){document.getElementById('contentModal').classList.remove('show')}
-function openInvestModal(){}
-function openCountryModal(){}
+function openContentEditor(id){document.getElementById('ceMo').classList.add('show')}
+function closeCE(){document.getElementById('ceMo').classList.remove('show')}
 
-function initAdmin(){renderCreditsTable();renderInvestTable();renderCountries();renderSources();renderInstrumentsTable()}
+function initAdmin(){rCreds();rInvs();rCountries();rSources();rInsts()}
 document.addEventListener('DOMContentLoaded',initAdmin);
 </script>
 </head>
 <body>
 
-<aside class="sidebar">
-  <div class="sidebar-logo"><h1>GreenCredit<span>X</span></h1><p>Admin Panel</p></div>
-  <nav class="sidebar-nav">
-    <div class="nav-section"><div class="nav-section-title">Overview</div>
-      <button class="nav-item active" onclick="showPanel('dashboard')"><span class="icon">📊</span> Dashboard</button>
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sb-logo"><h1>GreenCredit<span>X</span></h1><p>Admin Panel</p></div>
+  <nav class="sb-nav">
+    <div class="ns"><div class="ns-t">Overview</div><button class="ni on" onclick="showPanel('dashboard')"><span class="ic">📊</span> Dashboard</button></div>
+    <div class="ns"><div class="ns-t">Content Management</div>
+      <button class="ni" onclick="showPanel('marketplace')"><span class="ic">🛒</span> Marketplace<span class="bg">6</span></button>
+      <button class="ni" onclick="showPanel('investments')"><span class="ic">📈</span> Investments<span class="bg">10</span></button>
+      <button class="ni" onclick="showPanel('bpbuilder')"><span class="ic">📋</span> Business Plans</button>
+      <button class="ni" onclick="showPanel('countries')"><span class="ic">🌍</span> Countries</button>
+      <button class="ni" onclick="showPanel('content')"><span class="ic">📝</span> Content Pages</button>
     </div>
-    <div class="nav-section"><div class="nav-section-title">Content Management</div>
-      <button class="nav-item" onclick="showPanel('marketplace')"><span class="icon">🛒</span> Marketplace<span class="badge">6</span></button>
-      <button class="nav-item" onclick="showPanel('investments')"><span class="icon">📈</span> Investments<span class="badge">10</span></button>
-      <button class="nav-item" onclick="showPanel('countries')"><span class="icon">🌍</span> Countries & Regions</button>
-      <button class="nav-item" onclick="showPanel('content')"><span class="icon">📝</span> Content Pages</button>
+    <div class="ns"><div class="ns-t">Live Markets</div>
+      <button class="ni" onclick="showPanel('datasources')"><span class="ic">📡</span> Data Sources</button>
+      <button class="ni" onclick="showPanel('instruments')"><span class="ic">📉</span> Instruments</button>
     </div>
-    <div class="nav-section"><div class="nav-section-title">Live Markets</div>
-      <button class="nav-item" onclick="showPanel('datasources')"><span class="icon">📡</span> Data Sources</button>
-      <button class="nav-item" onclick="showPanel('instruments')"><span class="icon">📉</span> Instruments</button>
-    </div>
-    <div class="nav-section"><div class="nav-section-title">System</div>
-      <button class="nav-item" onclick="showPanel('users')"><span class="icon">👥</span> Users & Access</button>
-      <button class="nav-item" onclick="showPanel('settings')"><span class="icon">⚙️</span> Settings</button>
+    <div class="ns"><div class="ns-t">System</div>
+      <button class="ni" onclick="showPanel('users')"><span class="ic">👥</span> Users</button>
+      <button class="ni" onclick="showPanel('settings')"><span class="ic">⚙️</span> Settings</button>
     </div>
   </nav>
-  <div class="sidebar-footer"><div class="user"><div class="avatar">TP</div><div><div class="name">TPA Services</div><div class="role">Super Admin</div></div></div></div>
+  <div class="sb-ft"><div class="u"><div class="av">TP</div><div><div class="nm">TPA Services</div><div class="rl">Super Admin</div></div></div></div>
 </aside>
 
-<div class="main">
-  <div class="topbar">
-    <div style="display:flex;align-items:baseline"><h2 id="pageTitle">Dashboard</h2><span class="sub" id="pageSub">Overview of your platform</span></div>
-    <div class="topbar-actions"><a href="index.html" target="_blank" class="btn btn-secondary" style="text-decoration:none">👁️ View Live Site</a><button class="btn btn-primary" id="topAction" style="display:none">+ Add New</button></div>
-  </div>
-  <div class="content">
+<!-- MAIN -->
+<div class="mn">
+  <div class="tb"><div style="display:flex;align-items:baseline"><h2 id="pgT">Dashboard</h2><span class="su" id="pgS">Overview of your platform</span></div>
+    <div style="display:flex;gap:10px"><a href="index.html" target="_blank" class="btn bs" style="text-decoration:none">👁️ View Live Site</a></div></div>
+  <div class="ct">
 
     <!-- DASHBOARD -->
-    <div class="panel active" id="panel-dashboard">
-      <div class="admin-stats">
-        <div class="admin-stat"><div class="label">Credits Listed</div><div class="value">14,800</div><div class="change">↑ +2,400 this month</div></div>
-        <div class="admin-stat"><div class="label">Total Revenue</div><div class="value">$347K</div><div class="change">↑ +18% vs last month</div></div>
-        <div class="admin-stat"><div class="label">Active Investors</div><div class="value">128</div><div class="change">↑ +12 new this week</div></div>
-        <div class="admin-stat"><div class="label">Investment Raised</div><div class="value">€52.5M</div><div class="change">38% of pipeline</div></div>
+    <div data-panel id="p-dashboard" style="display:block">
+      <div class="as">
+        <div class="ast"><div class="al">Credits Listed</div><div class="av2">14,800</div><div class="ac">↑ +2,400 this month</div></div>
+        <div class="ast"><div class="al">Revenue</div><div class="av2">$347K</div><div class="ac">↑ +18%</div></div>
+        <div class="ast"><div class="al">Investors</div><div class="av2">128</div><div class="ac">↑ +12 new</div></div>
+        <div class="ast"><div class="al">Raised</div><div class="av2">€52.5M</div><div class="ac">38% pipeline</div></div>
       </div>
-      <div class="card"><div class="card-header"><div><div class="card-title">Recent Activity</div><div class="card-subtitle">Latest platform actions</div></div></div>
-        <div class="card-body"><table><thead><tr><th>Time</th><th>Action</th><th>User</th><th>Details</th></tr></thead><tbody>
-          <tr><td class="td-mono">2 min ago</td><td>Credit Purchase</td><td>Tsakos Energy Nav.</td><td>500 tCO₂e — VCS-2847 — $11,250</td></tr>
-          <tr><td class="td-mono">15 min ago</td><td>Investment</td><td>Angelicoussis Group</td><td>€200K — INV-001 Mindanao ARR</td></tr>
-          <tr><td class="td-mono">1 hr ago</td><td>Price Update</td><td>Admin (auto)</td><td>ARR-A spot: $23.95 → $24.04</td></tr>
-          <tr><td class="td-mono">2 hrs ago</td><td>New Investor</td><td>Star Bulk Carriers</td><td>Registered — interested in Philippines ARR</td></tr>
-          <tr><td class="td-mono">5 hrs ago</td><td>Content Update</td><td>Admin</td><td>Updated Mindanao business plan PDF</td></tr>
-        </tbody></table></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Recent Activity</div></div></div><div class="cb"><table><thead><tr><th>Time</th><th>Action</th><th>User</th><th>Details</th></tr></thead><tbody>
+        <tr><td class="tm">2 min ago</td><td>Credit Purchase</td><td>Tsakos Energy Nav.</td><td>500 tCO₂e — $11,250</td></tr>
+        <tr><td class="tm">15 min ago</td><td>Investment</td><td>Angelicoussis Group</td><td>€200K — INV-001</td></tr>
+        <tr><td class="tm">1 hr ago</td><td>BP Published</td><td>Admin</td><td>INV-001 Mindanao Business Plan</td></tr>
+        <tr><td class="tm">3 hrs ago</td><td>New Investor</td><td>Star Bulk Carriers</td><td>Registered</td></tr>
+      </tbody></table></div></div>
     </div>
 
     <!-- MARKETPLACE -->
-    <div class="panel" id="panel-marketplace">
-      <div class="admin-stats">
-        <div class="admin-stat"><div class="label">Active Listings</div><div class="value">6</div></div>
-        <div class="admin-stat"><div class="label">Total Available</div><div class="value">13,900</div><div class="change">tCO₂e</div></div>
-        <div class="admin-stat"><div class="label">Avg Price</div><div class="value">$23.50</div></div>
-        <div class="admin-stat"><div class="label">Sold This Month</div><div class="value">2,400</div><div class="change">tCO₂e</div></div>
-      </div>
-      <div class="card"><div class="card-header"><div><div class="card-title">Carbon Credits</div><div class="card-subtitle">Manage listings shown in the Marketplace</div></div><button class="btn btn-primary btn-sm" onclick="openCreditModal()">+ Add Credit</button></div>
-        <div class="card-body" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Type</th><th>Rating</th><th>Price</th><th>Available</th><th>Vintage</th><th>Origin</th><th>Actions</th></tr></thead><tbody id="creditsTable"></tbody></table></div></div>
+    <div data-panel id="p-marketplace" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">Carbon Credits</div><div class="ct-s">Manage marketplace listings</div></div><button class="btn bp bsm" onclick="openCM()">+ Add Credit</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Type</th><th>Rating</th><th>Price</th><th>Available</th><th>Vintage</th><th>Origin</th><th>Actions</th></tr></thead><tbody id="credTb"></tbody></table></div></div>
     </div>
 
     <!-- INVESTMENTS -->
-    <div class="panel" id="panel-investments">
+    <div data-panel id="p-investments" style="display:none">
       <div class="tabs">
-        <button class="tab active" onclick="setInvTab(this,'all')">All Projects (10)</button>
-        <button class="tab" onclick="setInvTab(this,'Philippines')">🇵🇭 Philippines (5)</button>
-        <button class="tab" onclick="setInvTab(this,'Indonesia')">🇮🇩 Indonesia (3)</button>
-        <button class="tab" onclick="setInvTab(this,'Malaysia')">🇲🇾 Malaysia (2)</button>
+        <button class="tab on" onclick="setIT(this,'all')">All (10)</button>
+        <button class="tab" onclick="setIT(this,'Philippines')">🇵🇭 Philippines</button>
+        <button class="tab" onclick="setIT(this,'Indonesia')">🇮🇩 Indonesia</button>
+        <button class="tab" onclick="setIT(this,'Malaysia')">🇲🇾 Malaysia</button>
       </div>
-      <div class="card"><div class="card-header"><div><div class="card-title">Investment Projects</div><div class="card-subtitle">Manage project details, funding, and content</div></div><button class="btn btn-primary btn-sm">+ Add Project</button></div>
-        <div class="card-body" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Country</th><th>Region</th><th>Phase</th><th>Raised</th><th>Target</th><th>Content</th><th>Actions</th></tr></thead><tbody id="investTable"></tbody></table></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Investment Projects</div><div class="ct-s">Manage projects, funding & business plans</div></div></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Country</th><th>Region</th><th>Phase</th><th>Raised</th><th>Target</th><th>Business Plan</th><th>Actions</th></tr></thead><tbody id="invTb"></tbody></table></div></div>
+    </div>
+
+    <!-- BP BUILDER (standalone panel) -->
+    <div data-panel id="p-bpbuilder" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">📋 Business Plan Builder</div><div class="ct-s">Select a project from Investments and click "Create Plan" or "Edit Plan"</div></div></div>
+        <div class="cb">
+          <p style="font-size:16px;color:var(--x500);line-height:1.6">Ο Business Plan Builder ανοίγει αυτόματα όταν πατήσετε <strong>"Create Plan"</strong> ή <strong>"Edit Plan"</strong> σε ένα investment project.<br><br>Κάθε business plan περιλαμβάνει:</p>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px">
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">📊</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Key Metrics</div><div style="font-size:13px;color:var(--x400)">Έκταση, επένδυση, credits, break-even</div></div>
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">🌳</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Why This Region</div><div style="font-size:13px;color:var(--x400)">Πλεονεκτήματα περιοχής</div></div>
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">📈</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Scenarios</div><div style="font-size:13px;color:var(--x400)">Σενάρια τιμών & αποδόσεων</div></div>
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">💰</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Cost Analysis</div><div style="font-size:13px;color:var(--x400)">Ανάλυση κόστους & CAPEX</div></div>
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">⚠️</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Risks</div><div style="font-size:13px;color:var(--x400)">Κίνδυνοι & μετριασμός</div></div>
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">⚡</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Next Steps</div><div style="font-size:13px;color:var(--x400)">Βήματα υλοποίησης</div></div>
+          </div>
+          <div style="margin-top:24px"><button class="btn bp" onclick="showPanel('investments')">Go to Investments →</button></div>
+        </div></div>
     </div>
 
     <!-- COUNTRIES -->
-    <div class="panel" id="panel-countries">
-      <div class="card"><div class="card-header"><div><div class="card-title">Countries & Regions</div><div class="card-subtitle">Manage land base locations</div></div><button class="btn btn-primary btn-sm">+ Add Country</button></div>
-        <div class="card-body" id="countriesContent"></div></div>
+    <div data-panel id="p-countries" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">Countries & Regions</div></div><button class="btn bp bsm">+ Add Country</button></div>
+        <div class="cb" id="coContent"></div></div>
     </div>
 
     <!-- CONTENT PAGES -->
-    <div class="panel" id="panel-content">
-      <div class="card"><div class="card-header"><div><div class="card-title">Content Pages</div><div class="card-subtitle">Business plans, presentations, and guides</div></div><button class="btn btn-primary btn-sm">+ Add Page</button></div>
-        <div class="card-body" style="padding:0"><table><thead><tr><th>Page</th><th>Section</th><th>Last Updated</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-          <tr><td style="font-weight:600">What are Carbon Credits?</td><td>General</td><td class="td-mono">2026-03-15</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('carbon-101')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Why Invest in Philippines?</td><td>Investment</td><td class="td-mono">2026-03-10</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('ph-invest')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Philippines — Business Plan</td><td>Investment</td><td class="td-mono">2026-03-08</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('ph-bp')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Indonesia — Business Plan</td><td>Investment</td><td class="td-mono">2026-02-28</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('id-bp')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Malaysia — Business Plan</td><td>Investment</td><td class="td-mono">2026-02-20</td><td><span class="status-dot status-draft"></span>Draft</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('my-bp')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Mindanao Caraga — Region Guide</td><td>Region</td><td class="td-mono">2026-03-12</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('caraga')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Verra Certification Process</td><td>Education</td><td class="td-mono">2026-03-01</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('verra')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">EU ETS & Maritime Compliance</td><td>Regulatory</td><td class="td-mono">2026-03-14</td><td><span class="status-dot status-live"></span>Published</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('eu-ets')">Edit</button></td></tr>
-          <tr><td style="font-weight:600">IMO Net-Zero Framework Guide</td><td>Regulatory</td><td class="td-mono">2026-03-16</td><td><span class="status-dot status-paused"></span>Updating</td><td><button class="btn btn-secondary btn-sm" onclick="openContentEditor('imo')">Edit</button></td></tr>
+    <div data-panel id="p-content" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">Content Pages</div></div><button class="btn bp bsm">+ Add Page</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Page</th><th>Section</th><th>Updated</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+          <tr><td style="font-weight:600">What are Carbon Credits?</td><td>General</td><td class="tm">2026-03-15</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openContentEditor()">Edit</button></td></tr>
+          <tr><td style="font-weight:600">Why Invest in Philippines?</td><td>Investment</td><td class="tm">2026-03-10</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openContentEditor()">Edit</button></td></tr>
+          <tr><td style="font-weight:600">Philippines — Business Plan</td><td>Investment</td><td class="tm">2026-03-08</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openContentEditor()">Edit</button></td></tr>
+          <tr><td style="font-weight:600">EU ETS & Maritime</td><td>Regulatory</td><td class="tm">2026-03-14</td><td><span class="sd sl"></span>Published</td><td><button class="btn bs bsm" onclick="openContentEditor()">Edit</button></td></tr>
+          <tr><td style="font-weight:600">IMO Net-Zero Guide</td><td>Regulatory</td><td class="tm">2026-03-16</td><td><span class="sd sp"></span>Updating</td><td><button class="btn bs bsm" onclick="openContentEditor()">Edit</button></td></tr>
         </tbody></table></div></div>
     </div>
 
     <!-- DATA SOURCES -->
-    <div class="panel" id="panel-datasources">
-      <div class="admin-stats">
-        <div class="admin-stat"><div class="label">Active Feeds</div><div class="value">5</div><div class="change">of 6 connected</div></div>
-        <div class="admin-stat"><div class="label">Data Points/sec</div><div class="value">847</div></div>
-        <div class="admin-stat"><div class="label">Uptime (30d)</div><div class="value">99.7%</div></div>
-        <div class="admin-stat"><div class="label">Monthly Cost</div><div class="value">$2,450</div><div class="change">API subscriptions</div></div>
+    <div data-panel id="p-datasources" style="display:none">
+      <div class="as">
+        <div class="ast"><div class="al">Active Feeds</div><div class="av2">5</div><div class="ac">of 6 connected</div></div>
+        <div class="ast"><div class="al">Data/sec</div><div class="av2">847</div></div>
+        <div class="ast"><div class="al">Uptime</div><div class="av2">99.7%</div></div>
+        <div class="ast"><div class="al">Monthly</div><div class="av2">$2,450</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" id="sourcesGrid"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="srcGrid"></div>
     </div>
 
     <!-- INSTRUMENTS -->
-    <div class="panel" id="panel-instruments">
-      <div class="card"><div class="card-header"><div><div class="card-title">Market Instruments</div><div class="card-subtitle">Configure instruments shown in Live Markets</div></div><button class="btn btn-primary btn-sm">+ Add Instrument</button></div>
-        <div class="card-body" style="padding:0"><table><thead><tr><th>Status</th><th>Symbol</th><th>Name</th><th>Exchange</th><th>Type</th><th>Base Price</th><th>Feed</th><th>Actions</th></tr></thead><tbody id="instrumentsTable"></tbody></table></div></div>
+    <div data-panel id="p-instruments" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">Market Instruments</div></div><button class="btn bp bsm">+ Add</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>Symbol</th><th>Name</th><th>Exchange</th><th>Type</th><th>Price</th><th>Feed</th><th>Actions</th></tr></thead><tbody id="instTb"></tbody></table></div></div>
     </div>
 
     <!-- USERS -->
-    <div class="panel" id="panel-users">
-      <div class="card"><div class="card-header"><div><div class="card-title">Users & Access Control</div></div><button class="btn btn-primary btn-sm">+ Add User</button></div>
-        <div class="card-body" style="padding:0"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Last Login</th><th>Status</th><th>Actions</th></tr></thead><tbody>
-          <tr><td style="font-weight:600">TPA Services Admin</td><td class="td-mono">admin@tpa-services.com</td><td><span style="padding:4px 12px;border-radius:8px;background:var(--green-100);color:var(--green-700);font-size:13px;font-weight:600">Super Admin</span></td><td class="td-mono">2 min ago</td><td><span class="status-dot status-live"></span>Active</td><td><button class="btn btn-secondary btn-sm">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Operations Manager</td><td class="td-mono">ops@tpa-services.com</td><td><span style="padding:4px 12px;border-radius:8px;background:#dbeafe;color:#1e40af;font-size:13px;font-weight:600">Editor</span></td><td class="td-mono">1 hr ago</td><td><span class="status-dot status-live"></span>Active</td><td><button class="btn btn-secondary btn-sm">Edit</button></td></tr>
-          <tr><td style="font-weight:600">Finance Team</td><td class="td-mono">finance@tpa-services.com</td><td><span style="padding:4px 12px;border-radius:8px;background:#fef3c7;color:#92400e;font-size:13px;font-weight:600">Viewer</span></td><td class="td-mono">Yesterday</td><td><span class="status-dot status-live"></span>Active</td><td><button class="btn btn-secondary btn-sm">Edit</button></td></tr>
+    <div data-panel id="p-users" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">Users</div></div><button class="btn bp bsm">+ Add User</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+          <tr><td style="font-weight:600">TPA Admin</td><td class="tm">admin@tpa-services.com</td><td><span style="padding:3px 10px;border-radius:7px;background:var(--g100);color:var(--g700);font-size:12px;font-weight:600">Super Admin</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
+          <tr><td style="font-weight:600">Operations</td><td class="tm">ops@tpa-services.com</td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Editor</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
         </tbody></table></div></div>
     </div>
 
     <!-- SETTINGS -->
-    <div class="panel" id="panel-settings">
-      <div class="card"><div class="card-header"><div class="card-title">Platform Settings</div></div>
-        <div class="card-body"><div class="form-grid">
-          <div class="form-group"><label class="form-label">Platform Name</label><input class="form-input" value="GreenCreditX"></div>
-          <div class="form-group"><label class="form-label">Company Name</label><input class="form-input" value="TPA Services"></div>
-          <div class="form-group"><label class="form-label">Default Currency</label><select class="form-input"><option>USD ($)</option><option>EUR (€)</option></select></div>
-          <div class="form-group"><label class="form-label">Ticker Speed (seconds)</label><input class="form-input" type="number" value="18"></div>
-          <div class="form-group"><label class="form-label">Live Data Refresh Rate</label><select class="form-input"><option>2.5 seconds</option><option>5 seconds</option><option>10 seconds</option></select></div>
-          <div class="form-group"><label class="form-label">Market Discount Display</label><input class="form-input" value="34%"></div>
-        </div><div class="form-actions"><button class="btn btn-primary">Save Settings</button></div></div></div>
+    <div data-panel id="p-settings" style="display:none">
+      <div class="cd"><div class="ch"><div class="ct-t">Platform Settings</div></div><div class="cb"><div class="fg">
+        <div class="fgp"><label class="fl">Platform Name</label><input class="fi" value="GreenCreditX"></div>
+        <div class="fgp"><label class="fl">Company</label><input class="fi" value="TPA Services"></div>
+        <div class="fgp"><label class="fl">Currency</label><select class="fi"><option>USD ($)</option><option>EUR (€)</option></select></div>
+        <div class="fgp"><label class="fl">Ticker Speed (s)</label><input class="fi" type="number" value="18"></div>
+      </div><div class="fa"><button class="btn bp">Save</button></div></div></div>
     </div>
 
   </div>
 </div>
 
-<!-- CREDIT MODAL -->
-<div class="modal-overlay" id="creditModal">
-  <div class="modal"><div class="modal-header"><div class="modal-title" id="creditModalTitle">Edit Credit</div><button class="modal-close" onclick="closeCreditModal()">×</button></div>
-    <div class="modal-body"><div class="form-grid">
-      <div class="form-group"><label class="form-label">Project ID</label><input class="form-input td-mono" id="cm-id" placeholder="VCS-0000"></div>
-      <div class="form-group"><label class="form-label">Status</label><select class="form-input" id="cm-status"><option>Live</option><option>Draft</option><option>Paused</option></select></div>
-      <div class="form-group full"><label class="form-label">Project Name</label><input class="form-input" id="cm-name" placeholder="Project name"></div>
-      <div class="form-group"><label class="form-label">Type</label><select class="form-input" id="cm-type"><option>ARR</option><option>Blue Carbon</option><option>REDD+</option></select></div>
-      <div class="form-group"><label class="form-label">Rating</label><select class="form-input" id="cm-rating"><option>AA</option><option>A+</option><option>A</option><option>A-</option><option>BBB+</option><option>BBB</option></select></div>
-      <div class="form-group"><label class="form-label">Price ($/tCO₂e)</label><input class="form-input" type="number" step="0.01" id="cm-price"></div>
-      <div class="form-group"><label class="form-label">Available (tCO₂e)</label><input class="form-input" type="number" id="cm-available"></div>
-      <div class="form-group"><label class="form-label">Vintage</label><input class="form-input" type="number" id="cm-vintage" value="2025"></div>
-      <div class="form-group"><label class="form-label">Origin</label><select class="form-input" id="cm-origin"><option>Philippines</option><option>Indonesia</option><option>Malaysia</option></select></div>
-    </div></div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeCreditModal()">Cancel</button><button class="btn btn-primary" onclick="saveCreditModal()">Save Changes</button></div>
-  </div>
-</div>
+<!-- ═══ CREDIT EDIT MODAL ═══ -->
+<div class="mo" id="cmMo"><div class="md"><div class="mh"><div class="mt">Edit Credit</div><button class="mc" onclick="closeCM()">×</button></div>
+  <div class="mb"><div class="fg">
+    <div class="fgp"><label class="fl">Project ID</label><input class="fi" id="cm-id"></div>
+    <div class="fgp"><label class="fl">Status</label><select class="fi"><option>Live</option><option>Draft</option></select></div>
+    <div class="fgp full"><label class="fl">Project Name</label><input class="fi" id="cm-name"></div>
+    <div class="fgp"><label class="fl">Type</label><select class="fi"><option>ARR</option><option>Blue Carbon</option><option>REDD+</option></select></div>
+    <div class="fgp"><label class="fl">Rating</label><select class="fi"><option>AA</option><option>A+</option><option>A</option><option>A-</option><option>BBB+</option><option>BBB</option></select></div>
+    <div class="fgp"><label class="fl">Price ($/tCO₂e)</label><input class="fi" type="number" step="0.01" id="cm-price"></div>
+    <div class="fgp"><label class="fl">Available</label><input class="fi" type="number" id="cm-available"></div>
+    <div class="fgp"><label class="fl">Vintage</label><input class="fi" type="number" value="2025"></div>
+    <div class="fgp"><label class="fl">Origin</label><select class="fi"><option>Philippines</option><option>Indonesia</option><option>Malaysia</option></select></div>
+  </div></div>
+  <div class="mf"><button class="btn bs" onclick="closeCM()">Cancel</button><button class="btn bp" onclick="closeCM()">Save</button></div></div></div>
 
-<!-- CONTENT EDITOR MODAL -->
-<div class="modal-overlay" id="contentModal">
-  <div class="modal" style="max-width:960px"><div class="modal-header"><div class="modal-title" id="contentModalTitle">Edit Content</div><button class="modal-close" onclick="closeContentEditor()">×</button></div>
-    <div class="modal-body">
-      <div class="form-group" style="margin-bottom:18px"><label class="form-label">Page Title</label><input class="form-input" id="ce-title" style="font-size:20px;font-weight:600"></div>
-      <div class="form-group" style="margin-bottom:18px">
-        <label class="form-label">Content</label>
-        <div class="editor-toolbar"><button><b>B</b></button><button><i>I</i></button><button>H1</button><button>H2</button><button>☰</button><button>🔗</button><button>🖼️</button><button>❝</button></div>
-        <div class="editor-area" contenteditable="true" id="ce-content">
-          <h2>Why Invest in Philippines Carbon Credits?</h2>
-          <p>The Philippines presents a unique opportunity for carbon credit investment due to several key factors:</p>
-          <p><strong>1.2 million hectares</strong> of land available for reforestation according to DENR.</p>
-          <p>Land costs in Mindanao range from <strong>₱50,000-250,000 per hectare</strong> (€850-€4,250), significantly lower than other Southeast Asian markets.</p>
-        </div>
-      </div>
-      <div class="form-grid">
-        <div class="form-group"><label class="form-label">Section</label><select class="form-input"><option>Investment</option><option>General</option><option>Region</option><option>Education</option><option>Regulatory</option></select></div>
-        <div class="form-group"><label class="form-label">Status</label><select class="form-input"><option>Published</option><option>Draft</option><option>Updating</option></select></div>
-        <div class="form-group"><label class="form-label">Attached Files</label><input class="form-input" type="file" multiple></div>
-        <div class="form-group"><label class="form-label">Linked Investment</label><select class="form-input"><option>— None —</option><option>INV-001 Mindanao</option><option>INV-006 Kalimantan</option></select></div>
+<!-- ═══ CONTENT EDITOR MODAL ═══ -->
+<div class="mo" id="ceMo"><div class="md" style="max-width:900px"><div class="mh"><div class="mt">Edit Content</div><button class="mc" onclick="closeCE()">×</button></div>
+  <div class="mb">
+    <div class="fgp" style="margin-bottom:16px"><label class="fl">Title</label><input class="fi" style="font-size:18px;font-weight:600" value="Why Invest in Philippines?"></div>
+    <div class="fgp" style="margin-bottom:16px"><label class="fl">Content</label><div contenteditable="true" style="border:1px solid var(--x200);border-radius:11px;min-height:200px;padding:18px;font-size:15px;line-height:1.6;outline:none"><h2>Why Invest in Philippines Carbon Credits?</h2><p>The Philippines presents a unique opportunity...</p></div></div>
+    <div class="fg"><div class="fgp"><label class="fl">Section</label><select class="fi"><option>Investment</option><option>General</option><option>Regulatory</option></select></div><div class="fgp"><label class="fl">Status</label><select class="fi"><option>Published</option><option>Draft</option></select></div></div>
+  </div>
+  <div class="mf"><button class="btn bs" onclick="closeCE()">Cancel</button><button class="btn bp">Publish</button></div></div></div>
+
+<!-- ═══ BUSINESS PLAN BUILDER MODAL ═══ -->
+<div class="mo" id="bpMo"><div class="md" style="max-width:1050px"><div class="mh">
+  <div><div class="mt">📋 Business Plan Builder</div><div style="font-size:14px;color:var(--x400);margin-top:2px"><span id="bp-project-id"></span> — <span id="bp-project-name"></span></div></div>
+  <button class="mc" onclick="closeBPB()">×</button></div>
+  <div class="mb">
+
+    <!-- BP Title & Summary -->
+    <div class="bp-section">
+      <div class="bp-section-title">📌 Executive Summary</div>
+      <div class="fg">
+        <div class="fgp full"><label class="fl">Plan Title</label><input class="fi" id="bp-title" placeholder="Carbon Credits Project — Philippines | 5-Year Investment"></div>
+        <div class="fgp full"><label class="fl">Summary (1-2 παράγραφοι)</label><textarea class="fi" id="bp-summary" placeholder="Κάθετη ολοκλήρωση από την παραγωγή..."></textarea></div>
       </div>
     </div>
-    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeContentEditor()">Cancel</button><button class="btn btn-primary">Publish Changes</button></div>
+
+    <!-- Key Metrics -->
+    <div class="bp-section">
+      <div class="bp-section-title">📊 Key Metrics <span style="font-size:12px;color:var(--x400);font-weight:400">— Εμφανίζονται ως κάρτες</span></div>
+      <div id="bp-metrics"></div>
+      <div class="bp-add-row"><button class="btn bs bsm" onclick="addMetric()">+ Add Metric</button></div>
+      <div class="bp-help">Π.χ. Έκταση → 5,000 ha, Επένδυση → €19.0M, Break-even → 2034</div>
+    </div>
+
+    <!-- Why This Region -->
+    <div class="bp-section">
+      <div class="bp-section-title">🌳 Γιατί Αυτή η Περιοχή; <span style="font-size:12px;color:var(--x400);font-weight:400">— Λόγοι επένδυσης</span></div>
+      <div id="bp-why"></div>
+      <div class="bp-add-row"><button class="btn bs bsm" onclick="addWhy()">+ Add Reason</button></div>
+    </div>
+
+    <!-- Scenarios -->
+    <div class="bp-section">
+      <div class="bp-section-title">📈 Σενάρια Απόδοσης</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;padding:0 10px">
+        <span style="flex:1;font-size:11px;color:var(--x400);font-weight:600">ΣΕΝΑΡΙΟ</span>
+        <span style="flex:.6;font-size:11px;color:var(--x400);font-weight:600">ΤΙΜΗ/ΤΟΝΟ</span>
+        <span style="flex:.6;font-size:11px;color:var(--x400);font-weight:600">ΕΣΟΔΑ</span>
+        <span style="flex:.6;font-size:11px;color:var(--x400);font-weight:600">BREAK-EVEN</span>
+        <span style="width:26px"></span>
+      </div>
+      <div id="bp-scenarios"></div>
+      <div class="bp-add-row"><button class="btn bs bsm" onclick="addScenario()">+ Add Scenario</button></div>
+    </div>
+
+    <!-- Cost Analysis -->
+    <div class="bp-section">
+      <div class="bp-section-title">💰 Ανάλυση Κόστους</div>
+      <div id="bp-costs"></div>
+      <div class="bp-add-row"><button class="btn bs bsm" onclick="addCost()">+ Add Cost Item</button></div>
+      <div class="bp-help">Τελευταίο item = Σύνολο (εμφανίζεται bold)</div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="bp-section">
+      <div class="bp-section-title">⚡ Επόμενα Βήματα</div>
+      <div id="bp-steps"></div>
+      <div class="bp-add-row"><button class="btn bs bsm" onclick="addStep()">+ Add Step</button></div>
+    </div>
+
   </div>
-</div>
+  <div class="mf">
+    <button class="btn bs" onclick="closeBPB()">Cancel</button>
+    <button class="btn bs" style="color:var(--g700)">💾 Save Draft</button>
+    <button class="btn bp" onclick="saveBP()">✅ Publish Business Plan</button>
+  </div>
+</div></div>
 
 </body>
 </html>
