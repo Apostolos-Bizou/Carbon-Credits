@@ -61,6 +61,13 @@ table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;fo
 .bp-row input,.bp-row select{flex:1}
 .bp-row-rm{background:none;border:none;color:var(--x300);font-size:18px;cursor:pointer;padding:0 4px}.bp-row-rm:hover{color:#dc2626}
 .bp-help{font-size:12px;color:var(--x400);margin-top:4px}
+
+/* Tooltips */
+.tt{cursor:help;position:relative}
+.tt .tt-text{display:none!important}
+#gcx-tip{position:fixed;z-index:99999;background:#14532d;color:#fff;font-size:13px;font-weight:500;line-height:1.55;padding:12px 16px;border-radius:11px;width:300px;box-shadow:0 8px 24px rgba(0,0,0,.3);pointer-events:none;opacity:0;transition:opacity .15s;font-family:var(--sans);letter-spacing:0;text-transform:none}
+#gcx-tip.show{opacity:1}
+.tt-t{font-weight:800;font-size:14px;margin-bottom:4px;color:#86efac}
 </style>
 
 <script>
@@ -252,29 +259,29 @@ document.addEventListener('DOMContentLoaded',initAdmin);
 <aside class="sb">
   <div class="sb-logo"><h1>GreenCredit<span>X</span></h1><p>Admin Panel</p></div>
   <nav class="sb-nav">
-    <div class="ns"><div class="ns-t">Overview</div><button class="ni on" onclick="showPanel('dashboard')"><span class="ic">📊</span> Dashboard</button></div>
+    <div class="ns"><div class="ns-t">Overview</div><button class="ni on tt" title="Συνοπτική εικόνα: credits, orders, investors, raised. Πρόσφατη δραστηριότητα." onclick="showPanel('dashboard')"><span class="ic">📊</span> Dashboard</button></div>
     <div class="ns"><div class="ns-t">Content Management</div>
-      <button class="ni" onclick="showPanel('marketplace')"><span class="ic">🛒</span> Marketplace<span class="bg">6</span></button>
-      <button class="ni" onclick="showPanel('orders')"><span class="ic">📦</span> Orders<span class="bg">5</span></button>
-      <button class="ni" onclick="showPanel('investments')"><span class="ic">📈</span> Investments<span class="bg">10</span></button>
-      <button class="ni" onclick="showPanel('bpbuilder')"><span class="ic">📋</span> Business Plans</button>
-      <button class="ni" onclick="showPanel('countries')"><span class="ic">🌍</span> Countries</button>
-      <button class="ni" onclick="showPanel('content')"><span class="ic">📝</span> Content Pages</button>
-      <button class="ni" onclick="showPanel('guide')"><span class="ic">📚</span> Guide Pages<span class="bg">7</span></button>
+      <button class="ni tt" title="Διαχείριση credits στο Marketplace. Add/Edit τιμές, ratings, ποσότητες." onclick="showPanel('marketplace')"><span class="ic">🛒</span> Marketplace<span class="bg">6</span></button>
+      <button class="ni tt" title="Ιστορικό παραγγελιών. Κάθε αγορά credits εμφανίζεται εδώ." onclick="showPanel('orders')"><span class="ic">📦</span> Orders<span class="bg">5</span></button>
+      <button class="ni tt" title="10 investment projects. Phase, funding, ROI, risk. Δημιουργία Business Plans." onclick="showPanel('investments')"><span class="ic">📈</span> Investments<span class="bg">10</span></button>
+      <button class="ni tt" title="Builder για Business Plans κάθε project. 6 sections: metrics, σενάρια, κόστη, κίνδυνοι." onclick="showPanel('bpbuilder')"><span class="ic">📋</span> Business Plans</button>
+      <button class="ni tt" title="Χώρες & περιοχές projects. Philippines, Indonesia, Malaysia — Mindanao, Kalimantan κλπ." onclick="showPanel('countries')"><span class="ic">🌍</span> Countries</button>
+      <button class="ni tt" title="Σελίδες περιεχομένου: presentations, αναλύσεις, εκπαιδευτικό υλικό." onclick="showPanel('content')"><span class="ic">📝</span> Content Pages</button>
+      <button class="ni tt" title="7 εκπαιδευτικές σελίδες στο Guide tab: τύποι credits, ratings, πώς δημιουργούνται, γλωσσάριο." onclick="showPanel('guide')"><span class="ic">📚</span> Guide Pages<span class="bg">7</span></button>
     </div>
     <div class="ns"><div class="ns-t">Live Markets</div>
-      <button class="ni" onclick="showPanel('datasources')"><span class="ic">📡</span> Data Sources</button>
-      <button class="ni" onclick="showPanel('instruments')"><span class="ic">📉</span> Instruments</button>
-      <button class="ni" onclick="showPanel('ticker')"><span class="ic">📺</span> Ticker Tape</button>
-      <button class="ni" onclick="showPanel('liveconfig')"><span class="ic">⚡</span> Live Config</button>
+      <button class="ni tt" title="6 API πηγές δεδομένων: Xpansiv CBL, CME, ICE, CIX, BeZero, Verra. Connect/disconnect." onclick="showPanel('datasources')"><span class="ic">📡</span> Data Sources</button>
+      <button class="ni tt" title="12 instruments στο Live Markets: GEO, EUA, ARR, REDD, Blue Carbon. Τιμές, exchanges." onclick="showPanel('instruments')"><span class="ic">📉</span> Instruments</button>
+      <button class="ni tt" title="Ρυθμίσεις ticker bar: ταχύτητα, instruments on/off, χρώματα, σειρά εμφάνισης." onclick="showPanel('ticker')"><span class="ic">📺</span> Ticker Tape</button>
+      <button class="ni tt" title="Order Book, Market Intel news, Chart settings. Τι βλέπει ο χρήστης στο Live Markets." onclick="showPanel('liveconfig')"><span class="ic">⚡</span> Live Config</button>
     </div>
     <div class="ns"><div class="ns-t">Fleet</div>
-      <button class="ni" onclick="showPanel('fleet')"><span class="ic">🚢</span> Fleet Monitor<span class="bg">23</span></button>
-      <button class="ni" onclick="showPanel('notifications')"><span class="ic">🔔</span> Notifications<span class="bg" style="background:#f59e0b">3</span></button>
+      <button class="ni tt" title="23 πλοιοκτήτες, 142 πλοία. Εκπομπές, EU ETS, gaps, documents, AIS. Τροφοδοτεί Fleet Monitor." onclick="showPanel('fleet')"><span class="ic">🚢</span> Fleet Monitor<span class="bg">23</span></button>
+      <button class="ni tt" title="Ειδοποιήσεις: credit gaps, missing docs, CII drops, νέες παραγγελίες. Rules engine." onclick="showPanel('notifications')"><span class="ic">🔔</span> Notifications<span class="bg" style="background:#f59e0b">3</span></button>
     </div>
     <div class="ns"><div class="ns-t">System</div>
-      <button class="ni" onclick="showPanel('users')"><span class="ic">👥</span> Users</button>
-      <button class="ni" onclick="showPanel('settings')"><span class="ic">⚙️</span> Settings</button>
+      <button class="ni tt" title="Λογαριασμοί admin & clients. Roles: Super Admin, Editor. Email, status." onclick="showPanel('users')"><span class="ic">👥</span> Users</button>
+      <button class="ni tt" title="Γενικές ρυθμίσεις: όνομα πλατφόρμας, εταιρεία, νόμισμα, ticker speed." onclick="showPanel('settings')"><span class="ic">⚙️</span> Settings</button>
     </div>
   </nav>
   <div class="sb-ft"><div class="u"><div class="av">TP</div><div><div class="nm">TPA Services</div><div class="rl">Super Admin</div></div></div></div>
@@ -289,10 +296,10 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- DASHBOARD -->
     <div data-panel id="p-dashboard" style="display:block">
       <div class="as">
-        <div class="ast"><div class="al">Credits Listed</div><div class="av2">14,800</div><div class="ac">6 active listings</div></div>
-        <div class="ast"><div class="al">Orders Revenue</div><div class="av2">$89,430</div><div class="ac">↑ 5 orders this month</div></div>
-        <div class="ast"><div class="al">Investors</div><div class="av2">128</div><div class="ac">↑ +12 new</div></div>
-        <div class="ast"><div class="al">Raised</div><div class="av2">€52.5M</div><div class="ac">38% pipeline</div></div>
+        <div class="ast tt" title="Συνολικοί τόνοι CO₂ credits που είναι διαθέσιμοι προς πώληση στο Marketplace. Αυξάνεται όταν προσθέτετε νέα credits."><div class="al">Credits Listed</div><div class="av2">14,800</div><div class="ac">6 active listings</div></div>
+        <div class="ast tt" title="Συνολικά έσοδα από πωλήσεις credits μέσω της πλατφόρμας. Κάθε Order στο Marketplace προστίθεται εδώ."><div class="al">Orders Revenue</div><div class="av2">$89,430</div><div class="ac">↑ 5 orders this month</div></div>
+        <div class="ast tt" title="Αριθμός μοναδικών επενδυτών που συμμετέχουν σε projects στο Invest tab. +12 νέοι αυτόν τον μήνα."><div class="al">Investors</div><div class="av2">128</div><div class="ac">↑ +12 new</div></div>
+        <div class="ast tt" title="Συνολικά κεφάλαια που έχουν συγκεντρωθεί για τα 10 investment projects. 38% του συνολικού pipeline €139.5M."><div class="al">Raised</div><div class="av2">€52.5M</div><div class="ac">38% pipeline</div></div>
       </div>
       <div class="cd"><div class="ch"><div><div class="ct-t">Recent Activity</div></div></div><div class="cb"><table><thead><tr><th>Time</th><th>Action</th><th>User</th><th>Details</th></tr></thead><tbody>
         <tr><td class="tm">2 min ago</td><td><span style="padding:3px 10px;border-radius:7px;background:#dcfce7;color:#15803d;font-size:12px;font-weight:600">Order</span></td><td>Tsakos Energy Nav.</td><td>ORD-M5K2R7 — 500 tCO₂e VCS-2847 — <strong>$11,250</strong></td></tr>
@@ -306,19 +313,19 @@ document.addEventListener('DOMContentLoaded',initAdmin);
 
     <!-- MARKETPLACE -->
     <div data-panel id="p-marketplace" style="display:none">
-      <div class="cd"><div class="ch"><div><div class="ct-t">Carbon Credits</div><div class="ct-s">Manage marketplace listings</div></div><button class="btn bp bsm" onclick="openCM()">+ Add Credit</button></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Carbon Credits</div><div class="ct-s tt" title="Εδώ διαχειρίζεστε τα credits που εμφανίζονται στο Marketplace tab. Add/Edit/Delete. Τιμές, ratings, ποσότητες.">Manage marketplace listings</div></div><button class="btn bp bsm" onclick="openCM()">+ Add Credit</button></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Type</th><th>Rating</th><th>Price</th><th>Available</th><th>Vintage</th><th>Origin</th><th>Trend</th><th>Actions</th></tr></thead><tbody id="credTb"></tbody></table></div></div>
     </div>
 
     <!-- ORDERS -->
     <div data-panel id="p-orders" style="display:none">
       <div class="as">
-        <div class="ast"><div class="al">Total Orders</div><div class="av2">5</div><div class="ac">This month</div></div>
-        <div class="ast"><div class="al">Revenue</div><div class="av2">$89,430</div><div class="ac">↑ +24%</div></div>
-        <div class="ast"><div class="al">Credits Sold</div><div class="av2">4,150 t</div><div class="ac">tCO₂e delivered</div></div>
-        <div class="ast"><div class="al">Avg Order</div><div class="av2">$17,886</div><div class="ac">Per transaction</div></div>
+        <div class="ast tt" title="Πόσες παραγγελίες credits έγιναν αυτόν τον μήνα μέσω του Marketplace → Buy → Place Order."><div class="al">Total Orders</div><div class="av2">5</div><div class="ac">This month</div></div>
+        <div class="ast tt" title="Συνολικά έσοδα σε δολάρια από πωλήσεις credits. Υπολογίζεται: ποσότητα × τιμή ανά tCO₂e."><div class="al">Revenue</div><div class="av2">$89,430</div><div class="ac">↑ +24%</div></div>
+        <div class="ast tt" title="Πόσοι τόνοι CO₂ credits παραδόθηκαν μέσω Verra Registry transfer. Κάθε credit = 1 τόνος CO₂."><div class="al">Credits Sold</div><div class="av2">4,150 t</div><div class="ac">tCO₂e delivered</div></div>
+        <div class="ast tt" title="Μέση αξία ανά παραγγελία. Revenue ÷ αριθμός orders. Βοηθά στο forecasting."><div class="al">Avg Order</div><div class="av2">$17,886</div><div class="ac">Per transaction</div></div>
       </div>
-      <div class="cd"><div class="ch"><div><div class="ct-t">Order History</div><div class="ct-s">All credit purchases — matches Place Order on website</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Order History</div><div class="ct-s tt" title="Ιστορικό παραγγελιών. Κάθε Buy→Place Order στο website εμφανίζεται εδώ. View receipt, track status.">All credit purchases — matches Place Order on website</div></div></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Order ID</th><th>Date</th><th>Buyer</th><th>Items</th><th>Credits</th><th>Total</th><th>Savings</th><th>Status</th><th>Actions</th></tr></thead><tbody>
           <tr><td class="tm" style="font-weight:700">ORD-M5K2R7</td><td class="tm">17/03/2026 14:32</td><td style="font-weight:600">Tsakos Energy Nav.</td><td>VCS-2847 (ARR, A)</td><td class="tm">500 tCO₂e</td><td class="tp">$11,250</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($5,794)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
           <tr><td class="tm" style="font-weight:700">ORD-L4J8P1</td><td class="tm">17/03/2026 11:15</td><td style="font-weight:600">Navios Maritime</td><td>GS-1455 (Blue Carbon, AA)</td><td class="tm">1,200 tCO₂e</td><td class="tp">$34,080</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($17,551)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
@@ -326,7 +333,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
           <tr><td class="tm" style="font-weight:700">ORD-J2G5M8</td><td class="tm">15/03/2026 09:22</td><td style="font-weight:600">Star Bulk Carriers</td><td>GS-1522 (REDD+, A+)</td><td class="tm">350 tCO₂e</td><td class="tp">$11,025</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($5,678)</td><td><span style="padding:4px 12px;border-radius:8px;background:#fef3c7;color:#a16207;font-size:13px;font-weight:600">⏳ Processing</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
           <tr><td class="tm" style="font-weight:700">ORD-I1F4L7</td><td class="tm">14/03/2026 13:55</td><td style="font-weight:600">Euronav NV</td><td>VCS-2847 (ARR, A)<br>VCS-3250 (ARR, BBB)</td><td class="tm">500 + 200<br>= 700 tCO₂e</td><td class="tp">$14,770</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($7,607)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
         </tbody></table></div></div>
-      <div class="cd"><div class="ch"><div><div class="ct-t">Order Flow</div><div class="ct-s">How credits are delivered after Place Order on the website</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Order Flow</div><div class="ct-s tt" title="Η ροή μετά την αγορά: Place Order → Invoice → Payment (Net 30) → Verra Transfer (48h) → Certificates.">How credits are delivered after Place Order on the website</div></div></div>
         <div class="cb"><div style="display:flex;gap:12px;align-items:center">
           <div style="flex:1;padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);text-align:center"><div style="font-size:24px;margin-bottom:6px">🛒</div><div style="font-size:14px;font-weight:700;color:var(--g900)">Place Order</div><div style="font-size:12px;color:var(--x400)">Buyer selects credits</div></div>
           <div style="font-size:20px;color:var(--g400)">→</div>
@@ -348,25 +355,25 @@ document.addEventListener('DOMContentLoaded',initAdmin);
         <button class="tab" onclick="setIT(this,'Indonesia')">🇮🇩 Indonesia</button>
         <button class="tab" onclick="setIT(this,'Malaysia')">🇲🇾 Malaysia</button>
       </div>
-      <div class="cd"><div class="ch"><div><div class="ct-t">Investment Projects</div><div class="ct-s">Manage projects, funding & business plans</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Investment Projects</div><div class="ct-s tt" title="Τα 10 projects που εμφανίζονται στο Invest tab. Status, phase, raised, target, ROI, risk, Business Plan.">Manage projects, funding & business plans</div></div></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Country</th><th>Region</th><th>Phase</th><th>Raised</th><th>Target</th><th>ROI</th><th>Risk</th><th>Area</th><th>Credits/yr</th><th>Business Plan</th><th>Actions</th></tr></thead><tbody id="invTb"></tbody></table></div></div>
     </div>
 
     <!-- BP BUILDER (standalone panel) -->
     <div data-panel id="p-bpbuilder" style="display:none">
       <div class="as">
-        <div class="ast"><div class="al">Published Plans</div><div class="av2">2</div><div class="ac">INV-001, INV-004</div></div>
-        <div class="ast"><div class="al">Missing Plans</div><div class="av2" style="color:#f59e0b">8</div><div class="ac">Need creation</div></div>
-        <div class="ast"><div class="al">Total Sections</div><div class="av2">6</div><div class="ac">Per business plan</div></div>
-        <div class="ast"><div class="al">Last Updated</div><div class="av2">Today</div><div class="ac">INV-001</div></div>
+        <div class="ast tt" title="Business Plans που έχουν δημοσιευτεί στο website. Εμφανίζονται στο Invest tab → Business Plan button."><div class="al">Published Plans</div><div class="av2">2</div><div class="ac">INV-001, INV-004</div></div>
+        <div class="ast tt" title="Projects χωρίς Business Plan. Οι επενδυτές δεν μπορούν να δουν λεπτομέρειες — πρέπει να δημιουργηθούν."><div class="al">Missing Plans</div><div class="av2" style="color:#f59e0b">8</div><div class="ac">Need creation</div></div>
+        <div class="ast tt" title="Κάθε BP έχει 6 sections: Key Metrics, Γιατί Φιλιππίνες, Σενάρια, Κόστος, Κίνδυνοι, Επόμενα Βήματα."><div class="al">Total Sections</div><div class="av2">6</div><div class="ac">Per business plan</div></div>
+        <div class="ast tt" title="Τελευταία φορά που τροποποιήθηκε κάποιο Business Plan. Σήμερα: INV-001 Mindanao."><div class="al">Last Updated</div><div class="av2">Today</div><div class="ac">INV-001</div></div>
       </div>
 
       <!-- Project Selector -->
-      <div class="cd"><div class="ch"><div><div class="ct-t">Select Project</div><div class="ct-s">Choose which project to edit, then click a section below</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Select Project</div><div class="ct-s tt" title="Επιλέξτε project → κλικ σε section παρακάτω → ανοίγει ο builder. ✓ = published, χωρίς ✓ = empty.">Choose which project to edit, then click a section below</div></div></div>
         <div class="cb"><div style="display:flex;gap:10px;flex-wrap:wrap" id="bpProjectBtns"></div></div></div>
 
       <!-- 6 Active Section Cards -->
-      <div class="cd"><div class="ch"><div><div class="ct-t">Business Plan Sections</div><div class="ct-s">Click any section to edit — opens the builder pre-filled</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Business Plan Sections</div><div class="ct-s tt" title="6 sections ανά BP: Metrics, Γιατί, Σενάρια, Κόστος, Κίνδυνοι, Βήματα. Κλικ → opens builder pre-filled.">Click any section to edit — opens the builder pre-filled</div></div></div>
         <div class="cb">
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
             <div onclick="openBPSection('metrics')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">📊</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Key Metrics</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Έκταση, επένδυση, credits, break-even, κόστος παραγωγής</div><div style="font-size:12px;color:var(--g600);font-weight:600;margin-top:8px" id="bpSec1">INV-001: 8 metrics ✓</div></div>
@@ -450,17 +457,17 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- DATA SOURCES -->
     <div data-panel id="p-datasources" style="display:none">
       <div class="as">
-        <div class="ast"><div class="al">Active Feeds</div><div class="av2">5</div><div class="ac">of 6 connected</div></div>
-        <div class="ast"><div class="al">Data/sec</div><div class="av2">847</div></div>
-        <div class="ast"><div class="al">Uptime</div><div class="av2">99.7%</div></div>
-        <div class="ast"><div class="al">Monthly</div><div class="av2">$2,450</div></div>
+        <div class="ast tt" title="Πηγές δεδομένων που τροφοδοτούν το Live Markets tab. Xpansiv CBL, CME, ICE, CIX, BeZero, Verra."><div class="al">Active Feeds</div><div class="av2">5</div><div class="ac">of 6 connected</div></div>
+        <div class="ast tt" title="Data points που λαμβάνουμε ανά δευτερόλεπτο. Τιμές, volumes, order book updates."><div class="al">Data/sec</div><div class="av2">847</div></div>
+        <div class="ast tt" title="Ποσοστό χρόνου που οι feeds λειτουργούν χωρίς διακοπή. 99.7% = ~22 ώρες downtime/χρόνο."><div class="al">Uptime</div><div class="av2">99.7%</div></div>
+        <div class="ast tt" title="Μηνιαίο κόστος για όλες τις API συνδρομές. Xpansiv $800 + CME $650 + ICE $500 + CIX $300 + BeZero $200."><div class="al">Monthly</div><div class="av2">$2,450</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="srcGrid"></div>
     </div>
 
     <!-- INSTRUMENTS -->
     <div data-panel id="p-instruments" style="display:none">
-      <div class="cd"><div class="ch"><div><div class="ct-t">Market Instruments</div></div><button class="btn bp bsm">+ Add</button></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Market Instruments</div><div class="ct-s tt" title="Τα 12 financial instruments που εμφανίζονται στο Live Markets tab. GEO, EUA, ARR, REDD, Blue Carbon κλπ."</div></div><button class="btn bp bsm">+ Add</button></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>Symbol</th><th>Name</th><th>Exchange</th><th>Type</th><th>Price</th><th>Feed</th><th>Actions</th></tr></thead><tbody id="instTb"></tbody></table></div></div>
     </div>
 
@@ -476,40 +483,40 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- ═══ FLEET MONITOR ADMIN ═══ -->
     <div data-panel id="p-fleet" style="display:none">
       <div class="as">
-        <div class="ast"><div class="al">Shipowners</div><div class="av2">23</div><div class="ac">Active clients</div></div>
-        <div class="ast"><div class="al">Total Vessels</div><div class="av2">142</div><div class="ac">Across all owners</div></div>
-        <div class="ast"><div class="al">Total Emissions</div><div class="av2">3.2M t</div><div class="ac">Annual tCO₂e</div></div>
-        <div class="ast"><div class="al">Credit Gap</div><div class="av2" style="color:#dc2626">847K</div><div class="ac">Credits needed</div></div>
+        <div class="ast tt" title="Πλοιοκτήτες-πελάτες TPA Services. Αυτοί βλέπουν τα πλοία τους στο Fleet Monitor tab του website."><div class="al">Shipowners</div><div class="av2">23</div><div class="ac">Active clients</div></div>
+        <div class="ast tt" title="Σύνολο πλοίων σε όλους τους πλοιοκτήτες. Κάθε πλοίο παρακολουθείται για εκπομπές, EU ETS, CII."><div class="al">Total Vessels</div><div class="av2">142</div><div class="ac">Across all owners</div></div>
+        <div class="ast tt" title="Ετήσιες εκπομπές CO₂ από όλα τα πλοία. Υπολογίζονται από κατανάλωση καυσίμου × IMO emission factor."><div class="al">Total Emissions</div><div class="av2">3.2M t</div><div class="ac">Annual tCO₂e</div></div>
+        <div class="ast tt" title="Τόνοι CO₂ που δεν καλύπτονται από credits. Αυτοί πρέπει να αγοράσουν credits ή να πληρώσουν EU ETS allowances (~€100/t)."><div class="al">Credit Gap</div><div class="av2" style="color:#dc2626">847K</div><div class="ac">Credits needed</div></div>
       </div>
 
       <div class="tabs" id="fleetTabs">
-        <button class="tab on" onclick="setFleetTab(this,'owners')">👥 Shipowners (23)</button>
-        <button class="tab" onclick="setFleetTab(this,'vessels')">🚢 Vessels (142)</button>
-        <button class="tab" onclick="setFleetTab(this,'docs')">📄 Documents</button>
-        <button class="tab" onclick="setFleetTab(this,'ais')">📡 AIS Config</button>
+        <button class="tab on tt" title="Λίστα όλων των πλοιοκτητών-πελατών. Εδώ διαχειρίζεστε ποιοι εμφανίζονται στο Fleet Monitor." onclick="setFleetTab(this,'owners')">👥 Shipowners (23)</button>
+        <button class="tab tt" title="Πίνακας όλων των πλοίων με IMO, τύπο, GT, εκπομπές, EU ETS scope, gap, CII rating." onclick="setFleetTab(this,'vessels')">🚢 Vessels (142)</button>
+        <button class="tab tt" title="10 τύποι εγγράφων ανά πλοίο (6 υποχρεωτικά EU MRV + 4 προαιρετικά). Tracking uploads." onclick="setFleetTab(this,'docs')">📄 Documents</button>
+        <button class="tab tt" title="Ρυθμίσεις σύνδεσης AIS API για live θέσεις πλοίων και εκτίμηση εκπομπών σε πραγματικό χρόνο." onclick="setFleetTab(this,'ais')">📡 AIS Config</button>
       </div>
 
       <!-- Shipowners Tab -->
       <div id="ftab-owners">
-        <div class="cd"><div class="ch"><div><div class="ct-t">Shipowner Clients</div><div class="ct-s">Manage your 20+ shipowner clients — data feeds Fleet Monitor on the website</div></div><button class="btn bp bsm" onclick="openOwnerModal()">+ Add Owner</button></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">Shipowner Clients</div><div class="ct-s tt" title="23 πλοιοκτήτες-πελάτες TPA. Ό,τι αλλάξετε εδώ εμφανίζεται στο Fleet Monitor sidebar + dashboard.">Manage your 20+ shipowner clients — data feeds Fleet Monitor on the website</div></div><button class="btn bp bsm" onclick="openOwnerModal()">+ Add Owner</button></div>
           <div class="cb" style="padding:0"><table><thead><tr><th>Flag</th><th>Company</th><th>HQ</th><th>Vessels</th><th>Emissions</th><th>EU ETS</th><th>Gap</th><th>Coverage</th><th>Contact</th><th>Actions</th></tr></thead><tbody id="ownerTb"></tbody></table></div></div>
       </div>
 
       <!-- Vessels Tab -->
       <div id="ftab-vessels" style="display:none">
-        <div class="cd"><div class="ch"><div><div class="ct-t">All Vessels</div><div class="ct-s">Click vessel to edit specs, emissions, routes & CII</div></div><button class="btn bp bsm">+ Add Vessel</button></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">All Vessels</div><div class="ct-s tt" title="Κάθε πλοίο: specs, route, εκπομπές, EU ETS scope, CII rating. Αλλαγές εμφανίζονται στα vessel cards.">Click vessel to edit specs, emissions, routes & CII</div></div><button class="btn bp bsm">+ Add Vessel</button></div>
           <div class="cb" style="padding:0"><table><thead><tr><th>Owner</th><th>Vessel</th><th>IMO</th><th>Type</th><th>GT</th><th>Route</th><th>Emissions</th><th>EU ETS</th><th>Gap</th><th>CII</th><th>Status</th><th>Actions</th></tr></thead><tbody id="vesselTb"></tbody></table></div></div>
       </div>
 
       <!-- Documents Tab -->
       <div id="ftab-docs" style="display:none">
         <div class="as">
-          <div class="ast"><div class="al">Total Docs</div><div class="av2">0/1,420</div><div class="ac">Across all vessels</div></div>
-          <div class="ast"><div class="al">Required Missing</div><div class="av2" style="color:#dc2626">852</div><div class="ac">6 types × 142 vessels</div></div>
-          <div class="ast"><div class="al">Optional Missing</div><div class="av2" style="color:#f59e0b">568</div><div class="ac">4 types × 142 vessels</div></div>
-          <div class="ast"><div class="al">Last Upload</div><div class="av2">—</div><div class="ac">No uploads yet</div></div>
+          <div class="ast tt" title="Σύνολο εγγράφων (υποχρεωτικά + προαιρετικά) από όλα τα πλοία. 10 τύποι × 142 πλοία = 1,420 max."><div class="al">Total Docs</div><div class="av2">0/1,420</div><div class="ac">Across all vessels</div></div>
+          <div class="ast tt" title="6 υποχρεωτικά έγγραφα ανά πλοίο: MP, ER, DoC, BDN, Voyage Reports, CER. Χωρίς αυτά: πρόστιμα EU ETS."><div class="al">Required Missing</div><div class="av2" style="color:#dc2626">852</div><div class="ac">6 types × 142 vessels</div></div>
+          <div class="ast tt" title="4 προαιρετικά αλλά συνιστώμενα: Noon Reports, Fuel Analysis, CII Certificate, SEEMP Part III."><div class="al">Optional Missing</div><div class="av2" style="color:#f59e0b">568</div><div class="ac">4 types × 142 vessels</div></div>
+          <div class="ast tt" title="Πότε ανέβηκε τελευταία φορά κάποιο έγγραφο. Η τακτική ενημέρωση εξασφαλίζει compliance."><div class="al">Last Upload</div><div class="av2">—</div><div class="ac">No uploads yet</div></div>
         </div>
-        <div class="cd"><div class="ch"><div><div class="ct-t">Document Types</div><div class="ct-s">10 document types tracked per vessel — 6 required for EU MRV/ETS compliance</div></div></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">Document Types</div><div class="ct-s tt" title="10 τύποι εγγράφων EU MRV/ETS: 6 υποχρεωτικά (MP, ER, DoC, BDN, Voyages, CER) + 4 προαιρετικά.">10 document types tracked per vessel — 6 required for EU MRV/ETS compliance</div></div></div>
           <div class="cb" style="padding:0"><table><thead><tr><th>Icon</th><th>Document</th><th>Required</th><th>Frequency</th><th>Format</th><th>Source</th><th>Status</th></tr></thead><tbody>
             <tr><td>📋</td><td style="font-weight:700">Monitoring Plan (MP)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Once / on change</td><td>XML / PDF</td><td>THETIS-MRV</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
             <tr><td>📊</td><td style="font-weight:700">Emission Report (ER)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Annual (by 31 Mar)</td><td>XML / CSV</td><td>THETIS-MRV</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
@@ -526,7 +533,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
 
       <!-- AIS Config Tab -->
       <div id="ftab-ais" style="display:none">
-        <div class="cd"><div class="ch"><div><div class="ct-t">AIS Integration</div><div class="ct-s">Connect to AIS API for real-time vessel tracking & emission estimation</div></div></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">AIS Integration</div><div class="ct-s tt" title="Σύνδεση με AIS provider για real-time θέσεις πλοίων. Στο demo χρησιμοποιούμε simulated data.">Connect to AIS API for real-time vessel tracking & emission estimation</div></div></div>
           <div class="cb">
             <div class="fg">
               <div class="fgp"><label class="fl">AIS Provider</label><select class="fi"><option>Datalastic (Recommended — €80/mo)</option><option>MarineTraffic (Enterprise)</option><option>Kpler (Enterprise)</option><option>NavAPI (€120/mo)</option><option>Data Docked (€150/mo)</option></select></div>
@@ -547,7 +554,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
 
     <!-- ═══ TICKER TAPE SETTINGS ═══ -->
     <div data-panel id="p-ticker" style="display:none">
-      <div class="cd"><div class="ch"><div><div class="ct-t">Ticker Tape Configuration</div><div class="ct-s">Controls the green scrolling price bar at the top of the website</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Ticker Tape Configuration</div><div class="ct-s tt" title="Η πράσινη μπάρα τιμών στην κορυφή του website. Εδώ ρυθμίζετε ταχύτητα, instruments, ενημέρωση.">Controls the green scrolling price bar at the top of the website</div></div></div>
         <div class="cb">
           <div class="fg" style="margin-bottom:20px">
             <div class="fgp"><label class="fl">Scroll Speed (seconds)</label><input class="fi" type="number" value="18" min="5" max="60"></div>
@@ -556,7 +563,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl">Show % Change</label><select class="fi"><option>Yes — show ▲0.58%</option><option>No — price only</option></select></div>
           </div>
         </div></div>
-      <div class="cd"><div class="ch"><div><div class="ct-t">Active Instruments on Ticker</div><div class="ct-s">Drag to reorder — toggle on/off to show/hide on the website ticker</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Active Instruments on Ticker</div><div class="ct-s tt" title="Ποιες τιμές εμφανίζονται στο ticker. Toggle on/off, αλλαγή σειράς. CORSIA είναι off by default.">Drag to reorder — toggle on/off to show/hide on the website ticker</div></div></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Order</th><th>Symbol</th><th>Name</th><th>Type</th><th>Current</th><th>Change</th><th>Color</th><th>Show</th></tr></thead><tbody>
           <tr><td class="tm">1</td><td style="font-weight:700">GEO</td><td>Global Emissions Offset</td><td>Voluntary</td><td class="tp">$1.85</td><td style="color:var(--g600)">+0.00%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></span> Green</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
           <tr><td class="tm">2</td><td style="font-weight:700">N-GEO</td><td>Nature-Based GEO</td><td>Voluntary</td><td class="tp">$3.44</td><td style="color:var(--g600)">+1.46%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></span> Green</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
@@ -577,14 +584,14 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- ═══ NOTIFICATIONS / ALERTS ═══ -->
     <div data-panel id="p-notifications" style="display:none">
       <div class="as">
-        <div class="ast"><div class="al">Active Alerts</div><div class="av2" style="color:#dc2626">3</div><div class="ac">Need attention</div></div>
-        <div class="ast"><div class="al">Rules</div><div class="av2">8</div><div class="ac">Automated</div></div>
-        <div class="ast"><div class="al">Sent Today</div><div class="av2">12</div><div class="ac">Email + In-app</div></div>
-        <div class="ast"><div class="al">Resolved</div><div class="av2">47</div><div class="ac">This month</div></div>
+        <div class="ast tt" title="Ειδοποιήσεις που δεν έχουν επιλυθεί ακόμα. Κρίσιμα: credit gaps, missing docs, CII drops."><div class="al">Active Alerts</div><div class="av2" style="color:#dc2626">3</div><div class="ac">Need attention</div></div>
+        <div class="ast tt" title="Αυτοματοποιημένοι κανόνες που ελέγχουν δεδομένα και στέλνουν ειδοποιήσεις. Π.χ. gap>10K → email admin."><div class="al">Rules</div><div class="av2">8</div><div class="ac">Automated</div></div>
+        <div class="ast tt" title="Πόσες ειδοποιήσεις στάλθηκαν σήμερα μέσω email ή in-app notification."><div class="al">Sent Today</div><div class="av2">12</div><div class="ac">Email + In-app</div></div>
+        <div class="ast tt" title="Ειδοποιήσεις που επιλύθηκαν αυτόν τον μήνα. Π.χ. πλοιοκτήτης αγόρασε credits → gap alert resolved."><div class="al">Resolved</div><div class="av2">47</div><div class="ac">This month</div></div>
       </div>
 
       <!-- Active Alerts -->
-      <div class="cd"><div class="ch"><div><div class="ct-t">🔴 Active Alerts</div><div class="ct-s">Unresolved issues that need attention</div></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">🔴 🔴 Active Alerts</div><div class="ct-s tt" title="Κρίσιμα θέματα: credit gaps >10K, missing documents, CII drops σε D/E. Πρέπει να επιλυθούν.">Unresolved issues that need attention</div></div></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Severity</th><th>Type</th><th>Description</th><th>Owner / Vessel</th><th>Triggered</th><th>Actions</th></tr></thead><tbody>
           <tr style="background:#fef2f2"><td><span style="padding:4px 12px;border-radius:8px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:700">CRITICAL</span></td><td>Credit Gap</td><td style="font-weight:600">Mediterranean Lines — 64.8K gap, 0% coverage</td><td>Mediterranean Lines</td><td class="tm">2 hrs ago</td><td><button class="btn bd bsm">Resolve</button> <button class="btn bs bsm">Notify</button></td></tr>
           <tr style="background:#fffbeb"><td><span style="padding:4px 12px;border-radius:8px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:700">WARNING</span></td><td>Missing Docs</td><td style="font-weight:600">Olympia Maritime — 0/80 documents uploaded</td><td>Olympia Maritime Corp.</td><td class="tm">1 day ago</td><td><button class="btn bd bsm">Resolve</button> <button class="btn bs bsm">Remind</button></td></tr>
@@ -592,7 +599,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
         </tbody></table></div></div>
 
       <!-- Alert Rules -->
-      <div class="cd"><div class="ch"><div><div class="ct-t">⚙️ Alert Rules</div><div class="ct-s">Automated rules that trigger notifications</div></div><button class="btn bp bsm">+ Add Rule</button></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">⚙️ ⚙️ Alert Rules</div><div class="ct-s tt" title="Αυτοματοποιημένοι κανόνες. Ορίζετε condition, channel (email/in-app), recipients. Toggle on/off.">Automated rules that trigger notifications</div></div><button class="btn bp bsm">+ Add Rule</button></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Active</th><th>Rule</th><th>Condition</th><th>Channel</th><th>Recipients</th><th>Last Fired</th></tr></thead><tbody>
           <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">Credit Gap Alert</td><td class="tm">Gap > 10K tCO₂e for any owner</td><td>📧 Email + 🔔 In-app</td><td>Admin, Operations</td><td class="tm">2 hrs ago</td></tr>
           <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">Missing Required Docs</td><td class="tm">Required docs missing > 30 days before deadline</td><td>📧 Email</td><td>Owner contact</td><td class="tm">1 day ago</td></tr>
@@ -608,14 +615,14 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- ═══ LIVE MARKETS CONFIG ═══ -->
     <div data-panel id="p-liveconfig" style="display:none">
       <div class="tabs">
-        <button class="tab on" onclick="setLCTab(this,'orderbook')">📊 Order Book</button>
-        <button class="tab" onclick="setLCTab(this,'news')">📰 Market Intel</button>
-        <button class="tab" onclick="setLCTab(this,'chart')">📈 Chart Config</button>
+        <button class="tab on tt" title="Ρυθμίσεις bid/ask display: rows, speed, spread format." onclick="setLCTab(this,'orderbook')">📊 Order Book</button>
+        <button class="tab tt" title="Διαχείριση νέων στο sidebar Live Markets. Add/edit/delete headlines." onclick="setLCTab(this,'news')">📰 Market Intel</button>
+        <button class="tab tt" title="Candlestick chart: timeframe, colors, candles, volume bars." onclick="setLCTab(this,'chart')">📈 Chart Config</button>
       </div>
 
       <!-- Order Book Config -->
       <div id="lctab-orderbook">
-        <div class="cd"><div class="ch"><div><div class="ct-t">Order Book Settings</div><div class="ct-s">Controls the bid/ask display on Live Markets page</div></div></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">Order Book Settings</div><div class="ct-s tt" title="Ρυθμίσεις Order Book: πόσα levels bid/ask, ταχύτητα ενημέρωσης, εμφάνιση spread.">Controls the bid/ask display on Live Markets page</div></div></div>
           <div class="cb"><div class="fg">
             <div class="fgp"><label class="fl">Visible Rows</label><select class="fi"><option>5 levels</option><option>7 levels</option><option>10 levels</option></select></div>
             <div class="fgp"><label class="fl">Update Speed</label><select class="fi"><option>Real-time (500ms)</option><option>1 second</option><option>5 seconds</option></select></div>
@@ -626,7 +633,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
 
       <!-- News / Market Intel Config -->
       <div id="lctab-news" style="display:none">
-        <div class="cd"><div class="ch"><div><div class="ct-t">Market Intel / News Feed</div><div class="ct-s">Manage news items shown in the Live Markets sidebar</div></div><button class="btn bp bsm">+ Add News Item</button></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">Market Intel / News Feed</div><div class="ct-s tt" title="Τα νέα που εμφανίζονται στο δεξί sidebar του Live Markets. Regulatory, IMO, Ratings, Volume, Supply.">Manage news items shown in the Live Markets sidebar</div></div><button class="btn bp bsm">+ Add News Item</button></div>
           <div class="cb" style="padding:0"><table><thead><tr><th>Time</th><th>Tag</th><th>Hot</th><th>Headline</th><th>Actions</th></tr></thead><tbody>
             <tr><td class="tm">14:32</td><td><span style="padding:3px 10px;border-radius:7px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:600">Regulatory</span></td><td>🔥</td><td style="font-weight:600">EU ETS Maritime reaches 100% phase-in 2026 — full compliance ahead</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
             <tr><td class="tm">13:15</td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Rating</span></td><td></td><td style="font-weight:600">Sylvera upgrades ARR credits outlook to Positive</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
@@ -664,10 +671,10 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- SETTINGS -->
     <div data-panel id="p-settings" style="display:none">
       <div class="cd"><div class="ch"><div class="ct-t">Platform Settings</div></div><div class="cb"><div class="fg">
-        <div class="fgp"><label class="fl">Platform Name</label><input class="fi" value="GreenCreditX"></div>
-        <div class="fgp"><label class="fl">Company</label><input class="fi" value="TPA Services"></div>
-        <div class="fgp"><label class="fl">Currency</label><select class="fi"><option>USD ($)</option><option>EUR (€)</option></select></div>
-        <div class="fgp"><label class="fl">Ticker Speed (s)</label><input class="fi" type="number" value="18"></div>
+        <div class="fgp"><label class="fl tt" title="Το όνομα που εμφανίζεται στο logo, τίτλο σελίδας και emails.">Platform Name</label><input class="fi" value="GreenCreditX"></div>
+        <div class="fgp"><label class="fl tt" title="Η εταιρεία πίσω από την πλατφόρμα. Εμφανίζεται σε receipts και invoices.">Company</label><input class="fi" value="TPA Services"></div>
+        <div class="fgp"><label class="fl tt" title="Νόμισμα εμφάνισης τιμών. USD ($) χρησιμοποιείται διεθνώς στα carbon credits.">Currency</label><select class="fi"><option>USD ($)</option><option>EUR (€)</option></select></div>
+        <div class="fgp"><label class="fl tt" title="Πόσα δευτερόλεπτα χρειάζεται η μπάρα τιμών (ticker) για έναν πλήρη κύκλο.">Ticker Speed (s)</label><input class="fi" type="number" value="18"></div>
       </div><div class="fa"><button class="btn bp">Save</button></div></div></div>
     </div>
 
@@ -797,7 +804,7 @@ how: '<div style="font-size:32px;font-weight:800;color:#14532d;margin-bottom:24p
 
 why: '<div style="font-size:32px;font-weight:800;color:#14532d;margin-bottom:24px">⚓ Γιατί Χρειάζονται;</div>\n<div style="font-size:17px;color:#555;margin-bottom:24px">Η ναυτιλία = <strong>3% παγκόσμιων εκπομπών</strong>. Νέες ρυθμίσεις:</div>\n<table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;margin-bottom:28px">\n  <thead><tr style="background:#14532d"><th style="padding:16px 20px;color:#fff;text-align:left">Ρύθμιση</th><th style="padding:16px 20px;color:#fff;text-align:left">Από πότε</th><th style="padding:16px 20px;color:#fff;text-align:left">Τι σημαίνει</th></tr></thead>\n  <tbody>\n    <tr><td style="padding:16px 20px;font-weight:700">EU ETS Maritime</td><td style="padding:16px 20px">2024 (100% 2026)</td><td style="padding:16px 20px">~€68/τόνο CO₂</td></tr>\n    <tr><td style="padding:16px 20px;font-weight:700">UK ETS Maritime</td><td style="padding:16px 20px">Ιούλιος 2026</td><td style="padding:16px 20px">Παρόμοιο UK waters</td></tr>\n    <tr><td style="padding:16px 20px;font-weight:700">IMO Net-Zero</td><td style="padding:16px 20px">Αναμένεται 2028</td><td style="padding:16px 20px">$100-380/τόνο</td></tr>\n  </tbody>\n</table>\n<div style="background:#f0fdf4;border:1px solid #dcfce7;border-radius:14px;padding:28px">\n  <div style="font-size:20px;font-weight:700;color:#15803d;margin-bottom:10px">🎯 Γιατί μας αφορά;</div>\n  <div style="font-size:17px;color:#444;line-height:1.7">20+ πλοιοκτήτες-πελάτες μας χρειάζονται εκατομμύρια credits. Εμείς τα παράγουμε <strong>30-50% φθηνότερα</strong> ($8-12/τόνο).</div>\n</div>',
 
-platform: '<div style="font-size:32px;font-weight:800;color:#14532d;margin-bottom:24px">💻 Η Πλατφόρμα GreenCreditX</div>\n<div style="display:grid;gap:20px">\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">🛒 Marketplace</div><div style="font-size:16px;color:#555;line-height:1.7">Αγορά credits. Κάρτες με ID, Rating, τύπο, τιμή, ποσότητα, vintage, χώρα. Cart & Checkout. <strong>Avg Discount 34%</strong> = φθηνότερα από spot.</div></div>\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">📈 Invest</div><div style="font-size:16px;color:#555;line-height:1.7">Επένδυση σε projects. Φίλτρα ανά χώρα/περιοχή. Φάση, ROI, risk, credits/yr. <strong>Business Plan</strong> button για πλήρη ανάλυση.</div></div>\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">◉ Live Markets</div><div style="font-size:16px;color:#555;line-height:1.7">Real-time τιμές. 12 instruments. Candlestick chart, Order Book, Market Intel. <strong>Ticker Tape</strong> = πράσινη μπάρα τιμών.</div></div>\n</div>',
+platform: '<div style="font-size:32px;font-weight:800;color:#14532d;margin-bottom:24px">💻 Η Πλατφόρμα GreenCreditX</div>\n<div style="display:grid;gap:20px">\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">🛒 Marketplace</div><div style="font-size:16px;color:#555;line-height:1.7">Αγορά credits. Κάρτες με ID, Rating, τύπο, τιμή, ποσότητα, vintage, χώρα. Cart & Checkout. <strong>Avg Discount 34%</strong> = φθηνότερα από spot.</div></div>\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">📈 Invest</div><div style="font-size:16px;color:#555;line-height:1.7">Επένδυση σε projects. Φίλτρα ανά χώρα/περιοχή. Φάση, ROI, risk, credits/yr. <strong>Business Plan</strong> button για πλήρη ανάλυση.</div></div>\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">◉ Live Markets</div><div style="font-size:16px;color:#555;line-height:1.7">Real-time τιμές. 12 instruments. Candlestick chart, Order Book, Market Intel. <strong>Ticker Tape</strong> = πράσινη μπάρα τιμών.</div></div>\n  <div style="background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:28px"><div style="font-size:22px;font-weight:700;color:#14532d;margin-bottom:12px">🚢 Fleet Monitor</div><div style="font-size:16px;color:#555;line-height:1.7">Παρακολούθηση στόλου πλοιοκτητών. <strong>23 shipowners</strong>, 142 πλοία. Dashboard με εκπομπές, EU ETS exposure, credit gaps, CII ratings. <strong>Live Map</strong> με AIS θέσεις πλοίων σε πραγματικό χρόνο. Data Upload Center για EU MRV documents (Monitoring Plan, Emission Reports, DoC, BDN κ.ά.).</div></div>\n</div>',
 
 glossary: '<div style="font-size:32px;font-weight:800;color:#14532d;margin-bottom:24px">📖 Γλωσσάριο Όρων</div>\n<div style="font-size:17px;color:#555;margin-bottom:24px">17 όροι που θα συναντήσετε στην πλατφόρμα:</div>\n<table style="width:100%;border-collapse:collapse;background:#fff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden">\n  <thead><tr style="background:#14532d"><th style="padding:14px 20px;color:#fff;text-align:left;width:35%">Όρος</th><th style="padding:14px 20px;color:#fff;text-align:left">Εξήγηση</th></tr></thead>\n  <tbody>\n    <tr><td style="padding:14px 20px;font-weight:700">tCO₂e</td><td style="padding:14px 20px">Τόνοι ισοδύναμου CO₂</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">VCU</td><td style="padding:14px 20px">Verified Carbon Unit — Verra credit</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">Vintage</td><td style="padding:14px 20px">Χρονιά έκδοσης credit</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">ARR / REDD+ / Blue Carbon</td><td style="padding:14px 20px">Φύτευση / Προστασία δασών / Παράκτια</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">EU ETS / EUA</td><td style="padding:14px 20px">Ευρωπαϊκή αγορά / Allowance ~€68</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">ROI / Break-even</td><td style="padding:14px 20px">Απόδοση / Σημείο ισοφάρισης</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">CAPEX / OPEX</td><td style="padding:14px 20px">Κεφαλαιουχικές / Λειτουργικές δαπάνες</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">Order Book / Spread</td><td style="padding:14px 20px">Bids+Asks / Διαφορά τιμών</td></tr>\n    <tr><td style="padding:14px 20px;font-weight:700">Avg Discount</td><td style="padding:14px 20px">Μέση έκπτωση vs spot τιμή αγοράς</td></tr>\n  </tbody>\n</table>'
 };
@@ -815,6 +822,28 @@ function openGuideEditor(id){
   if(orderField) orderField.value=guideOrders[id]||1;
 }
 function closeGE(){document.getElementById('geMo').classList.remove('show')}
+</script>
+
+<div id="gcx-tip"></div>
+<script>
+(function(){
+  var tip=document.getElementById('gcx-tip'),ht;
+  document.addEventListener('mouseover',function(e){
+    var el=e.target.closest('.tt');if(!el)return;
+    var sp=el.querySelector('.tt-text'),t=el.getAttribute('title'),c='';
+    if(sp)c=sp.innerHTML;else if(el.dataset.tip)c=el.dataset.tip;else if(t){c=t;el.setAttribute('data-title-bak',t);el.removeAttribute('title')}
+    if(!c)return;clearTimeout(ht);tip.innerHTML=c;tip.classList.add('show');
+    var r=el.getBoundingClientRect(),tw=300,th=tip.offsetHeight;
+    var left=r.left+r.width/2-tw/2;if(left<8)left=8;if(left+tw>window.innerWidth-8)left=window.innerWidth-tw-8;
+    var top=r.bottom+8;if(top+th>window.innerHeight-8)top=r.top-th-8;if(top<8)top=8;
+    tip.style.left=left+'px';tip.style.top=top+'px';
+  });
+  document.addEventListener('mouseout',function(e){
+    var el=e.target.closest('.tt');if(!el)return;
+    var bak=el.getAttribute('data-title-bak');if(bak){el.setAttribute('title',bak);el.removeAttribute('data-title-bak')}
+    ht=setTimeout(function(){tip.classList.remove('show')},100);
+  });
+})();
 </script>
 
 </body>
