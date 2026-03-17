@@ -154,7 +154,22 @@ tb.innerHTML=ii.map(function(i){var bg=i.t==='Compliance'?'#dbeafe':'var(--g50)'
 function openContentEditor(id){document.getElementById('ceMo').classList.add('show')}
 function closeCE(){document.getElementById('ceMo').classList.remove('show')}
 
-function initAdmin(){rCreds();rInvs();rCountries();rSources();rInsts()}
+function initAdmin(){rCreds();rInvs();rCountries();rSources();rInsts();rBPProjects()}
+
+var bpSelectedProject='INV-001';
+function rBPProjects(){var el=document.getElementById('bpProjectBtns');if(!el)return;
+el.innerHTML=invs.map(function(v){var active=v.id===bpSelectedProject;return '<button onclick="selectBPProject(\''+v.id+'\')" style="padding:10px 18px;border-radius:10px;font-size:14px;font-weight:600;border:2px solid '+(active?'var(--g500)':'var(--x200)')+';background:'+(active?'var(--g50)':'#fff')+';color:'+(active?'var(--g700)':'var(--x500)')+';cursor:pointer;font-family:inherit;transition:all .15s">'+(v.bp?'✓ ':'')+v.id+' '+v.nm+'</button>'}).join('')}
+
+function selectBPProject(id){bpSelectedProject=id;rBPProjects();
+var v=invs.find(function(i){return i.id===id});
+document.getElementById('bpSec1').textContent=v&&v.bp?id+': 8 metrics ✓':id+': Empty — click to add';document.getElementById('bpSec1').style.color=v&&v.bp?'var(--g600)':'var(--x400)';
+document.getElementById('bpSec2').textContent=v&&v.bp?id+': 6 reasons ✓':id+': Empty — click to add';document.getElementById('bpSec2').style.color=v&&v.bp?'var(--g600)':'var(--x400)';
+document.getElementById('bpSec3').textContent=v&&v.bp?id+': 4 scenarios ✓':id+': Empty — click to add';document.getElementById('bpSec3').style.color=v&&v.bp?'var(--g600)':'var(--x400)';
+document.getElementById('bpSec4').textContent=v&&v.bp?id+': 4 items ✓':id+': Empty — click to add';document.getElementById('bpSec4').style.color=v&&v.bp?'var(--g600)':'var(--x400)';
+document.getElementById('bpSec5').textContent=v&&v.bp?id+': 4 risks ✓':id+': Empty — click to add';document.getElementById('bpSec5').style.color=v&&v.bp?'var(--g600)':'var(--x400)';
+document.getElementById('bpSec6').textContent=v&&v.bp?id+': 4 steps ✓':id+': Empty — click to add';document.getElementById('bpSec6').style.color=v&&v.bp?'var(--g600)':'var(--x400)'}
+
+function openBPSection(section){openBPBuilder(bpSelectedProject)}
 document.addEventListener('DOMContentLoaded',initAdmin);
 </script>
 </head>
@@ -260,19 +275,44 @@ document.addEventListener('DOMContentLoaded',initAdmin);
 
     <!-- BP BUILDER (standalone panel) -->
     <div data-panel id="p-bpbuilder" style="display:none">
-      <div class="cd"><div class="ch"><div><div class="ct-t">📋 Business Plan Builder</div><div class="ct-s">Select a project from Investments and click "Create Plan" or "Edit Plan"</div></div></div>
+      <div class="as">
+        <div class="ast"><div class="al">Published Plans</div><div class="av2">2</div><div class="ac">INV-001, INV-004</div></div>
+        <div class="ast"><div class="al">Missing Plans</div><div class="av2" style="color:#f59e0b">8</div><div class="ac">Need creation</div></div>
+        <div class="ast"><div class="al">Total Sections</div><div class="av2">6</div><div class="ac">Per business plan</div></div>
+        <div class="ast"><div class="al">Last Updated</div><div class="av2">Today</div><div class="ac">INV-001</div></div>
+      </div>
+
+      <!-- Project Selector -->
+      <div class="cd"><div class="ch"><div><div class="ct-t">Select Project</div><div class="ct-s">Choose which project to edit, then click a section below</div></div></div>
+        <div class="cb"><div style="display:flex;gap:10px;flex-wrap:wrap" id="bpProjectBtns"></div></div></div>
+
+      <!-- 6 Active Section Cards -->
+      <div class="cd"><div class="ch"><div><div class="ct-t">Business Plan Sections</div><div class="ct-s">Click any section to edit — opens the builder pre-filled</div></div></div>
         <div class="cb">
-          <p style="font-size:16px;color:var(--x500);line-height:1.6">Ο Business Plan Builder ανοίγει αυτόματα όταν πατήσετε <strong>"Create Plan"</strong> ή <strong>"Edit Plan"</strong> σε ένα investment project.<br><br>Κάθε business plan περιλαμβάνει:</p>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px">
-            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">📊</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Key Metrics</div><div style="font-size:13px;color:var(--x400)">Έκταση, επένδυση, credits, break-even</div></div>
-            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">🌳</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Why This Region</div><div style="font-size:13px;color:var(--x400)">Πλεονεκτήματα περιοχής</div></div>
-            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">📈</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Scenarios</div><div style="font-size:13px;color:var(--x400)">Σενάρια τιμών & αποδόσεων</div></div>
-            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">💰</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Cost Analysis</div><div style="font-size:13px;color:var(--x400)">Ανάλυση κόστους & CAPEX</div></div>
-            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">⚠️</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Risks</div><div style="font-size:13px;color:var(--x400)">Κίνδυνοι & μετριασμός</div></div>
-            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100)"><div style="font-size:20px;margin-bottom:6px">⚡</div><div style="font-size:15px;font-weight:700;color:var(--g900)">Next Steps</div><div style="font-size:13px;color:var(--x400)">Βήματα υλοποίησης</div></div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+            <div onclick="openBPSection('metrics')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">📊</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Key Metrics</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Έκταση, επένδυση, credits, break-even, κόστος παραγωγής</div><div style="font-size:12px;color:var(--g600);font-weight:600;margin-top:8px" id="bpSec1">INV-001: 8 metrics ✓</div></div>
+            <div onclick="openBPSection('why')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">🌳</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Why This Region</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Πλεονεκτήματα περιοχής, DENR, κόστος γης</div><div style="font-size:12px;color:var(--g600);font-weight:600;margin-top:8px" id="bpSec2">INV-001: 6 reasons ✓</div></div>
+            <div onclick="openBPSection('scenarios')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">📈</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Scenarios</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Σενάρια τιμών: απαισιόδοξο → αισιόδοξο</div><div style="font-size:12px;color:var(--g600);font-weight:600;margin-top:8px" id="bpSec3">INV-001: 4 scenarios ✓</div></div>
+            <div onclick="openBPSection('costs')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">💰</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Cost Analysis</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Γη, φύτευση, πιστοποίηση, σύνολο CAPEX</div><div style="font-size:12px;color:var(--g600);font-weight:600;margin-top:8px" id="bpSec4">INV-001: 4 items ✓</div></div>
+            <div onclick="openBPSection('risks')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">⚠️</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Risks & Mitigation</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Κίνδυνοι τιμών, φυσικές καταστροφές, ρυθμίσεις</div><div style="font-size:12px;color:var(--x400);margin-top:8px" id="bpSec5">INV-001: Coming soon</div></div>
+            <div onclick="openBPSection('steps')" style="padding:22px;background:var(--g50);border-radius:14px;border:1px solid var(--g100);cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor='#22c55e';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='';this.style.transform=''"><div style="font-size:24px;margin-bottom:8px">⚡</div><div style="font-size:17px;font-weight:700;color:var(--g900)">Next Steps</div><div style="font-size:13px;color:var(--x400);margin-top:4px">Αριθμημένα βήματα υλοποίησης</div><div style="font-size:12px;color:var(--g600);font-weight:600;margin-top:8px" id="bpSec6">INV-001: 4 steps ✓</div></div>
           </div>
-          <div style="margin-top:24px"><button class="btn bp" onclick="showPanel('investments')">Go to Investments →</button></div>
         </div></div>
+
+      <!-- Status per project -->
+      <div class="cd"><div class="ch"><div><div class="ct-t">Status per Project</div></div></div>
+        <div class="cb"><div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span style="padding:8px 16px;border-radius:10px;background:#dcfce7;color:#15803d;font-size:14px;font-weight:600">✓ INV-001 Mindanao — 6/6 sections</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#dcfce7;color:#15803d;font-size:14px;font-weight:600">✓ INV-004 Caraga II — 6/6 sections</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-002 Bukidnon — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-003 Palawan — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-005 Davao — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-006 Kalimantan — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-007 Sulawesi — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-008 Sumatra — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-009 Sabah — 0/6</span>
+          <span style="padding:8px 16px;border-radius:10px;background:#fef3c7;color:#a16207;font-size:14px;font-weight:600">⚠ INV-010 Sarawak — 0/6</span>
+        </div></div></div>
     </div>
 
     <!-- COUNTRIES -->
