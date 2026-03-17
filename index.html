@@ -156,9 +156,9 @@ input { font-family: var(--sans); }
 .invest-title { font-size: 32px; font-weight: 800; color: var(--green-900); }
 .invest-sub { font-size: 17px; color: var(--gray-500); }
 .invest-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-.invest-card { background: #fff; border-radius: 20px; border: 1px solid var(--gray-200); overflow: hidden; transition: all .3s; }
-.invest-card:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(34,197,94,.1); border-color: var(--green-300); }
-.invest-phase { background: linear-gradient(135deg, var(--green-50), #ecfdf5); padding: 16px 26px; border-bottom: 1px solid var(--green-100); display: flex; justify-content: space-between; align-items: center; }
+.invest-card { background: #fff; border-radius: 20px; border: 1px solid var(--gray-200); transition: all .3s; position: relative; }
+.invest-card:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(34,197,94,.1); border-color: var(--green-300); z-index: 10; }
+.invest-phase { background: linear-gradient(135deg, var(--green-50), #ecfdf5); padding: 16px 26px; border-bottom: 1px solid var(--green-100); display: flex; justify-content: space-between; align-items: center; border-radius: 20px 20px 0 0; }
 .phase-badge { font-size: 14px; padding: 5px 14px; border-radius: 8px; font-weight: 700; background: var(--green-100); color: var(--green-700); }
 .risk-badge { font-size: 14px; padding: 5px 14px; border-radius: 8px; font-weight: 600; }
 .invest-body { padding: 28px; }
@@ -969,25 +969,29 @@ function renderInvestments() {
     const pct = Math.round(inv.raised/inv.target*100);
     const rc = inv.risk==='Low'?'#22c55e':inv.risk==='Medium'?'#f59e0b':inv.risk==='Medium-High'?'#f97316':'#ef4444';
     const r = 43, circ = 2*Math.PI*r, off = circ-pct/100*circ;
+    const riskTip = inv.risk==='Low'?"<div class='tt-title'>Low Risk</div>\u03A0\u03C1\u03BF\u03C7\u03C9\u03C1\u03B7\u03BC\u03AD\u03BD\u03BF project \u03BC\u03B5 Verra validation \u03C3\u03B5 \u03B5\u03BE\u03AD\u03BB\u03B9\u03BE\u03B7. \u039C\u03B9\u03BA\u03C1\u03CC\u03C4\u03B5\u03C1\u03BF \u03C1\u03AF\u03C3\u03BA\u03BF, \u03C7\u03B1\u03BC\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03BF ROI.":inv.risk==='Medium'?"<div class='tt-title'>Medium Risk</div>\u03A4\u03BF project \u03B2\u03C1\u03AF\u03C3\u03BA\u03B5\u03C4\u03B1\u03B9 \u03C3\u03B5 \u03C6\u03AC\u03C3\u03B7 \u03C5\u03BB\u03BF\u03C0\u03BF\u03AF\u03B7\u03C3\u03B7\u03C2. \u039C\u03B5\u03C3\u03B1\u03AF\u03BF \u03C1\u03AF\u03C3\u03BA\u03BF \u03BC\u03B5 \u03BA\u03B1\u03BB\u03AE \u03C3\u03C7\u03AD\u03C3\u03B7 risk/return.":"<div class='tt-title'>High Risk</div>\u03A0\u03C1\u03CE\u03B9\u03BC\u03BF \u03C3\u03C4\u03AC\u03B4\u03B9\u03BF (feasibility/land). \u03A5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03BF \u03C1\u03AF\u03C3\u03BA\u03BF \u03B1\u03BB\u03BB\u03AC \u03BA\u03B1\u03B9 \u03C5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03BF ROI.";
+    const phaseTip = {"Phase 1":"<div class='tt-title'>Phase 1</div>\u0394\u03B9\u03B5\u03C1\u03B5\u03CD\u03BD\u03B7\u03C3\u03B7, feasibility study, \u03B1\u03B3\u03BF\u03C1\u03AC \u03B3\u03B7\u03C2. \u03A0\u03C1\u03CE\u03B9\u03BC\u03BF \u03C3\u03C4\u03AC\u03B4\u03B9\u03BF, \u03BC\u03B5\u03B3\u03B1\u03BB\u03CD\u03C4\u03B5\u03C1\u03B5\u03C2 \u03B5\u03C5\u03BA\u03B1\u03B9\u03C1\u03AF\u03B5\u03C2.","Phase 2":"<div class='tt-title'>Phase 2</div>\u03A6\u03CD\u03C4\u03B5\u03C5\u03C3\u03B7 \u03C3\u03B5 \u03B5\u03BE\u03AD\u03BB\u03B9\u03BE\u03B7, PDD \u03C0\u03C1\u03BF\u03B5\u03C4\u03BF\u03B9\u03BC\u03B1\u03C3\u03AF\u03B1. \u03A4\u03B1 \u03B4\u03AD\u03BD\u03C4\u03C1\u03B1 \u03BC\u03B5\u03B3\u03B1\u03BB\u03CE\u03BD\u03BF\u03C5\u03BD.","Phase 3":"<div class='tt-title'>Phase 3</div>Verra validation/certification. \u039A\u03BF\u03BD\u03C4\u03AC \u03C3\u03B5 \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7 credits."};
+    const phaseKey = inv.phase.includes('1')?'Phase 1':inv.phase.includes('2')?'Phase 2':'Phase 3';
     return `
     <div class="invest-card fade-in" style="animation-delay:${idx*.06}s">
       <div class="invest-phase">
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-size:14px;font-family:var(--mono);color:var(--gray-400)">${inv.id}</span>
-          <span class="phase-badge">${inv.phase}</span>
+          <span class="phase-badge tt">${inv.phase}<span class="tt-text">${phaseTip[phaseKey]||''}</span></span>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:14px;padding:5px 12px;border-radius:8px;font-weight:600;background:#dbeafe;color:#1e40af">${inv.flag} ${inv.region}</span>
-          <span class="risk-badge" style="background:${rc}15;color:${rc};border:1px solid ${rc}30">${inv.risk} Risk</span>
+          <span class="tt" style="font-size:14px;padding:5px 12px;border-radius:8px;font-weight:600;background:#dbeafe;color:#1e40af">${inv.flag} ${inv.region}<span class="tt-text"><div class="tt-title">\u03A4\u03BF\u03C0\u03BF\u03B8\u03B5\u03C3\u03AF\u03B1 Project</div>\u0397 \u03B3\u03B5\u03C9\u03B3\u03C1\u03B1\u03C6\u03B9\u03BA\u03AE \u03C0\u03B5\u03C1\u03B9\u03BF\u03C7\u03AE \u03C4\u03BF\u03C5 project. \u03A4\u03BF Mindanao \u03C0\u03C1\u03BF\u03C3\u03C6\u03AD\u03C1\u03B5\u03B9 \u03C7\u03B1\u03BC\u03B7\u03BB\u03CC \u03BA\u03CC\u03C3\u03C4\u03BF\u03C2 \u03B3\u03B7\u03C2, DENR support \u03BA\u03B1\u03B9 Verra-certified projects.</span></span>
+          <span class="risk-badge tt" style="background:${rc}15;color:${rc};border:1px solid ${rc}30">${inv.risk} Risk<span class="tt-text">${riskTip}</span></span>
         </div>
       </div>
       <div class="invest-body">
         <div class="invest-name">${inv.name}</div>
         <div class="invest-info">${inv.type} · ${inv.timeline} · ${inv.ha.toLocaleString()} hectares · Land: ${inv.landCost}</div>
         <div class="funding-row">
-          <div class="progress-ring">
+          <div class="progress-ring tt">
             <svg width="100" height="100"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--green-50)" stroke-width="6"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--green-500)" stroke-width="6" stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round" style="transition:stroke-dashoffset 1s"/></svg>
             <div class="pct">${pct}%</div>
+            <span class="tt-text"><div class="tt-title">\u03A0\u03C1\u03CC\u03BF\u03B4\u03BF\u03C2 Funding</div>${pct}% \u03C4\u03BF\u03C5 target \u03AD\u03C7\u03B5\u03B9 \u03C3\u03C5\u03B3\u03BA\u03B5\u03BD\u03C4\u03C1\u03C9\u03B8\u03B5\u03AF. Raised: \u20AC${(inv.raised/1e6).toFixed(1)}M \u03B1\u03C0\u03CC \u20AC${(inv.target/1e6).toFixed(1)}M target.</span>
           </div>
           <div class="funding-details">
             <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:15px;color:var(--gray-500)">Raised</span><span style="font-size:18px;font-weight:700;color:var(--green-700);font-family:var(--mono)">€${(inv.raised/1e6).toFixed(1)}M</span></div>
@@ -996,16 +1000,16 @@ function renderInvestments() {
           </div>
         </div>
         <div class="invest-metrics">
-          <div><div class="detail-label">Projected ROI</div><div class="detail-value" style="color:var(--green-700)">${inv.roi}</div></div>
-          <div><div class="detail-label">Credits/Year</div><div class="detail-value">${inv.credits.toLocaleString()} t</div></div>
-          <div><div class="detail-label">Investors</div><div class="detail-value">${inv.investors}</div></div>
+          <div class="tt"><div class="detail-label">Projected ROI</div><div class="detail-value" style="color:var(--green-700)">${inv.roi}</div><span class="tt-text"><div class="tt-title">ROI \u2014 Return on Investment</div>\u0391\u03BD\u03B1\u03BC\u03B5\u03BD\u03CC\u03BC\u03B5\u03BD\u03B7 \u03B5\u03C4\u03AE\u03C3\u03B9\u03B1 \u03B1\u03C0\u03CC\u03B4\u03BF\u03C3\u03B7 \u03B5\u03C0\u03AD\u03BD\u03B4\u03C5\u03C3\u03B7\u03C2 \u03B1\u03C0\u03CC \u03C0\u03C9\u03BB\u03AE\u03C3\u03B5\u03B9\u03C2 carbon credits. \u0395\u03BE\u03B1\u03C1\u03C4\u03AC\u03C4\u03B1\u03B9 \u03B1\u03C0\u03CC \u03C4\u03B9\u03BC\u03AE credits \u03BA\u03B1\u03B9 \u03C0\u03B1\u03C1\u03B1\u03B3\u03C9\u03B3\u03B9\u03BA\u03CC\u03C4\u03B7\u03C4\u03B1.</span></div>
+          <div class="tt"><div class="detail-label">Credits/Year</div><div class="detail-value">${inv.credits.toLocaleString()} t</div><span class="tt-text"><div class="tt-title">Credits / Year</div>\u0395\u03C4\u03AE\u03C3\u03B9\u03B1 \u03C0\u03B1\u03C1\u03B1\u03B3\u03C9\u03B3\u03AE carbon credits (\u03C4\u03CC\u03BD\u03BF\u03B9 CO\u2082) \u03CC\u03C4\u03B1\u03BD \u03C4\u03BF project \u03C6\u03C4\u03AC\u03C3\u03B5\u03B9 \u03C0\u03BB\u03AE\u03C1\u03B7 \u03B4\u03C5\u03BD\u03B1\u03BC\u03B9\u03BA\u03CC\u03C4\u03B7\u03C4\u03B1 (3-5 \u03C7\u03C1\u03CC\u03BD\u03B9\u03B1 \u03BC\u03B5\u03C4\u03AC \u03C6\u03CD\u03C4\u03B5\u03C5\u03C3\u03B7).</span></div>
+          <div class="tt"><div class="detail-label">Investors</div><div class="detail-value">${inv.investors}</div><span class="tt-text"><div class="tt-title">\u0395\u03C0\u03B5\u03BD\u03B4\u03C5\u03C4\u03AD\u03C2</div>\u0391\u03C1\u03B9\u03B8\u03BC\u03CC\u03C2 \u03B5\u03C0\u03B5\u03BD\u03B4\u03C5\u03C4\u03CE\u03BD \u03C0\u03BF\u03C5 \u03AD\u03C7\u03BF\u03C5\u03BD \u03AE\u03B4\u03B7 \u03C3\u03C5\u03BC\u03BC\u03B5\u03C4\u03AC\u03C3\u03C7\u03B5\u03B9 \u03C3\u03B5 \u03B1\u03C5\u03C4\u03CC \u03C4\u03BF project. \u03A0\u03B5\u03C1\u03B9\u03C3\u03C3\u03CC\u03C4\u03B5\u03C1\u03BF\u03B9 = \u03BC\u03B5\u03B3\u03B1\u03BB\u03CD\u03C4\u03B5\u03C1\u03B7 \u03B5\u03BC\u03C0\u03B9\u03C3\u03C4\u03BF\u03C3\u03CD\u03BD\u03B7.</span></div>
         </div>
         <div class="invest-bottom">
-          <div><div class="milestone-label">NEXT MILESTONE</div><div class="milestone-value">${inv.next}</div></div>
+          <div class="tt"><div class="milestone-label">NEXT MILESTONE</div><div class="milestone-value">${inv.next}</div><span class="tt-text"><div class="tt-title">Next Milestone</div>\u03A4\u03BF \u03B5\u03C0\u03CC\u03BC\u03B5\u03BD\u03BF \u03BA\u03C1\u03AF\u03C3\u03B9\u03BC\u03BF \u03B2\u03AE\u03BC\u03B1 \u03C4\u03BF\u03C5 project. \u039A\u03AC\u03B8\u03B5 milestone \u03C6\u03AD\u03C1\u03BD\u03B5\u03B9 \u03C4\u03BF project \u03C0\u03B9\u03BF \u03BA\u03BF\u03BD\u03C4\u03AC \u03C3\u03C4\u03B7\u03BD \u03AD\u03BA\u03B4\u03BF\u03C3\u03B7 credits.</span></div>
           <div style="display:flex;align-items:center;gap:10px">
             ${inv.plan?'<button onclick="showBusinessPlan(\''+inv.id+'\')" style="padding:12px 22px;border-radius:12px;border:1px solid var(--green-500);background:var(--green-50);color:var(--green-700);font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;transition:all .2s">📄 Business Plan</button>':'<span style="font-size:13px;color:var(--gray-400);padding:12px 0">Plan coming soon</span>'}
-            <div style="text-align:right"><div class="milestone-label">MIN INVEST</div><div style="font-size:18px;font-weight:700;color:var(--green-900);font-family:var(--mono)">€${(inv.min/1000).toFixed(0)}K</div></div>
-            <button class="invest-btn">Invest</button>
+            <div class="tt" style="text-align:right"><div class="milestone-label">MIN INVEST</div><div style="font-size:18px;font-weight:700;color:var(--green-900);font-family:var(--mono)">€${(inv.min/1000).toFixed(0)}K</div><span class="tt-text"><div class="tt-title">\u0395\u03BB\u03AC\u03C7\u03B9\u03C3\u03C4\u03B7 \u0395\u03C0\u03AD\u03BD\u03B4\u03C5\u03C3\u03B7</div>\u03A4\u03BF \u03B5\u03BB\u03AC\u03C7\u03B9\u03C3\u03C4\u03BF \u03C0\u03BF\u03C3\u03CC \u03B3\u03B9\u03B1 \u03C3\u03C5\u03BC\u03BC\u03B5\u03C4\u03BF\u03C7\u03AE. \u0391\u03C0\u03BF\u03BA\u03C4\u03AC\u03C4\u03B5 \u03BC\u03B5\u03C1\u03AF\u03B4\u03B9\u03BF \u03C3\u03C4\u03B7\u03BD \u03C0\u03B1\u03C1\u03B1\u03B3\u03C9\u03B3\u03AE credits \u03BA\u03B1\u03B9 \u03C3\u03C4\u03B1 \u03BC\u03B5\u03BB\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AC \u03AD\u03C3\u03BF\u03B4\u03B1.</span></div>
+            <button class="invest-btn tt" style="position:relative">Invest<span class="tt-text"><div class="tt-title">\u0395\u03C0\u03B5\u03BD\u03B4\u03CD\u03C3\u03C4\u03B5 \u03A4\u03CE\u03C1\u03B1</div>\u039E\u03B5\u03BA\u03B9\u03BD\u03AE\u03C3\u03C4\u03B5 \u03C4\u03B7 \u03B4\u03B9\u03B1\u03B4\u03B9\u03BA\u03B1\u03C3\u03AF\u03B1 \u03B5\u03C0\u03AD\u03BD\u03B4\u03C5\u03C3\u03B7\u03C2. \u0398\u03B1 \u03BB\u03AC\u03B2\u03B5\u03C4\u03B5 term sheet \u03BA\u03B1\u03B9 \u03BB\u03B5\u03C0\u03C4\u03BF\u03BC\u03AD\u03C1\u03B5\u03B9\u03B5\u03C2 \u03B3\u03B9\u03B1 \u03C4\u03B7 \u03C3\u03C5\u03BC\u03BC\u03B5\u03C4\u03BF\u03C7\u03AE \u03C3\u03B1\u03C2.</span></button>
           </div>
         </div>
       </div>
