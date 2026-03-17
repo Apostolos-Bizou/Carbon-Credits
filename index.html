@@ -339,10 +339,10 @@ input { font-family: var(--sans); }
   <div class="container" style="display:flex;gap:20px">
     <div style="flex:1;min-width:0">
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-label">Credits Traded</div><div class="stat-value" id="stat1">0</div><div class="stat-sub">tCO₂e YTD</div></div>
-        <div class="stat-card"><div class="stat-label">Active Clients</div><div class="stat-value" id="stat2">0</div><div class="stat-sub">Shipowners</div></div>
-        <div class="stat-card"><div class="stat-label">Client Savings</div><div class="stat-value" id="stat3">$0K</div><div class="stat-sub">vs Market</div></div>
-        <div class="stat-card"><div class="stat-label">Avg Discount</div><div class="stat-value">34%</div><div class="stat-sub">Below Spot</div></div>
+        <div class="stat-card tt"><div class="stat-label">Credits Traded</div><div class="stat-value" id="stat1">0</div><div class="stat-sub">tCO₂e YTD</div><span class="tt-text"><div class="tt-title">Credits Traded</div>Συνολικοί τόνοι CO₂ που έχουν διαπραγματευτεί μέσω GreenCreditX από την αρχή του έτους (Year To Date). Κάθε credit = 1 τόνος CO₂.</span></div>
+        <div class="stat-card tt"><div class="stat-label">Active Clients</div><div class="stat-value" id="stat2">0</div><div class="stat-sub">Shipowners</div><span class="tt-text"><div class="tt-title">Active Clients</div>Αριθμός πλοιοκτητών που αγοράζουν credits μέσω της πλατφόρμας. Αυτοί είναι οι 20+ πελάτες TPA που χρειάζονται credits για EU ETS/IMO compliance.</span></div>
+        <div class="stat-card tt"><div class="stat-label">Client Savings</div><div class="stat-value" id="stat3">$0K</div><div class="stat-sub">vs Market</div><span class="tt-text"><div class="tt-title">Client Savings</div>Συνολική εξοικονόμηση πελατών σε σχέση με τις τιμές spot market. Τα credits μας κοστίζουν $17-31/t ενώ η αγορά $35+ για ίδια ποιότητα.</span></div>
+        <div class="stat-card tt"><div class="stat-label">Avg Discount</div><div class="stat-value">34%</div><div class="stat-sub">Below Spot</div><span class="tt-text"><div class="tt-title">Average Discount</div>Μέση έκπτωση που απολαμβάνουν οι πελάτες μας σε σχέση με τις τιμές spot. 34% σημαίνει ότι πληρώνουν 34% λιγότερα από την τρέχουσα αγορά.</span></div>
       </div>
       <div class="filters">
         <div class="search-box"><span>🔍</span><input type="text" placeholder="Search projects, IDs..." oninput="filterCredits()"></div>
@@ -368,10 +368,10 @@ input { font-family: var(--sans); }
       <div class="invest-sub">Fund reforestation projects · Earn returns from carbon credit production</div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Total Pipeline</div><div class="stat-value" id="invPipeline">€139.5M</div><div class="stat-sub" id="invProjCount">10 Active Projects</div></div>
-      <div class="stat-card"><div class="stat-label">Capital Raised</div><div class="stat-value" id="invRaised">€52.5M</div><div class="stat-sub">38% of Target</div></div>
-      <div class="stat-card"><div class="stat-label">Active Investors</div><div class="stat-value" id="invInvestors">128</div><div class="stat-sub">Across all projects</div></div>
-      <div class="stat-card"><div class="stat-label">Projected Credits</div><div class="stat-value" id="invCredits">40,255</div><div class="stat-sub">tCO₂e/year capacity</div></div>
+      <div class="stat-card tt"><div class="stat-label">Total Pipeline</div><div class="stat-value" id="invPipeline">€139.5M</div><div class="stat-sub" id="invProjCount">10 Active Projects</div><span class="tt-text"><div class="tt-title">Total Pipeline</div>Η συνολική αξία όλων των investment projects που είναι ανοιχτά για χρηματοδότηση. Περιλαμβάνει γη, φύτευση, πιστοποίηση Verra και λειτουργικά κόστη.</span></div>
+      <div class="stat-card tt"><div class="stat-label">Capital Raised</div><div class="stat-value" id="invRaised">€52.5M</div><div class="stat-sub">38% of Target</div><span class="tt-text"><div class="tt-title">Capital Raised</div>Τα κεφάλαια που έχουν ήδη συγκεντρωθεί από επενδυτές σε όλα τα projects. Το ποσοστό δείχνει πόσο κοντά είμαστε στον στόχο χρηματοδότησης.</span></div>
+      <div class="stat-card tt"><div class="stat-label">Active Investors</div><div class="stat-value" id="invInvestors">128</div><div class="stat-sub">Across all projects</div><span class="tt-text"><div class="tt-title">Active Investors</div>Συνολικός αριθμός επενδυτών που συμμετέχουν σε ένα ή περισσότερα projects. Περισσότεροι επενδυτές = μεγαλύτερη εμπιστοσύνη στην αγορά.</span></div>
+      <div class="stat-card tt"><div class="stat-label">Projected Credits</div><div class="stat-value" id="invCredits">40,255</div><div class="stat-sub">tCO₂e/year capacity</div><span class="tt-text"><div class="tt-title">Projected Credits</div>Η συνολική ετήσια παραγωγική δυναμικότητα σε τόνους CO₂ (carbon credits) από όλα τα projects σε πλήρη λειτουργία. Αυτά τα credits πωλούνται στους πλοιοκτήτες.</span></div>
     </div>
 
     <!-- Country & Region filters -->
