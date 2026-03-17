@@ -58,9 +58,10 @@ input { font-family: var(--sans); }
 .cart-count { position: absolute; top: -5px; right: -5px; background: var(--green-500); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
 /* Ticker */
-.ticker { background: var(--green-900); padding: 12px 0; overflow: hidden; }
-.ticker-track { display: flex; gap: 48px; animation: scroll 18s linear infinite; white-space: nowrap; padding-left: 100%; }
-.ticker-item { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; }
+.ticker { background: var(--green-900); padding: 12px 0; overflow: hidden; position: sticky; top: 80px; z-index: 99; }
+.ticker-inner { display: flex; width: max-content; animation: scroll 50s linear infinite; }
+.ticker-half { display: flex; gap: 48px; padding-right: 48px; }
+.ticker-item { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; flex-shrink: 0; }
 .ticker-sym { color: var(--green-300); font-weight: 700; }
 .ticker-price { color: #fff; font-family: var(--mono); font-weight: 500; }
 .ticker-chg { font-family: var(--mono); font-weight: 600; }
@@ -263,8 +264,7 @@ input { font-family: var(--sans); }
 </header>
 
 <!-- ═══ TICKER ═══ -->
-<div class="ticker">
-  <div class="ticker-track" id="ticker"></div>
+<div class="ticker" id="tickerWrap">
 </div>
 
 <!-- ═══ SECTION 1: MARKETPLACE ═══ -->
@@ -680,15 +680,15 @@ function renderInvestments() {
 // LIVE MARKETS
 // ═══════════════════════════════════════════════
 function renderTicker() {
-  const t = document.getElementById('ticker');
-  const items = [...liveData,...liveData].map(d=>`
+  const container = document.getElementById('tickerWrap');
+  const itemsHtml = liveData.map(d=>`
     <span class="ticker-item">
       <span class="ticker-sym">${d.sym}</span>
       <span class="ticker-price">$${d.price.toFixed(2)}</span>
       <span class="ticker-chg ${d.ch>=0?'ticker-up':'ticker-dn'}">${d.ch>=0?'▲':'▼'}${Math.abs(d.chPct).toFixed(2)}%</span>
     </span>
   `).join('');
-  t.innerHTML = items;
+  container.innerHTML = '<div class="ticker-inner"><div class="ticker-half">' + itemsHtml + '</div><div class="ticker-half">' + itemsHtml + '</div></div>';
 }
 
 function renderInstrumentList() {
