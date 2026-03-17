@@ -58,7 +58,7 @@ input { font-family: var(--sans); }
 
 /* Ticker */
 .ticker { background: var(--green-900); padding: 12px 0; overflow: hidden; }
-.ticker-track { display: flex; gap: 48px; animation: scroll 50s linear infinite; white-space: nowrap; padding-left: 100%; }
+.ticker-track { display: flex; gap: 48px; animation: scroll 18s linear infinite; white-space: nowrap; padding-left: 100%; }
 .ticker-item { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; }
 .ticker-sym { color: var(--green-300); font-weight: 700; }
 .ticker-price { color: #fff; font-family: var(--mono); font-weight: 500; }
@@ -73,7 +73,7 @@ input { font-family: var(--sans); }
 .section-flex.active { display: flex; }
 
 /* Container */
-.container { max-width: 1800px; margin: 0 auto; padding: 32px 40px; }
+.container { max-width: 100%; margin: 0 auto; padding: 32px 48px; }
 
 /* Stats grid */
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
@@ -168,7 +168,7 @@ input { font-family: var(--sans); }
 .invest-btn:hover { transform: scale(1.03); }
 
 /* ═══ MARKETS ═══ */
-.markets-wrap { max-width: 1800px; margin: 0 auto; display: flex; }
+.markets-wrap { width: 100%; margin: 0; display: flex; }
 .mkt-left { width: 360px; flex-shrink: 0; border-right: 1px solid var(--gray-200); background: #fff; height: calc(100vh - 124px); overflow-y: auto; }
 .mkt-filters { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); display: flex; gap: 6px; flex-wrap: wrap; }
 .mkt-filter-btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--gray-200); background: transparent; color: var(--gray-400); text-transform: uppercase; letter-spacing: .3px; transition: all .15s; }
@@ -186,23 +186,23 @@ input { font-family: var(--sans); }
 .up { color: var(--green-600); }
 .dn { color: #dc2626; }
 
-.mkt-center { flex: 1; padding: 24px 28px; }
-.sel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-.sel-sym { font-size: 30px; font-weight: 800; color: var(--green-900); }
-.sel-name { font-size: 17px; color: var(--gray-500); }
-.sel-exch { font-size: 13px; color: var(--gray-400); margin-left: 16px; }
-.sel-price { font-size: 48px; font-weight: 800; font-family: var(--mono); color: var(--green-900); line-height: 1; letter-spacing: -2px; }
-.sel-change { font-size: 18px; font-weight: 700; font-family: var(--mono); margin-top: 4px; }
-.chart-box { background: #fff; border-radius: 16px; border: 1px solid var(--gray-200); padding: 20px; margin-bottom: 20px; }
-.tf-btns { display: flex; gap: 8px; margin-bottom: 14px; }
-.tf-btn { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: var(--mono); border: 1px solid var(--gray-200); background: transparent; color: var(--gray-400); cursor: pointer; }
+.mkt-center { flex: 1; padding: 28px 36px; }
+.sel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.sel-sym { font-size: 36px; font-weight: 800; color: var(--green-900); }
+.sel-name { font-size: 18px; color: var(--gray-500); }
+.sel-exch { font-size: 14px; color: var(--gray-400); margin-left: 16px; }
+.sel-price { font-size: 56px; font-weight: 800; font-family: var(--mono); color: var(--green-900); line-height: 1; letter-spacing: -2px; }
+.sel-change { font-size: 22px; font-weight: 700; font-family: var(--mono); margin-top: 4px; }
+.chart-box { background: #fff; border-radius: 16px; border: 1px solid var(--gray-200); padding: 24px; margin-bottom: 24px; }
+.tf-btns { display: flex; gap: 8px; margin-bottom: 16px; }
+.tf-btn { padding: 8px 18px; border-radius: 8px; font-size: 15px; font-weight: 600; font-family: var(--mono); border: 1px solid var(--gray-200); background: transparent; color: var(--gray-400); cursor: pointer; }
 .tf-btn.active { border-color: var(--green-500); background: var(--green-50); color: var(--green-700); }
-.chart-stats { font-size: 13px; color: var(--gray-400); }
+.chart-stats { font-size: 15px; color: var(--gray-400); }
 .chart-stats span { color: var(--green-900); font-weight: 600; font-family: var(--mono); }
-.mkt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-.mkt-stat { background: #fff; border-radius: 12px; padding: 16px 18px; border: 1px solid var(--gray-100); }
-.mkt-stat-label { font-size: 12px; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
-.mkt-stat-value { font-size: 22px; font-weight: 800; color: var(--green-900); font-family: var(--mono); margin-top: 4px; }
+.mkt-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.mkt-stat { background: #fff; border-radius: 14px; padding: 20px 22px; border: 1px solid var(--gray-100); }
+.mkt-stat-label { font-size: 13px; color: var(--gray-400); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+.mkt-stat-value { font-size: 26px; font-weight: 800; color: var(--green-900); font-family: var(--mono); margin-top: 4px; }
 .sources { background: linear-gradient(135deg, var(--green-50), #ecfdf5); border-radius: 14px; padding: 18px 22px; border: 1px solid var(--green-100); }
 .sources-title { font-size: 13px; font-weight: 700; color: var(--green-700); margin-bottom: 10px; }
 .sources-list { display: flex; gap: 20px; flex-wrap: wrap; }
@@ -339,7 +339,7 @@ input { font-family: var(--sans); }
           <span style="flex:1"></span>
           <span class="chart-stats" id="chartStats"></span>
         </div>
-        <svg id="candleChart" width="100%" height="280" style="display:block;margin-top:10px"></svg>
+        <svg id="candleChart" width="100%" height="420" style="display:block;margin-top:10px"></svg>
       </div>
       <div class="mkt-stats" id="mktStats"></div>
       <div class="sources">
@@ -733,7 +733,7 @@ function renderMarketCenter() {
   for(let i=0;i<hist.length-1;i+=2){const o=hist[i],cl=hist[i+1]||o;candles.push({o,cl,h:Math.max(o,cl)*1.002,l:Math.min(o,cl)*.998,up:cl>=o});}
   const all=candles.flatMap(c=>[c.h,c.l]);
   const mn=Math.min(...all),mx=Math.max(...all),rng=mx-mn||1;
-  const W=580,H=260,cw=W/candles.length*.6,g=W/candles.length*.4;
+  const W=800,H=400,cw=W/candles.length*.6,g=W/candles.length*.4;
   const tY=v=>H-6-((v-mn)/rng)*(H-12);
   let svg='';
   [0,.25,.5,.75,1].forEach(p=>{const v=mn+rng*p,y=tY(v);svg+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#f0fdf4" stroke-width="1"/><text x="${W-2}" y="${y-3}" text-anchor="end" font-size="8" fill="#9ca3af" font-family="'DM Mono',monospace">$${v.toFixed(2)}</text>`;});
