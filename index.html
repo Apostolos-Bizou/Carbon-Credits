@@ -300,10 +300,22 @@ input { font-family: var(--sans); }
       <div class="invest-sub">Fund reforestation projects · Earn returns from carbon credit production</div>
     </div>
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">Total Pipeline</div><div class="stat-value">€43.7M</div><div class="stat-sub">4 Active Projects</div></div>
-      <div class="stat-card"><div class="stat-label">Capital Raised</div><div class="stat-value">€14.0M</div><div class="stat-sub">32% of Target</div></div>
-      <div class="stat-card"><div class="stat-label">Active Investors</div><div class="stat-value">49</div><div class="stat-sub">Across all projects</div></div>
-      <div class="stat-card"><div class="stat-label">Projected Credits</div><div class="stat-value">10,455</div><div class="stat-sub">tCO₂e/year capacity</div></div>
+      <div class="stat-card"><div class="stat-label">Total Pipeline</div><div class="stat-value" id="invPipeline">€139.5M</div><div class="stat-sub" id="invProjCount">10 Active Projects</div></div>
+      <div class="stat-card"><div class="stat-label">Capital Raised</div><div class="stat-value" id="invRaised">€52.5M</div><div class="stat-sub">38% of Target</div></div>
+      <div class="stat-card"><div class="stat-label">Active Investors</div><div class="stat-value" id="invInvestors">128</div><div class="stat-sub">Across all projects</div></div>
+      <div class="stat-card"><div class="stat-label">Projected Credits</div><div class="stat-value" id="invCredits">40,255</div><div class="stat-sub">tCO₂e/year capacity</div></div>
+    </div>
+
+    <!-- Country & Region filters -->
+    <div style="margin-bottom:24px">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap">
+        <span style="font-size:15px;font-weight:700;color:var(--green-900)">🌍 Country</span>
+        <div id="countryFilters" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:15px;font-weight:700;color:var(--green-900)">📍 Region</span>
+        <div id="regionFilters" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
     </div>
     <div class="invest-grid" id="investGrid"></div>
   </div>
@@ -365,10 +377,16 @@ const CREDITS = [
 ];
 
 const INVESTMENTS = [
-  {id:"INV-001",name:"Mindanao 5,000ha ARR Project",phase:"Phase 2 — Planting",target:19000000,raised:7200000,roi:"18-24%",timeline:"2025-2030",min:50000,investors:14,next:"Verra PDD Submission Q2 2026",risk:"Medium",type:"Equity",ha:5000,credits:4250},
-  {id:"INV-002",name:"Bukidnon Highland Expansion",phase:"Phase 1 — Land Acquisition",target:8500000,raised:2100000,roi:"15-20%",timeline:"2026-2031",min:25000,investors:8,next:"Site Survey Q1 2026",risk:"Medium-High",type:"Equity",ha:2500,credits:2125},
-  {id:"INV-003",name:"Palawan Blue Carbon Mangroves",phase:"Phase 1 — Feasibility",target:12000000,raised:850000,roi:"22-30%",timeline:"2026-2032",min:100000,investors:5,next:"Environmental Impact Assessment",risk:"High",type:"Joint Venture",ha:3000,credits:2550},
-  {id:"INV-004",name:"Caraga Region Phase II",phase:"Phase 3 — Certification",target:4200000,raised:3800000,roi:"12-16%",timeline:"2024-2029",min:25000,investors:22,next:"Verra Validation Audit Q1 2026",risk:"Low",type:"Revenue Share",ha:1800,credits:1530},
+  {id:"INV-001",name:"Mindanao 5,000ha ARR Project",phase:"Phase 2 — Planting",target:19000000,raised:7200000,roi:"18-24%",timeline:"2025-2030",min:50000,investors:14,next:"Verra PDD Submission Q2 2026",risk:"Medium",type:"Equity",ha:5000,credits:4250,country:"Philippines",region:"Mindanao — Caraga",flag:"🇵🇭",landCost:"€850-2,500/ha"},
+  {id:"INV-002",name:"Bukidnon Highland Expansion",phase:"Phase 1 — Land Acquisition",target:8500000,raised:2100000,roi:"15-20%",timeline:"2026-2031",min:25000,investors:8,next:"Site Survey Q1 2026",risk:"Medium-High",type:"Equity",ha:2500,credits:2125,country:"Philippines",region:"Mindanao — Bukidnon",flag:"🇵🇭",landCost:"€900-1,800/ha"},
+  {id:"INV-003",name:"Palawan Blue Carbon Mangroves",phase:"Phase 1 — Feasibility",target:12000000,raised:850000,roi:"22-30%",timeline:"2026-2032",min:100000,investors:5,next:"Environmental Impact Assessment",risk:"High",type:"Joint Venture",ha:3000,credits:2550,country:"Philippines",region:"Palawan",flag:"🇵🇭",landCost:"€1,200-3,000/ha"},
+  {id:"INV-004",name:"Caraga Region Phase II",phase:"Phase 3 — Certification",target:4200000,raised:3800000,roi:"12-16%",timeline:"2024-2029",min:25000,investors:22,next:"Verra Validation Audit Q1 2026",risk:"Low",type:"Revenue Share",ha:1800,credits:1530,country:"Philippines",region:"Mindanao — Caraga",flag:"🇵🇭",landCost:"€850-2,500/ha"},
+  {id:"INV-005",name:"Davao Gulf Coastal Restoration",phase:"Phase 1 — Feasibility",target:6800000,raised:420000,roi:"20-28%",timeline:"2026-2033",min:50000,investors:3,next:"DENR Permit Application",risk:"High",type:"Joint Venture",ha:1500,credits:1275,country:"Philippines",region:"Mindanao — Davao",flag:"🇵🇭",landCost:"€1,500-3,200/ha"},
+  {id:"INV-006",name:"West Kalimantan Peatland Restoration",phase:"Phase 2 — Planting",target:22000000,raised:9500000,roi:"20-28%",timeline:"2025-2031",min:100000,investors:18,next:"Verra Validation Q3 2026",risk:"Medium",type:"Equity",ha:8000,credits:6800,country:"Indonesia",region:"Kalimantan",flag:"🇮🇩",landCost:"€400-1,200/ha"},
+  {id:"INV-007",name:"Sulawesi Mangrove & Coral Blue Carbon",phase:"Phase 1 — Land Acquisition",target:15000000,raised:3200000,roi:"24-32%",timeline:"2026-2033",min:75000,investors:9,next:"Community FPIC Process",risk:"Medium-High",type:"Joint Venture",ha:4500,credits:3825,country:"Indonesia",region:"Sulawesi",flag:"🇮🇩",landCost:"€350-900/ha"},
+  {id:"INV-008",name:"Sumatra Lowland Rainforest REDD+",phase:"Phase 2 — Monitoring",target:28000000,raised:18500000,roi:"16-22%",timeline:"2024-2030",min:50000,investors:31,next:"First Verification Q2 2026",risk:"Medium",type:"Revenue Share",ha:12000,credits:10200,country:"Indonesia",region:"Sumatra",flag:"🇮🇩",landCost:"€300-800/ha"},
+  {id:"INV-009",name:"Sabah Rainforest Corridor",phase:"Phase 1 — Feasibility",target:10000000,raised:1100000,roi:"18-25%",timeline:"2027-2034",min:50000,investors:6,next:"State Government MoU",risk:"High",type:"Equity",ha:3500,credits:2975,country:"Malaysia",region:"Sabah — Borneo",flag:"🇲🇾",landCost:"€600-1,500/ha"},
+  {id:"INV-010",name:"Sarawak Peat Swamp Conservation",phase:"Phase 2 — Planting",target:14000000,raised:5800000,roi:"15-20%",timeline:"2025-2032",min:75000,investors:12,next:"Gold Standard Registration",risk:"Medium",type:"Joint Venture",ha:5500,credits:4675,country:"Malaysia",region:"Sarawak — Borneo",flag:"🇲🇾",landCost:"€500-1,200/ha"},
 ];
 
 const INSTRUMENTS = [
@@ -413,6 +431,8 @@ let currentSection = "marketplace";
 let typeFilter = "all";
 let mktFilter = "all";
 let selectedInst = "ARR-A";
+let investCountry = "all";
+let investRegion = "all";
 let liveData = INSTRUMENTS.map(i=>({...i,price:i.base,prev:i.base,ch:0,chPct:0,hi:i.base*1.02,lo:i.base*0.98,vol:Math.floor(Math.random()*50000)+5000,hist:Array.from({length:60},()=>i.base+(Math.random()-.5)*i.base*.04)}));
 
 // ═══════════════════════════════════════════════
@@ -531,24 +551,82 @@ function renderCart() {
 // ═══════════════════════════════════════════════
 // INVESTMENTS
 // ═══════════════════════════════════════════════
+function getFilteredInvestments() {
+  return INVESTMENTS.filter(inv => {
+    const mc = investCountry==='all' || inv.country===investCountry;
+    const mr = investRegion==='all' || inv.region===investRegion;
+    return mc && mr;
+  });
+}
+
+function renderInvestFilters() {
+  // Countries
+  const countries = [...new Set(INVESTMENTS.map(i=>i.country))];
+  const cEl = document.getElementById('countryFilters');
+  cEl.innerHTML = [`<button class="filter-btn ${investCountry==='all'?'active':''}" onclick="setInvestCountry('all')">🌏 All Countries</button>`]
+    .concat(countries.map(c => {
+      const flag = INVESTMENTS.find(i=>i.country===c).flag;
+      const count = INVESTMENTS.filter(i=>i.country===c).length;
+      return `<button class="filter-btn ${investCountry===c?'active':''}" onclick="setInvestCountry('${c}')">${flag} ${c} <span style="opacity:.5;margin-left:4px">(${count})</span></button>`;
+    })).join('');
+
+  // Regions - filtered by selected country
+  const pool = investCountry==='all' ? INVESTMENTS : INVESTMENTS.filter(i=>i.country===investCountry);
+  const regions = [...new Set(pool.map(i=>i.region))];
+  const rEl = document.getElementById('regionFilters');
+  rEl.innerHTML = [`<button class="filter-btn ${investRegion==='all'?'active':''}" onclick="setInvestRegion('all')">All Regions</button>`]
+    .concat(regions.map(r => {
+      const count = pool.filter(i=>i.region===r).length;
+      return `<button class="filter-btn ${investRegion===r?'active':''}" onclick="setInvestRegion('${r}')">${r} <span style="opacity:.5;margin-left:4px">(${count})</span></button>`;
+    })).join('');
+}
+
+function setInvestCountry(c) {
+  investCountry = c;
+  investRegion = 'all'; // reset region when country changes
+  renderInvestFilters();
+  renderInvestments();
+}
+function setInvestRegion(r) {
+  investRegion = r;
+  renderInvestFilters();
+  renderInvestments();
+}
+
 function renderInvestments() {
+  const filtered = getFilteredInvestments();
   const grid = document.getElementById('investGrid');
-  grid.innerHTML = INVESTMENTS.map((inv,idx)=>{
+
+  // Update summary stats
+  const totalTarget = filtered.reduce((s,i)=>s+i.target,0);
+  const totalRaised = filtered.reduce((s,i)=>s+i.raised,0);
+  const totalInvestors = filtered.reduce((s,i)=>s+i.investors,0);
+  const totalCredits = filtered.reduce((s,i)=>s+i.credits,0);
+  document.getElementById('invPipeline').textContent = '€'+(totalTarget/1e6).toFixed(1)+'M';
+  document.getElementById('invProjCount').textContent = filtered.length+' Active Projects';
+  document.getElementById('invRaised').textContent = '€'+(totalRaised/1e6).toFixed(1)+'M';
+  document.getElementById('invInvestors').textContent = totalInvestors;
+  document.getElementById('invCredits').textContent = totalCredits.toLocaleString();
+
+  grid.innerHTML = filtered.map((inv,idx)=>{
     const pct = Math.round(inv.raised/inv.target*100);
     const rc = inv.risk==='Low'?'#22c55e':inv.risk==='Medium'?'#f59e0b':inv.risk==='Medium-High'?'#f97316':'#ef4444';
     const r = 43, circ = 2*Math.PI*r, off = circ-pct/100*circ;
     return `
-    <div class="invest-card fade-in" style="animation-delay:${idx*.08}s">
+    <div class="invest-card fade-in" style="animation-delay:${idx*.06}s">
       <div class="invest-phase">
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-size:14px;font-family:var(--mono);color:var(--gray-400)">${inv.id}</span>
           <span class="phase-badge">${inv.phase}</span>
         </div>
-        <span class="risk-badge" style="background:${rc}15;color:${rc};border:1px solid ${rc}30">${inv.risk} Risk</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:14px;padding:5px 12px;border-radius:8px;font-weight:600;background:#dbeafe;color:#1e40af">${inv.flag} ${inv.region}</span>
+          <span class="risk-badge" style="background:${rc}15;color:${rc};border:1px solid ${rc}30">${inv.risk} Risk</span>
+        </div>
       </div>
       <div class="invest-body">
         <div class="invest-name">${inv.name}</div>
-        <div class="invest-info">${inv.type} · ${inv.timeline} · ${inv.ha.toLocaleString()} hectares</div>
+        <div class="invest-info">${inv.type} · ${inv.timeline} · ${inv.ha.toLocaleString()} hectares · Land: ${inv.landCost}</div>
         <div class="funding-row">
           <div class="progress-ring">
             <svg width="100" height="100"><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--green-50)" stroke-width="6"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--green-500)" stroke-width="6" stroke-dasharray="${circ}" stroke-dashoffset="${off}" stroke-linecap="round" style="transition:stroke-dashoffset 1s"/></svg>
@@ -575,6 +653,10 @@ function renderInvestments() {
       </div>
     </div>`;
   }).join('');
+
+  if(filtered.length===0) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--gray-400)"><div style="font-size:48px;margin-bottom:12px">🌏</div><div style="font-size:18px;font-weight:600">No projects in this region yet</div><div style="font-size:14px;margin-top:4px">Try a different country or region filter</div></div>';
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -725,6 +807,7 @@ function animateStats() {
 function init() {
   renderCredits();
   renderCart();
+  renderInvestFilters();
   renderInvestments();
   renderTicker();
   renderMktFilters();
