@@ -1180,11 +1180,12 @@ const SHIPOWNERS = [
 ];
 
 let selectedOwner = null;
+let selectedVessel = null;
 
 function renderOwnerList() {
-  const search = (document.getElementById('ownerSearch')?.value||'').toLowerCase();
-  const list = document.getElementById('ownerList');
-  const filtered = SHIPOWNERS.filter(o=>o.name.toLowerCase().includes(search)||o.hq.toLowerCase().includes(search));
+  var search = (document.getElementById('ownerSearch')?.value||'').toLowerCase();
+  var list = document.getElementById('ownerList');
+  var filtered = SHIPOWNERS.filter(function(o){return o.name.toLowerCase().includes(search)||o.hq.toLowerCase().includes(search);});
   var html = '';
   for(var i=0;i<filtered.length;i++){
     var o = filtered[i];
@@ -1194,7 +1195,7 @@ function renderOwnerList() {
     var gapStyle = totalGap>0?'background:#fee2e2;color:#991b1b':'background:#d1fae5;color:#047857';
     var gapText = totalGap>0?'Gap: '+(totalGap/1000).toFixed(1)+'K':'✓ Covered';
     html += '<div class="owner-item'+(isActive?' active':'')+'" onclick="selectOwner(\''+o.name.replace(/'/g,"\\'")+'\')">'
-      +'<div style="display:flex;justify-content:space-between;align-items:center"><div class="owner-name">'+o.flag+' '+o.name+'</div></div>'
+      +'<div class="owner-name">'+o.flag+' '+o.name+'</div>'
       +'<div class="owner-meta">'+o.hq+' · '+o.vessels.length+' vessels</div>'
       +'<div class="owner-stats-row">'
       +'<span class="owner-stat-mini">'+(totalE/1000).toFixed(0)+'K tCO₂</span>'
@@ -1204,127 +1205,271 @@ function renderOwnerList() {
   list.innerHTML = html;
 }
 
-function selectOwner(name) {
-  selectedOwner = name;
-  renderOwnerList();
-  renderFleetMain();
-}
+function selectOwner(name) { selectedOwner = name; selectedVessel = null; renderOwnerList(); renderFleetDashboard(); }
+function selectVessel(imo) { selectedVessel = imo; renderVesselDetail(); }
+function backToFleet() { selectedVessel = null; renderFleetDashboard(); }
 
-function renderFleetMain() {
-  const owner = SHIPOWNERS.find(o=>o.name===selectedOwner);
+function renderFleetDashboard() {
+  var owner = SHIPOWNERS.find(function(o){return o.name===selectedOwner;});
   if(!owner) return;
-  const main = document.getElementById('fleetMain');
-  const v = owner.vessels;
-  const totalEmissions = v.reduce((s,x)=>s+x.annualEmissions,0);
-  const totalEU = v.reduce((s,x)=>s+x.euEmissions,0);
-  const totalCredits = v.reduce((s,x)=>s+x.creditsOwned,0);
-  const totalGap = v.reduce((s,x)=>s+x.gap,0);
-  const euCost = Math.round(totalEU*100);
-  const imoCost = Math.round(totalEmissions*380);
-  const ourCost = Math.round(totalGap*22);
-  const savings = Math.round(totalGap*100) - ourCost;
-  const coveragePct = totalEU>0?Math.round(totalCredits/totalEU*100):0;
-  const MONTHS = ['Ιαν','Φεβ','Μαρ','Απρ','Μαϊ','Ιουν','Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'];
-  const monthly = Array(12).fill(0);
+  var main = document.getElementById('fleetMain');
+  var v = owner.vessels;
+  var totalEmissions = v.reduce(function(s,x){return s+x.annualEmissions;},0);
+  var totalEU = v.reduce(function(s,x){return s+x.euEmissions;},0);
+  var totalCredits = v.reduce(function(s,x){return s+x.creditsOwned;},0);
+  var totalGap = v.reduce(function(s,x){return s+x.gap;},0);
+  var euCost = Math.round(totalEU*100);
+  var ourCost = Math.round(totalGap*22);
+  var savings = Math.round(totalGap*100) - ourCost;
+  var coveragePct = totalEU>0?Math.round(totalCredits/totalEU*100):0;
+  var yr = new Date().getFullYear();
+  var MONTHS = ['Ιαν','Φεβ','Μαρ','Απρ','Μαϊ','Ιουν','Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'];
+  var monthly = Array(12).fill(0);
   v.forEach(function(vessel){vessel.monthlyEmissions.forEach(function(e,mi){monthly[mi]+=e;});});
-  const maxMonth = Math.max.apply(null, monthly);
-
-  const coverClass = coveragePct>=90?'good':coveragePct>=50?'':'alert';
-  const gapClass2 = totalGap>0?'alert':'good';
-  const gapVal = totalGap>0?(totalGap/1000).toFixed(1)+'K':'✓ 0';
-  const gapSub = totalGap>0?'Credits needed':'Fully covered';
-  const yr = new Date().getFullYear();
-
-  // Build monthly chart
+  var maxMonth = Math.max.apply(null, monthly);
+  var types = {}; v.forEach(function(x){ types[x.type] = (types[x.type]||0)+1; });
+  var typeColors = {'Bulk Carrier':'#22c55e','Container':'#2563eb','Tanker':'#f59e0b','LNG Carrier':'#8b5cf6','RoRo':'#06b6d4','General Cargo':'#ec4899'};
+  var typeKeys = Object.keys(types);
+  var ciiCounts = {A:0,B:0,C:0,D:0}; v.forEach(function(x){ ciiCounts[x.cii]=(ciiCounts[x.cii]||0)+1; });
+  var euVoyages = v.filter(function(x){return x.route.region==='eu';}).length;
+  var intlVoyages = v.filter(function(x){return x.route.region==='intl';}).length;
+  var activeV = v.filter(function(x){return x.status==='Active';}).length;
   var chartBars = '';
   for(var mi=0;mi<12;mi++){
-    var h = maxMonth>0?Math.max(4, Math.round(monthly[mi]/maxMonth*90)):4;
-    chartBars += '<div style="flex:1;text-align:center"><div class="yearly-bar" style="height:'+h+'px;background:linear-gradient(180deg,var(--green-400),var(--green-600));margin:0 auto;width:80%"><div class="bar-tooltip">'+(monthly[mi]/1000).toFixed(1)+'K tCO₂</div></div><div class="yearly-bar-label">'+MONTHS[mi]+'</div></div>';
+    var h = maxMonth>0?Math.max(6, Math.round(monthly[mi]/maxMonth*120)):6;
+    chartBars += '<div style="flex:1;text-align:center"><div class="yearly-bar" style="height:'+h+'px;background:linear-gradient(180deg,var(--green-400),var(--green-600));margin:0 auto;width:70%;border-radius:6px 6px 0 0"><div class="bar-tooltip">'+(monthly[mi]/1000).toFixed(1)+'K tCO₂</div></div><div class="yearly-bar-label">'+MONTHS[mi]+'</div></div>';
   }
-
-  // Build vessel rows
-  var sorted = v.slice().sort(function(a,b){return b.gap-a.gap;});
-  var vesselRows = '';
+  var donutSegs='', offset=0, legendHtml='', circ=2*Math.PI*52;
+  for(var ti=0;ti<typeKeys.length;ti++){
+    var tk=typeKeys[ti], pct=types[tk]/v.length, dash=circ*pct, gap2=circ-dash, col=typeColors[tk]||'#999';
+    donutSegs+='<circle cx="70" cy="70" r="52" fill="none" stroke="'+col+'" stroke-width="18" stroke-dasharray="'+dash.toFixed(1)+' '+gap2.toFixed(1)+'" stroke-dashoffset="-'+offset.toFixed(1)+'" stroke-linecap="round"/>';
+    offset+=dash;
+    legendHtml+='<div style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="width:10px;height:10px;border-radius:3px;background:'+col+';flex-shrink:0"></span><span style="color:var(--gray-600)">'+tk+'</span><span style="font-weight:700;color:var(--green-900);margin-left:auto;font-family:var(--mono)">'+types[tk]+'</span></div>';
+  }
+  var vesselCards='', sorted=v.slice().sort(function(a,b){return b.gap-a.gap;});
   for(var vi=0;vi<sorted.length;vi++){
-    var vessel = sorted[vi];
-    var gc = vessel.gap===0?'compliance-covered':vessel.gap<vessel.euEmissions*0.3?'compliance-partial':'compliance-gap';
-    var gl = vessel.gap===0?'✓ Covered':vessel.gap<vessel.euEmissions*0.3?'Partial':'Gap';
-    var cc = vessel.cii==='A'?'#047857':vessel.cii==='B'?'#16a34a':vessel.cii==='C'?'#f59e0b':'#dc2626';
-    var rc = vessel.route.region==='eu'?'route-eu':vessel.route.region==='asia'?'route-asia':'route-intl';
-    var ep = vessel.annualEmissions>0?Math.round(vessel.euEmissions/vessel.annualEmissions*100):0;
-    var stColor = vessel.status==='Active'?'var(--green-600)':'var(--gray-400)';
-    var stDot = vessel.status==='Active'?'var(--green-500)':'var(--gray-300)';
-    var gapText = vessel.gap>0?' · '+vessel.gap.toLocaleString()+' t':'';
-    vesselRows += '<tr>'
-      +'<td><div class="vessel-name">'+vessel.name+'</div><div class="vessel-imo">IMO '+vessel.imo+'</div></td>'
-      +'<td><div style="font-weight:600;font-size:13px">'+vessel.type+'</div><div style="font-family:var(--mono);font-size:12px;color:var(--gray-400)">'+vessel.gt.toLocaleString()+' GT</div></td>'
-      +'<td><span class="route-badge '+rc+'">'+vessel.route.type+'</span><div style="font-size:12px;color:var(--gray-500);margin-top:2px">'+vessel.route.name+'</div></td>'
-      +'<td><div style="font-family:var(--mono);font-weight:700;font-size:15px">'+vessel.annualEmissions.toLocaleString()+'</div><div style="margin-top:4px"><div class="emission-bar-wrap"><div class="emission-bar-fill" style="width:'+ep+'%;background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div><div style="font-size:11px;color:var(--gray-400);margin-top:2px">'+ep+'% EU scope</div></td>'
-      +'<td style="font-family:var(--mono);font-weight:700;color:#1e40af">'+vessel.euEmissions.toLocaleString()+'</td>'
-      +'<td style="font-family:var(--mono);font-weight:600;color:var(--green-700)">'+vessel.creditsOwned.toLocaleString()+'</td>'
-      +'<td><span class="compliance-badge '+gc+'">'+gl+gapText+'</span></td>'
-      +'<td><span style="font-weight:800;font-size:16px;color:'+cc+'">'+vessel.cii+'</span></td>'
-      +'<td><span style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:'+stColor+'"><span style="width:7px;height:7px;border-radius:50%;background:'+stDot+'"></span>'+vessel.status+'</span></td>'
-      +'</tr>';
+    var vs=sorted[vi];
+    var gc=vs.gap===0?'#d1fae5':vs.gap<vs.euEmissions*0.3?'#fef3c7':'#fee2e2';
+    var gtc=vs.gap===0?'#047857':vs.gap<vs.euEmissions*0.3?'#92400e':'#991b1b';
+    var ciiCol=vs.cii==='A'?'#047857':vs.cii==='B'?'#16a34a':vs.cii==='C'?'#f59e0b':'#dc2626';
+    var stDot=vs.status==='Active'?'var(--green-500)':'var(--gray-300)';
+    var routeBg=vs.route.region==='eu'?'#dbeafe':vs.route.region==='asia'?'#fef3c7':'#f3e8ff';
+    var routeCol=vs.route.region==='eu'?'#1e40af':vs.route.region==='asia'?'#92400e':'#6b21a8';
+    vesselCards+='<div onclick="selectVessel(\''+vs.imo+'\')" style="background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:20px 22px;cursor:pointer;transition:all .2s" onmouseover="this.style.borderColor=\'var(--green-400)\';this.style.transform=\'translateY(-3px)\';this.style.boxShadow=\'0 8px 24px rgba(34,197,94,.12)\'" onmouseout="this.style.borderColor=\'var(--gray-200)\';this.style.transform=\'none\';this.style.boxShadow=\'none\'">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px"><div><div style="font-size:17px;font-weight:700;color:var(--green-900)">'+vs.name+'</div><div style="font-family:var(--mono);font-size:11px;color:var(--gray-400);margin-top:2px">IMO '+vs.imo+' · '+vs.type+'</div></div><div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:'+stDot+'"></span><span style="font-size:12px;font-weight:600;color:var(--gray-500)">'+vs.status+'</span></div></div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">'
+      +'<div style="background:var(--gray-50);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--gray-400);text-transform:uppercase;font-weight:600">Emissions</div><div style="font-size:16px;font-weight:800;color:var(--green-900);font-family:var(--mono)">'+(vs.annualEmissions/1000).toFixed(1)+'K</div></div>'
+      +'<div style="background:var(--gray-50);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--gray-400);text-transform:uppercase;font-weight:600">EU ETS</div><div style="font-size:16px;font-weight:800;color:#1e40af;font-family:var(--mono)">'+(vs.euEmissions/1000).toFixed(1)+'K</div></div>'
+      +'<div style="background:'+gc+';border-radius:8px;padding:10px"><div style="font-size:10px;color:'+gtc+';text-transform:uppercase;font-weight:600">'+(vs.gap>0?'Gap':'Covered')+'</div><div style="font-size:16px;font-weight:800;color:'+gtc+';font-family:var(--mono)">'+(vs.gap>0?(vs.gap/1000).toFixed(1)+'K':'✓')+'</div></div></div>'
+      +'<div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:6px;align-items:center"><span style="font-size:12px;padding:3px 8px;border-radius:5px;font-weight:600;background:'+routeBg+';color:'+routeCol+'">'+vs.route.type+'</span><span style="font-size:11px;color:var(--gray-400)">'+vs.route.name.split(' \u2192 ')[0]+' \u2192</span></div><div style="display:flex;align-items:center;gap:6px"><span style="font-size:11px;color:var(--gray-400)">CII</span><span style="font-weight:800;font-size:15px;color:'+ciiCol+'">'+vs.cii+'</span><span style="font-size:11px;color:var(--gray-400);margin-left:4px">'+vs.gt.toLocaleString()+' GT</span></div></div></div>';
   }
+  main.innerHTML=''
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px"><div><div style="font-size:34px;font-weight:800;color:var(--green-900)">'+owner.flag+' '+owner.name+'</div><div style="font-size:15px;color:var(--gray-500);margin-top:4px">'+owner.hq+' \u00B7 '+v.length+' vessels \u00B7 '+owner.contact+'</div></div><div style="display:flex;gap:10px"><button class="buy-btn" onclick="switchSection(\'marketplace\')" style="font-size:14px;padding:12px 24px">\uD83D\uDED2 Buy Credits</button><button style="padding:12px 24px;border-radius:12px;border:1px solid var(--green-500);background:var(--green-50);color:var(--green-700);font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">\uD83D\uDCC4 Export Report</button></div></div>'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">'
+    +'<div style="background:linear-gradient(135deg,#14532d,#166534);border-radius:20px;padding:28px 30px;color:#fff;position:relative;overflow:hidden"><div style="position:absolute;top:-20px;right:-20px;font-size:100px;opacity:.08">\uD83D\uDEA2</div><div style="font-size:12px;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;font-weight:600">Total Fleet Emissions</div><div style="font-size:42px;font-weight:800;font-family:var(--mono);margin-top:8px;line-height:1">'+(totalEmissions/1000).toFixed(1)+'K</div><div style="font-size:14px;opacity:.6;margin-top:4px">tCO\u2082e / year</div><div style="margin-top:14px;display:flex;gap:14px"><div style="font-size:12px;opacity:.7"><span style="font-weight:700">'+v.length+'</span> vessels</div><div style="font-size:12px;opacity:.7"><span style="font-weight:700">'+activeV+'</span> active</div></div></div>'
+    +'<div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);border-radius:20px;padding:28px 30px;color:#fff;position:relative;overflow:hidden"><div style="position:absolute;top:-20px;right:-20px;font-size:100px;opacity:.08">\uD83C\uDDEA\uD83C\uDDFA</div><div style="font-size:12px;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;font-weight:600">EU ETS Exposure</div><div style="font-size:42px;font-weight:800;font-family:var(--mono);margin-top:8px;line-height:1">'+(totalEU/1000).toFixed(1)+'K</div><div style="font-size:14px;opacity:.6;margin-top:4px">tCO\u2082e under EU ETS</div><div style="margin-top:14px;font-size:12px;opacity:.7">Cost @ spot: <span style="font-weight:700">\u20AC'+(euCost/1e6).toFixed(1)+'M</span></div></div>'
+    +'<div style="background:linear-gradient(135deg,'+(totalGap>0?'#7f1d1d,#991b1b':'#14532d,#047857')+');border-radius:20px;padding:28px 30px;color:#fff;position:relative;overflow:hidden"><div style="position:absolute;top:-20px;right:-20px;font-size:100px;opacity:.08">'+(totalGap>0?'\u26A0\uFE0F':'\u2705')+'</div><div style="font-size:12px;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;font-weight:600">'+(totalGap>0?'Credit Gap':'Fully Covered')+'</div><div style="font-size:42px;font-weight:800;font-family:var(--mono);margin-top:8px;line-height:1">'+(totalGap>0?(totalGap/1000).toFixed(1)+'K':'\u2713 0')+'</div><div style="font-size:14px;opacity:.6;margin-top:4px">'+(totalGap>0?'credits needed \u00B7 coverage '+coveragePct+'%':'all EU ETS obligations met')+'</div><div style="margin-top:14px;font-size:12px;opacity:.7">GreenCreditX savings: <span style="font-weight:700">\u20AC'+(savings/1e6).toFixed(1)+'M</span></div></div></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px">'
+    +'<div style="background:#fff;border-radius:18px;border:1px solid var(--gray-200);padding:24px;text-align:center"><div style="font-size:13px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px">EU ETS Coverage</div><div style="position:relative;width:120px;height:120px;margin:0 auto"><svg width="120" height="120" style="transform:rotate(-90deg)"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--gray-100)" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="'+(coveragePct>=80?'var(--green-500)':coveragePct>=50?'#f59e0b':'#dc2626')+'" stroke-width="10" stroke-dasharray="'+Math.round(314*Math.min(coveragePct,100)/100)+' 314" stroke-linecap="round"/></svg><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;font-family:var(--mono);color:var(--green-900)">'+coveragePct+'%</div></div><div style="font-size:13px;color:var(--gray-500);margin-top:12px">'+totalCredits.toLocaleString()+' credits owned</div></div>'
+    +'<div style="background:#fff;border-radius:18px;border:1px solid var(--gray-200);padding:24px"><div style="font-size:13px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px">Cost Comparison</div><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fef2f2;border-radius:8px"><span style="font-size:12px;font-weight:600;color:#991b1b">EU ETS @\u20AC100/t</span><span style="font-family:var(--mono);font-weight:800;font-size:16px;color:#dc2626">\u20AC'+(euCost/1e6).toFixed(1)+'M</span></div><div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--green-50);border-radius:8px"><span style="font-size:12px;font-weight:600;color:var(--green-700)">GreenCreditX @$22/t</span><span style="font-family:var(--mono);font-weight:800;font-size:16px;color:var(--green-700)">$'+(ourCost/1e3).toFixed(0)+'K</span></div><div style="text-align:center;padding:8px;background:linear-gradient(135deg,var(--green-50),#ecfdf5);border-radius:8px;font-size:15px;font-weight:800;color:var(--green-700)">Save \u20AC'+(savings/1e6).toFixed(1)+'M</div></div></div>'
+    +'<div style="background:#fff;border-radius:18px;border:1px solid var(--gray-200);padding:24px;display:flex;flex-direction:column;gap:10px"><div style="font-size:13px;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Quick Actions</div><div onclick="switchSection(\'marketplace\')" style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--green-50);border-radius:10px;border:1px solid var(--green-100);cursor:pointer"><span style="font-size:22px">\uD83D\uDED2</span><div><div style="font-size:14px;font-weight:700;color:var(--green-900)">Buy '+totalGap.toLocaleString()+' Credits</div><div style="font-size:11px;color:var(--gray-500)">Cover gap instantly</div></div></div><div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--gray-50);border-radius:10px;border:1px solid var(--gray-100);cursor:pointer"><span style="font-size:22px">\uD83D\uDCCB</span><div><div style="font-size:14px;font-weight:700;color:var(--green-900)">Pre-Purchase '+(yr+1)+'-'+(yr+3)+'</div><div style="font-size:11px;color:var(--gray-500)">Lock fixed pricing</div></div></div><div onclick="switchSection(\'invest\')" style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--gray-50);border-radius:10px;border:1px solid var(--gray-100);cursor:pointer"><span style="font-size:22px">\uD83C\uDF33</span><div><div style="font-size:14px;font-weight:700;color:var(--green-900)">Invest in Production</div><div style="font-size:11px;color:var(--gray-500)">$8-12/t own credits</div></div></div></div></div>'
+    +'<div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px"><div style="background:#fff;border-radius:18px;border:1px solid var(--gray-200);padding:24px"><div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:16px">\uD83D\uDCCA Monthly Emissions '+yr+'</div><div style="display:flex;align-items:flex-end;gap:4px;height:130px;padding:0 2px">'+chartBars+'</div></div><div style="background:#fff;border-radius:18px;border:1px solid var(--gray-200);padding:24px"><div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:16px">\uD83D\uDEA2 Fleet Composition</div><div style="display:flex;align-items:center;gap:20px"><div style="position:relative;flex-shrink:0"><svg width="140" height="140"><circle cx="70" cy="70" r="52" fill="none" stroke="var(--gray-100)" stroke-width="18"/>'+donutSegs+'</svg><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column"><div style="font-size:26px;font-weight:800;color:var(--green-900)">'+v.length+'</div><div style="font-size:10px;color:var(--gray-400)">vessels</div></div></div><div style="display:flex;flex-direction:column;gap:6px;flex:1">'+legendHtml+'</div></div></div></div>'
+    +'<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">'
+    +'<div style="background:#fff;border-radius:14px;border:1px solid var(--gray-200);padding:18px;text-align:center"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">Routes EU</div><div style="font-size:28px;font-weight:800;color:#1e40af;font-family:var(--mono);margin-top:4px">'+euVoyages+'</div><div style="font-size:12px;color:var(--gray-400)">vessels in EU scope</div></div>'
+    +'<div style="background:#fff;border-radius:14px;border:1px solid var(--gray-200);padding:18px;text-align:center"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">Routes Intl</div><div style="font-size:28px;font-weight:800;color:#6b21a8;font-family:var(--mono);margin-top:4px">'+intlVoyages+'</div><div style="font-size:12px;color:var(--gray-400)">international routes</div></div>'
+    +'<div style="background:#fff;border-radius:14px;border:1px solid var(--gray-200);padding:18px;text-align:center"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">CII A/B</div><div style="font-size:28px;font-weight:800;color:var(--green-700);font-family:var(--mono);margin-top:4px">'+ciiCounts.A+'/'+ciiCounts.B+'</div><div style="font-size:12px;color:var(--gray-400)">good performance</div></div>'
+    +'<div style="background:#fff;border-radius:14px;border:1px solid var(--gray-200);padding:18px;text-align:center"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">CII D</div><div style="font-size:28px;font-weight:800;color:#dc2626;font-family:var(--mono);margin-top:4px">'+ciiCounts.D+'</div><div style="font-size:12px;color:var(--gray-400)">needs attention</div></div></div>'
+    +'<div style="font-size:20px;font-weight:800;color:var(--green-900);margin-bottom:14px;display:flex;align-items:center;gap:8px">\uD83D\uDEA2 Fleet Vessels <span style="font-size:13px;font-weight:500;color:var(--gray-400);margin-left:8px">Click a vessel for detailed analysis</span></div>'
+    +'<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:32px">'+vesselCards+'</div>'
+    + buildUploadCenter(owner, v);
+}
 
-  // Stats counts
-  var gt5k = v.filter(function(x){return x.gt>5000;}).length;
-  var ciiAB = v.filter(function(x){return x.cii==='A'||x.cii==='B';}).length;
-  var ciiD = v.filter(function(x){return x.cii==='D';}).length;
-  var activeV = v.filter(function(x){return x.status==='Active';}).length;
-  var covColor = coveragePct>=80?'var(--green-700)':'#dc2626';
-  var covBar = coveragePct>=80?'linear-gradient(90deg,var(--green-400),var(--green-500))':'linear-gradient(90deg,#f87171,#dc2626)';
-  var covW = Math.min(100,coveragePct);
+// ═══════════════════════════════════════════════
+// DATA UPLOAD CENTER
+// ═══════════════════════════════════════════════
+var uploadStore = {};
 
-  main.innerHTML = ''
-    +'<div class="fleet-owner-header"><div>'
-    +'<div class="fleet-owner-title">'+owner.flag+' '+owner.name+'</div>'
-    +'<div class="fleet-owner-sub">'+owner.hq+' · '+v.length+' vessels · '+owner.contact+'</div>'
-    +'</div><div style="display:flex;gap:10px">'
-    +'<button class="buy-btn" onclick="switchSection(\'marketplace\')" style="font-size:14px;padding:10px 20px">🛒 Buy Credits</button>'
-    +'<button style="padding:10px 20px;border-radius:12px;border:1px solid var(--green-500);background:var(--green-50);color:var(--green-700);font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">📄 Export Report</button>'
-    +'</div></div>'
+var DOC_TYPES = [
+  {id:'monitoring_plan', name:'Monitoring Plan (MP)', icon:'\uD83D\uDCCB', desc:'EU MRV Monitoring Plan \u2014 \u03C0\u03B5\u03C1\u03B9\u03B3\u03C1\u03B1\u03C6\u03AE \u03C3\u03C5\u03C3\u03C4\u03AE\u03BC\u03B1\u03C4\u03BF\u03C2 monitoring \u03BA\u03AC\u03B8\u03B5 \u03C0\u03BB\u03BF\u03AF\u03BF\u03C5', required:true, freq:'Once / on change', format:'XML / PDF', source:'THETIS-MRV'},
+  {id:'emission_report', name:'Emission Report (ER)', icon:'\uD83D\uDCCA', desc:'\u0395\u03C4\u03AE\u03C3\u03B9\u03B1 \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B5\u03BA\u03C0\u03BF\u03BC\u03C0\u03CE\u03BD CO\u2082, CH\u2084, N\u2082O \u03B1\u03BD\u03AC \u03C0\u03BB\u03BF\u03AF\u03BF', required:true, freq:'Annual (by 31 Mar)', format:'XML / CSV', source:'THETIS-MRV'},
+  {id:'doc_compliance', name:'Document of Compliance (DoC)', icon:'\u2705', desc:'\u03A0\u03B9\u03C3\u03C4\u03BF\u03C0\u03BF\u03B9\u03B7\u03C4\u03B9\u03BA\u03CC \u03C3\u03C5\u03BC\u03BC\u03CC\u03C1\u03C6\u03C9\u03C3\u03B7\u03C2 \u03B1\u03C0\u03CC verifier (DNV, RINA, BV, LR)', required:true, freq:'Annual', format:'PDF', source:'Verifier'},
+  {id:'bdn', name:'Bunker Delivery Notes (BDN)', icon:'\u26FD', desc:'\u0391\u03C0\u03BF\u03B4\u03B5\u03AF\u03BE\u03B5\u03B9\u03C2 \u03C0\u03B1\u03C1\u03B1\u03BB\u03B1\u03B2\u03AE\u03C2 \u03BA\u03B1\u03C5\u03C3\u03AF\u03BC\u03BF\u03C5 \u2014 \u03C4\u03CD\u03C0\u03BF\u03C2, \u03C0\u03BF\u03C3\u03CC\u03C4\u03B7\u03C4\u03B1, \u03C0\u03C5\u03BA\u03BD\u03CC\u03C4\u03B7\u03C4\u03B1', required:true, freq:'Per bunkering', format:'PDF / scan', source:'Fuel supplier'},
+  {id:'noon_reports', name:'Noon Reports', icon:'\u2693', desc:'\u039A\u03B1\u03B8\u03B7\u03BC\u03B5\u03C1\u03B9\u03BD\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC: \u03B8\u03AD\u03C3\u03B7, \u03BA\u03B1\u03C4\u03B1\u03BD\u03AC\u03BB\u03C9\u03C3\u03B7, \u03C4\u03B1\u03C7\u03CD\u03C4\u03B7\u03C4\u03B1, \u03BA\u03B1\u03B9\u03C1\u03CC\u03C2', required:false, freq:'Daily at sea', format:'CSV / Excel', source:'Ship'},
+  {id:'voyage_reports', name:'Voyage Reports', icon:'\uD83D\uDDFA\uFE0F', desc:'\u03A3\u03C5\u03B3\u03BA\u03B5\u03BD\u03C4\u03C1\u03C9\u03C4\u03B9\u03BA\u03AC \u03B1\u03BD\u03AC \u03C4\u03B1\u03BE\u03AF\u03B4\u03B9: \u03BB\u03B9\u03BC\u03AC\u03BD\u03B9\u03B1, \u03BA\u03B1\u03CD\u03C3\u03B9\u03BC\u03B1, \u03B1\u03C0\u03CC\u03C3\u03C4\u03B1\u03C3\u03B7, \u03C6\u03BF\u03C1\u03C4\u03AF\u03BF', required:true, freq:'Per voyage', format:'CSV / Excel / PDF', source:'Ship / Office'},
+  {id:'cer', name:'Company Emission Report (CER)', icon:'\uD83C\uDFE2', desc:'\u03A3\u03C5\u03B3\u03BA\u03B5\u03BD\u03C4\u03C1\u03C9\u03C4\u03B9\u03BA\u03AE \u03B5\u03C4\u03B1\u03B9\u03C1\u03B9\u03BA\u03AE \u03B1\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B3\u03B9\u03B1 EU ETS', required:true, freq:'Annual (by 31 Mar)', format:'XML / PDF', source:'THETIS-MRV'},
+  {id:'fuel_analysis', name:'Fuel Analysis Reports', icon:'\uD83E\uDDEA', desc:'\u0391\u03BD\u03AC\u03BB\u03C5\u03C3\u03B7 \u03C0\u03BF\u03B9\u03CC\u03C4\u03B7\u03C4\u03B1\u03C2 \u03BA\u03B1\u03C5\u03C3\u03AF\u03BC\u03BF\u03C5 \u03B1\u03C0\u03CC lab \u2014 emission factors', required:false, freq:'Per bunkering', format:'PDF', source:'Lab'},
+  {id:'cii_rating', name:'CII Rating Certificate', icon:'\uD83C\uDFC5', desc:'Carbon Intensity Indicator rating A-E \u03B1\u03BD\u03AC \u03C0\u03BB\u03BF\u03AF\u03BF', required:false, freq:'Annual', format:'PDF', source:'Flag State / Class'},
+  {id:'seemp', name:'SEEMP Part III', icon:'\uD83D\uDCD7', desc:'Ship Energy Efficiency Management Plan \u2014 IMO DCS data', required:false, freq:'Annual', format:'PDF', source:'IMO / Flag State'}
+];
 
-    +'<div class="fleet-stats">'
-    +'<div class="fleet-stat-card"><div class="fleet-stat-label">Total Emissions</div><div class="fleet-stat-value">'+(totalEmissions/1000).toFixed(1)+'K</div><div class="fleet-stat-sub">tCO₂e / year</div></div>'
-    +'<div class="fleet-stat-card"><div class="fleet-stat-label">EU ETS Scope</div><div class="fleet-stat-value">'+(totalEU/1000).toFixed(1)+'K</div><div class="fleet-stat-sub">tCO₂e under EU ETS</div></div>'
-    +'<div class="fleet-stat-card '+coverClass+'"><div class="fleet-stat-label">Coverage</div><div class="fleet-stat-value">'+coveragePct+'%</div><div class="fleet-stat-sub">'+totalCredits.toLocaleString()+' credits owned</div></div>'
-    +'<div class="fleet-stat-card '+gapClass2+'"><div class="fleet-stat-label">Credit Gap</div><div class="fleet-stat-value">'+gapVal+'</div><div class="fleet-stat-sub">'+gapSub+'</div></div>'
-    +'<div class="fleet-stat-card"><div class="fleet-stat-label">EU ETS Cost</div><div class="fleet-stat-value">€'+(euCost/1e6).toFixed(1)+'M</div><div class="fleet-stat-sub">@€100/t (spot)</div></div>'
-    +'</div>'
+function getUploadKey(ownerName, vesselImo, docId) {
+  return ownerName + '::' + vesselImo + '::' + docId;
+}
 
-    +'<div class="fleet-action-row">'
-    +'<div class="fleet-action-card" onclick="switchSection(\'marketplace\')"><div class="fleet-action-icon">🛒</div><div class="fleet-action-title">Buy '+totalGap.toLocaleString()+' Credits</div><div class="fleet-action-desc">Cover gap via GreenCreditX @ ~$22/t → save €'+(savings/1e6).toFixed(1)+'M vs EU ETS spot</div></div>'
-    +'<div class="fleet-action-card"><div class="fleet-action-icon">📋</div><div class="fleet-action-title">Pre-Purchase Agreement</div><div class="fleet-action-desc">Lock in '+(yr+1)+'-'+(yr+3)+' supply at fixed price — long-term savings</div></div>'
-    +'<div class="fleet-action-card" onclick="switchSection(\'invest\')"><div class="fleet-action-icon">🌳</div><div class="fleet-action-title">Invest in Production</div><div class="fleet-action-desc">Produce own credits at $8-12/t — maximum savings for '+owner.name+'</div></div>'
-    +'</div>'
+function handleFileSelect(ownerName, vesselImo, docId, inputEl) {
+  if (!inputEl.files || !inputEl.files.length) return;
+  var file = inputEl.files[0];
+  var key = getUploadKey(ownerName, vesselImo, docId);
+  uploadStore[key] = {
+    name: file.name,
+    size: (file.size / 1024).toFixed(0) + ' KB',
+    date: new Date().toLocaleDateString('el-GR'),
+    time: new Date().toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}),
+    status: 'uploaded'
+  };
+  // Re-render just the upload center
+  var el = document.getElementById('uploadCenterContent');
+  if (el) {
+    var owner = SHIPOWNERS.find(function(o){return o.name===selectedOwner;});
+    if (owner) el.innerHTML = buildUploadRows(owner, owner.vessels);
+  }
+}
 
-    +'<div class="fleet-section-title">📊 Monthly Emissions ('+yr+')</div>'
-    +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px;margin-bottom:24px"><div class="yearly-chart-row">'+chartBars+'</div></div>'
+function buildUploadRows(owner, vessels) {
+  var html = '';
+  // Build per-vessel upload sections
+  for (var vi = 0; vi < vessels.length; vi++) {
+    var vs = vessels[vi];
+    var uploadedCount = 0;
+    var requiredCount = 0;
+    DOC_TYPES.forEach(function(dt) {
+      if (dt.required) requiredCount++;
+      var key = getUploadKey(owner.name, vs.imo, dt.id);
+      if (uploadStore[key]) uploadedCount++;
+    });
+    var pct = requiredCount > 0 ? Math.round(uploadedCount / DOC_TYPES.length * 100) : 0;
+    var barCol = pct >= 80 ? 'var(--green-500)' : pct >= 40 ? '#f59e0b' : '#dc2626';
 
-    +'<div class="fleet-section-title">🚢 Vessel Details</div>'
-    +'<table class="vessel-table"><thead><tr><th>Vessel</th><th>Type / GT</th><th>Route</th><th>Annual tCO₂</th><th>EU ETS tCO₂</th><th>Credits</th><th>Gap</th><th>CII</th><th>Status</th></tr></thead><tbody>'+vesselRows+'</tbody></table>'
+    html += '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;overflow:hidden;margin-bottom:16px">'
+      + '<div onclick="toggleVesselUpload(\'' + vs.imo + '\')" style="padding:18px 22px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s" onmouseover="this.style.background=\'var(--green-50)\'" onmouseout="this.style.background=\'#fff\'">'
+      + '<div style="display:flex;align-items:center;gap:14px">'
+      + '<div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green-100),var(--green-50));display:flex;align-items:center;justify-content:center;font-size:20px">\uD83D\uDEA2</div>'
+      + '<div><div style="font-size:16px;font-weight:700;color:var(--green-900)">' + vs.name + '</div>'
+      + '<div style="font-size:12px;color:var(--gray-400)">IMO ' + vs.imo + ' \u00B7 ' + vs.type + ' \u00B7 ' + vs.gt.toLocaleString() + ' GT</div></div></div>'
+      + '<div style="display:flex;align-items:center;gap:16px">'
+      + '<div style="text-align:right"><div style="font-size:13px;font-weight:700;color:var(--green-900)">' + uploadedCount + '/' + DOC_TYPES.length + ' docs</div>'
+      + '<div style="width:100px;height:6px;background:var(--gray-100);border-radius:3px;margin-top:4px"><div style="width:' + pct + '%;height:100%;background:' + barCol + ';border-radius:3px;transition:width .5s"></div></div></div>'
+      + '<span id="chevron-' + vs.imo + '" style="font-size:18px;color:var(--gray-400);transition:transform .2s">\u25B6</span>'
+      + '</div></div>';
 
-    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px">'
-    +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">'
-    +'<div class="fleet-section-title" style="margin-bottom:10px">💰 Cost Comparison (Annual)</div>'
-    +'<div style="display:flex;flex-direction:column;gap:10px">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fef2f2;border-radius:10px;border:1px solid #fca5a5"><span style="font-size:14px;font-weight:600;color:#991b1b">EU ETS Spot (€100/t)</span><span style="font-family:var(--mono);font-weight:800;font-size:18px;color:#dc2626">€'+(euCost/1e6).toFixed(2)+'M</span></div>'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#fef3c7;border-radius:10px;border:1px solid #fde68a"><span style="font-size:14px;font-weight:600;color:#92400e">IMO 2027+ ($380/t)</span><span style="font-family:var(--mono);font-weight:800;font-size:18px;color:#b45309">$'+(imoCost/1e6).toFixed(2)+'M</span></div>'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--green-50);border-radius:10px;border:1px solid var(--green-200)"><span style="font-size:14px;font-weight:600;color:var(--green-700)">GreenCreditX ($22/t)</span><span style="font-family:var(--mono);font-weight:800;font-size:18px;color:var(--green-700)">$'+(ourCost/1e3).toFixed(0)+'K</span></div>'
-    +'<div style="text-align:center;padding:10px;background:linear-gradient(135deg,var(--green-50),#ecfdf5);border-radius:10px"><span style="font-size:18px;font-weight:800;color:var(--green-700)">Savings: €'+(savings/1e6).toFixed(1)+'M vs EU ETS</span></div>'
-    +'</div></div>'
+    // Expandable document list
+    html += '<div id="uploads-' + vs.imo + '" style="display:none;border-top:1px solid var(--gray-100);padding:0 22px 18px">';
+    
+    for (var di = 0; di < DOC_TYPES.length; di++) {
+      var dt = DOC_TYPES[di];
+      var key = getUploadKey(owner.name, vs.imo, dt.id);
+      var uploaded = uploadStore[key];
+      var inputId = 'file-' + vs.imo + '-' + dt.id;
+      
+      html += '<div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-50)">'
+        + '<div style="font-size:24px;width:36px;text-align:center;flex-shrink:0">' + dt.icon + '</div>'
+        + '<div style="flex:1;min-width:0">'
+        + '<div style="display:flex;align-items:center;gap:8px"><span style="font-size:14px;font-weight:700;color:var(--green-900)">' + dt.name + '</span>'
+        + (dt.required ? '<span style="font-size:10px;padding:2px 8px;border-radius:4px;background:#fee2e2;color:#991b1b;font-weight:700">REQUIRED</span>' : '<span style="font-size:10px;padding:2px 8px;border-radius:4px;background:var(--gray-100);color:var(--gray-500);font-weight:600">OPTIONAL</span>')
+        + '</div>'
+        + '<div style="font-size:12px;color:var(--gray-500);margin-top:2px">' + dt.desc + '</div>'
+        + '<div style="display:flex;gap:12px;margin-top:4px;font-size:11px;color:var(--gray-400)">'
+        + '<span>\uD83D\uDD04 ' + dt.freq + '</span>'
+        + '<span>\uD83D\uDCC1 ' + dt.format + '</span>'
+        + '<span>\uD83D\uDCE4 ' + dt.source + '</span>'
+        + '</div></div>'
+        + '<div style="flex-shrink:0;text-align:right;min-width:160px">';
 
-    +'<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">'
-    +'<div class="fleet-section-title" style="margin-bottom:10px">📋 Compliance Summary</div>'
-    +'<div style="display:flex;flex-direction:column;gap:10px">'
-    +'<div style="padding:14px;background:var(--gray-50);border-radius:10px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:14px;font-weight:600">EU ETS Coverage</span><span style="font-family:var(--mono);font-weight:800;color:'+covColor+'">'+coveragePct+'%</span></div><div class="emission-bar-wrap" style="height:12px"><div class="emission-bar-fill" style="width:'+covW+'%;background:'+covBar+'"></div></div></div>'
-    +'<div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--gray-100)"><span style="font-size:14px;color:var(--gray-500)">Vessels &gt;5,000 GT (EU ETS)</span><span style="font-weight:700;font-size:15px">'+gt5k+' / '+v.length+'</span></div>'
-    +'<div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--gray-100)"><span style="font-size:14px;color:var(--gray-500)">CII A or B rated</span><span style="font-weight:700;font-size:15px;color:var(--green-700)">'+ciiAB+' vessels</span></div>'
-    +'<div style="display:flex;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--gray-100)"><span style="font-size:14px;color:var(--gray-500)">CII D rated (attention)</span><span style="font-weight:700;font-size:15px;color:#dc2626">'+ciiD+' vessels</span></div>'
-    +'<div style="display:flex;justify-content:space-between;padding:12px 14px"><span style="font-size:14px;color:var(--gray-500)">Active voyages</span><span style="font-weight:700;font-size:15px">'+activeV+' / '+v.length+'</span></div>'
-    +'</div></div></div>';
+      if (uploaded) {
+        html += '<div style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><span style="width:8px;height:8px;border-radius:50%;background:var(--green-500)"></span><span style="font-size:12px;font-weight:700;color:var(--green-700)">\u2713 Uploaded</span></div>'
+          + '<div style="font-size:11px;color:var(--gray-400);margin-top:2px">' + uploaded.name + '</div>'
+          + '<div style="font-size:11px;color:var(--gray-400)">' + uploaded.size + ' \u00B7 ' + uploaded.date + ' ' + uploaded.time + '</div>';
+      } else {
+        html += '<label for="' + inputId + '" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1px dashed var(--green-400);background:var(--green-50);color:var(--green-700);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s" onmouseover="this.style.background=\'var(--green-100)\'" onmouseout="this.style.background=\'var(--green-50)\'">\uD83D\uDCE4 Upload</label>'
+          + '<input type="file" id="' + inputId + '" style="display:none" accept=".pdf,.xml,.csv,.xlsx,.xls" onchange="handleFileSelect(\'' + owner.name.replace(/'/g, "\\'") + '\',\'' + vs.imo + '\',\'' + dt.id + '\',this)">';
+      }
+
+      html += '</div></div>';
+    }
+    html += '</div></div>';
+  }
+  return html;
+}
+
+function toggleVesselUpload(imo) {
+  var el = document.getElementById('uploads-' + imo);
+  var chev = document.getElementById('chevron-' + imo);
+  if (!el) return;
+  if (el.style.display === 'none') {
+    el.style.display = 'block';
+    if (chev) chev.style.transform = 'rotate(90deg)';
+  } else {
+    el.style.display = 'none';
+    if (chev) chev.style.transform = 'rotate(0deg)';
+  }
+}
+
+function buildUploadCenter(owner, vessels) {
+  var totalDocs = vessels.length * DOC_TYPES.length;
+  var uploadedDocs = 0;
+  vessels.forEach(function(vs) {
+    DOC_TYPES.forEach(function(dt) {
+      if (uploadStore[getUploadKey(owner.name, vs.imo, dt.id)]) uploadedDocs++;
+    });
+  });
+  var pct = totalDocs > 0 ? Math.round(uploadedDocs / totalDocs * 100) : 0;
+  var reqTotal = vessels.length * DOC_TYPES.filter(function(d){return d.required;}).length;
+  var reqUploaded = 0;
+  vessels.forEach(function(vs) {
+    DOC_TYPES.forEach(function(dt) {
+      if (dt.required && uploadStore[getUploadKey(owner.name, vs.imo, dt.id)]) reqUploaded++;
+    });
+  });
+  var reqPct = reqTotal > 0 ? Math.round(reqUploaded / reqTotal * 100) : 0;
+
+  return ''
+    + '<div style="margin-bottom:32px">'
+    + '<div style="font-size:20px;font-weight:800;color:var(--green-900);margin-bottom:6px;display:flex;align-items:center;gap:8px">\uD83D\uDCE4 Data Upload Center</div>'
+    + '<div style="font-size:14px;color:var(--gray-500);margin-bottom:18px">\u0391\u03BD\u03B5\u03B2\u03AC\u03C3\u03C4\u03B5 \u03C4\u03B1 \u03AD\u03B3\u03B3\u03C1\u03B1\u03C6\u03B1 EU MRV, voyage data \u03BA\u03B1\u03B9 compliance documents \u03B3\u03B9\u03B1 \u03BA\u03AC\u03B8\u03B5 \u03C0\u03BB\u03BF\u03AF\u03BF \u2014 \u03C7\u03C1\u03B7\u03C3\u03B9\u03BC\u03BF\u03C0\u03BF\u03B9\u03BF\u03CD\u03BC\u03B5 \u03C4\u03B1 \u03AF\u03B4\u03B9\u03B1 \u03B4\u03B5\u03B4\u03BF\u03BC\u03AD\u03BD\u03B1 \u03C0\u03BF\u03C5 \u03C5\u03C0\u03BF\u03B2\u03AC\u03BB\u03BB\u03B5\u03C4\u03B5 \u03C3\u03C4\u03BF THETIS-MRV.</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px">'
+    + '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:18px;text-align:center"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">Total Progress</div><div style="font-size:32px;font-weight:800;color:var(--green-900);font-family:var(--mono);margin-top:4px">' + pct + '%</div><div style="font-size:12px;color:var(--gray-400)">' + uploadedDocs + '/' + totalDocs + ' documents</div></div>'
+    + '<div style="background:#fff;border:1px solid ' + (reqPct >= 100 ? '#86efac' : '#fca5a5') + ';border-radius:14px;padding:18px;text-align:center;background:' + (reqPct >= 100 ? '#f0fdf4' : '#fef2f2') + '"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">Required Docs</div><div style="font-size:32px;font-weight:800;color:' + (reqPct >= 100 ? 'var(--green-700)' : '#dc2626') + ';font-family:var(--mono);margin-top:4px">' + reqUploaded + '/' + reqTotal + '</div><div style="font-size:12px;color:var(--gray-400)">' + (reqPct >= 100 ? '\u2713 Complete' : 'missing ' + (reqTotal - reqUploaded)) + '</div></div>'
+    + '<div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:18px;text-align:center"><div style="font-size:11px;color:var(--gray-400);text-transform:uppercase;font-weight:600;letter-spacing:.5px">Vessels</div><div style="font-size:32px;font-weight:800;color:var(--green-900);font-family:var(--mono);margin-top:4px">' + vessels.length + '</div><div style="font-size:12px;color:var(--gray-400">' + DOC_TYPES.length + ' doc types each</div></div>'
+    + '</div>'
+    + '<div id="uploadCenterContent">' + buildUploadRows(owner, vessels) + '</div>'
+    + '</div>';
+}
+
+function renderVesselDetail() {
+  var owner = SHIPOWNERS.find(function(o){return o.name===selectedOwner;});
+  if(!owner) return;
+  var vessel = owner.vessels.find(function(x){return x.imo===selectedVessel;});
+  if(!vessel) return;
+  var main = document.getElementById('fleetMain');
+  var MONTHS = ['Ιαν','Φεβ','Μαρ','Απρ','Μαϊ','Ιουν','Ιουλ','Αυγ','Σεπ','Οκτ','Νοε','Δεκ'];
+  var yr = new Date().getFullYear();
+  var maxM = Math.max.apply(null, vessel.monthlyEmissions);
+  var epct = vessel.annualEmissions>0?Math.round(vessel.euEmissions/vessel.annualEmissions*100):0;
+  var covPct = vessel.euEmissions>0?Math.round(vessel.creditsOwned/vessel.euEmissions*100):0;
+  var etsCost = Math.round(vessel.euEmissions*100);
+  var ourCost = Math.round(vessel.gap*22);
+  var saving = etsCost - Math.round(vessel.euEmissions*22);
+  var ciiCol = vessel.cii==='A'?'#047857':vessel.cii==='B'?'#16a34a':vessel.cii==='C'?'#f59e0b':'#dc2626';
+  var gc = vessel.gap===0?'#047857':vessel.gap<vessel.euEmissions*0.3?'#92400e':'#991b1b';
+  var monthBars = '';
+  for(var mi=0;mi<12;mi++){
+    var h = maxM>0?Math.max(6, Math.round(vessel.monthlyEmissions[mi]/maxM*100)):6;
+    monthBars += '<div style="flex:1;text-align:center"><div class="yearly-bar" style="height:'+h+'px;background:linear-gradient(180deg,var(--green-400),var(--green-600));margin:0 auto;width:70%;border-radius:5px 5px 0 0"><div class="bar-tooltip">'+(vessel.monthlyEmissions[mi]/1000).toFixed(1)+'K tCO\u2082</div></div><div class="yearly-bar-label">'+MONTHS[mi]+'</div></div>';
+  }
+  main.innerHTML=''
+    +'<div style="margin-bottom:20px"><button onclick="backToFleet()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;border:1px solid var(--gray-200);background:#fff;font-size:14px;font-weight:600;color:var(--gray-600);cursor:pointer;font-family:inherit">\u2190 Back to '+owner.name+'</button></div>'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px"><div><div style="font-size:30px;font-weight:800;color:var(--green-900)">'+vessel.name+'</div><div style="font-size:14px;color:var(--gray-500);margin-top:4px">IMO '+vessel.imo+' \u00B7 '+vessel.type+' \u00B7 '+vessel.gt.toLocaleString()+' GT \u00B7 '+vessel.route.name+'</div></div><div style="display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:'+(vessel.status==='Active'?'var(--green-600)':'var(--gray-400)')+'"><span style="width:8px;height:8px;border-radius:50%;background:'+(vessel.status==='Active'?'var(--green-500)':'var(--gray-300)')+'"></span>'+vessel.status+'</span><span style="font-weight:800;font-size:20px;color:'+ciiCol+';margin-left:8px">CII '+vessel.cii+'</span></div></div>'
+    +'<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:24px">'
+    +'<div class="fleet-stat-card"><div class="fleet-stat-label">Annual Emissions</div><div class="fleet-stat-value">'+(vessel.annualEmissions/1000).toFixed(1)+'K</div><div class="fleet-stat-sub">tCO\u2082e / year</div></div>'
+    +'<div class="fleet-stat-card" style="border-color:#93c5fd"><div class="fleet-stat-label">EU ETS Scope</div><div class="fleet-stat-value" style="color:#1e40af">'+(vessel.euEmissions/1000).toFixed(1)+'K</div><div class="fleet-stat-sub">'+epct+'% of total</div></div>'
+    +'<div class="fleet-stat-card"><div class="fleet-stat-label">Credits Owned</div><div class="fleet-stat-value" style="color:var(--green-700)">'+vessel.creditsOwned.toLocaleString()+'</div><div class="fleet-stat-sub">coverage '+covPct+'%</div></div>'
+    +'<div class="fleet-stat-card" style="border-color:'+(vessel.gap>0?'#fca5a5':'#86efac')+';background:'+(vessel.gap>0?'#fef2f2':'#f0fdf4')+'"><div class="fleet-stat-label">Credit Gap</div><div class="fleet-stat-value" style="color:'+gc+'">'+(vessel.gap>0?vessel.gap.toLocaleString():'\u2713 0')+'</div><div class="fleet-stat-sub">'+(vessel.gap>0?'credits needed':'fully covered')+'</div></div>'
+    +'<div class="fleet-stat-card"><div class="fleet-stat-label">EU ETS Cost</div><div class="fleet-stat-value">\u20AC'+(etsCost/1e6).toFixed(2)+'M</div><div class="fleet-stat-sub">@\u20AC100/t spot</div></div></div>'
+    +'<div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px"><div style="background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:22px"><div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:14px">\uD83D\uDCCA Monthly Emissions '+yr+'</div><div style="display:flex;align-items:flex-end;gap:4px;height:110px">'+monthBars+'</div></div>'
+    +'<div style="background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:22px"><div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:14px">\uD83D\uDCB0 Cost Analysis</div><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;padding:10px 12px;background:#fef2f2;border-radius:8px"><span style="font-size:12px;font-weight:600;color:#991b1b">EU ETS @\u20AC100/t</span><span style="font-family:var(--mono);font-weight:800;color:#dc2626">\u20AC'+(etsCost/1e3).toFixed(0)+'K</span></div><div style="display:flex;justify-content:space-between;padding:10px 12px;background:var(--green-50);border-radius:8px"><span style="font-size:12px;font-weight:600;color:var(--green-700)">GreenCreditX @$22/t</span><span style="font-family:var(--mono);font-weight:800;color:var(--green-700)">$'+(ourCost/1e3).toFixed(0)+'K</span></div><div style="text-align:center;padding:10px;background:linear-gradient(135deg,var(--green-50),#ecfdf5);border-radius:8px;font-weight:800;color:var(--green-700)">Save \u20AC'+(saving/1e3).toFixed(0)+'K/year</div></div></div></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px"><div style="background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:22px"><div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:14px">\uD83D\uDDFA\uFE0F Route Details</div><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--gray-500)">Route</span><span style="font-weight:700">'+vessel.route.name+'</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--gray-500)">Type</span><span style="font-weight:700">'+vessel.route.type+'</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--gray-500)">Distance</span><span style="font-weight:700;font-family:var(--mono)">'+vessel.route.nm.toLocaleString()+' nm</span></div><div style="display:flex;justify-content:space-between;padding:10px 0"><span style="color:var(--gray-500)">Annual Voyages</span><span style="font-weight:700;font-family:var(--mono)">'+vessel.voyages+'</span></div></div></div>'
+    +'<div style="background:#fff;border-radius:16px;border:1px solid var(--gray-200);padding:22px"><div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:14px">\u2699\uFE0F Vessel Specifications</div><div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--gray-500)">Type</span><span style="font-weight:700">'+vessel.type+'</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--gray-500)">Gross Tonnage</span><span style="font-weight:700;font-family:var(--mono)">'+vessel.gt.toLocaleString()+' GT</span></div><div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100)"><span style="color:var(--gray-500)">CII Rating</span><span style="font-weight:800;font-size:18px;color:'+ciiCol+'">'+vessel.cii+'</span></div><div style="display:flex;justify-content:space-between;padding:10px 0"><span style="color:var(--gray-500)">Status</span><span style="font-weight:700;color:'+(vessel.status==='Active'?'var(--green-600)':'var(--gray-400)')+'">'+vessel.status+'</span></div></div></div></div>'
+    +(vessel.gap>0?'<div style="text-align:center;padding:24px;background:linear-gradient(135deg,var(--green-50),#ecfdf5);border-radius:16px;border:1px solid var(--green-100)"><div style="font-size:18px;font-weight:700;color:var(--green-900);margin-bottom:8px">This vessel needs '+vessel.gap.toLocaleString()+' additional credits for full EU ETS compliance</div><button class="buy-btn" onclick="switchSection(\'marketplace\')" style="font-size:16px;padding:14px 36px;margin-top:8px">\uD83D\uDED2 Buy Credits Now \u2014 Save \u20AC'+((vessel.gap*100-vessel.gap*22)/1e3).toFixed(0)+'K</button></div>':'');
 }
 
 // ═══════════════════════════════════════════════
