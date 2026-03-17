@@ -65,7 +65,7 @@ table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;fo
 
 <script>
 /* ═══ ALL JS IN HEAD ═══ */
-var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
+var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
 
 function showPanel(id){
   document.querySelectorAll('[data-panel]').forEach(function(p){p.style.display='none'});
@@ -167,6 +167,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <div class="ns"><div class="ns-t">Overview</div><button class="ni on" onclick="showPanel('dashboard')"><span class="ic">📊</span> Dashboard</button></div>
     <div class="ns"><div class="ns-t">Content Management</div>
       <button class="ni" onclick="showPanel('marketplace')"><span class="ic">🛒</span> Marketplace<span class="bg">6</span></button>
+      <button class="ni" onclick="showPanel('orders')"><span class="ic">📦</span> Orders<span class="bg">5</span></button>
       <button class="ni" onclick="showPanel('investments')"><span class="ic">📈</span> Investments<span class="bg">10</span></button>
       <button class="ni" onclick="showPanel('bpbuilder')"><span class="ic">📋</span> Business Plans</button>
       <button class="ni" onclick="showPanel('countries')"><span class="ic">🌍</span> Countries</button>
@@ -194,16 +195,18 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <!-- DASHBOARD -->
     <div data-panel id="p-dashboard" style="display:block">
       <div class="as">
-        <div class="ast"><div class="al">Credits Listed</div><div class="av2">14,800</div><div class="ac">↑ +2,400 this month</div></div>
-        <div class="ast"><div class="al">Revenue</div><div class="av2">$347K</div><div class="ac">↑ +18%</div></div>
+        <div class="ast"><div class="al">Credits Listed</div><div class="av2">14,800</div><div class="ac">6 active listings</div></div>
+        <div class="ast"><div class="al">Orders Revenue</div><div class="av2">$89,430</div><div class="ac">↑ 5 orders this month</div></div>
         <div class="ast"><div class="al">Investors</div><div class="av2">128</div><div class="ac">↑ +12 new</div></div>
         <div class="ast"><div class="al">Raised</div><div class="av2">€52.5M</div><div class="ac">38% pipeline</div></div>
       </div>
       <div class="cd"><div class="ch"><div><div class="ct-t">Recent Activity</div></div></div><div class="cb"><table><thead><tr><th>Time</th><th>Action</th><th>User</th><th>Details</th></tr></thead><tbody>
-        <tr><td class="tm">2 min ago</td><td>Credit Purchase</td><td>Tsakos Energy Nav.</td><td>500 tCO₂e — $11,250</td></tr>
-        <tr><td class="tm">15 min ago</td><td>Investment</td><td>Angelicoussis Group</td><td>€200K — INV-001</td></tr>
-        <tr><td class="tm">1 hr ago</td><td>BP Published</td><td>Admin</td><td>INV-001 Mindanao Business Plan</td></tr>
-        <tr><td class="tm">3 hrs ago</td><td>New Investor</td><td>Star Bulk Carriers</td><td>Registered</td></tr>
+        <tr><td class="tm">2 min ago</td><td><span style="padding:3px 10px;border-radius:7px;background:#dcfce7;color:#15803d;font-size:12px;font-weight:600">Order</span></td><td>Tsakos Energy Nav.</td><td>ORD-M5K2R7 — 500 tCO₂e VCS-2847 — <strong>$11,250</strong></td></tr>
+        <tr><td class="tm">3 hrs ago</td><td><span style="padding:3px 10px;border-radius:7px;background:#dcfce7;color:#15803d;font-size:12px;font-weight:600">Order</span></td><td>Navios Maritime</td><td>ORD-L4J8P1 — 1,200 tCO₂e GS-1455 — <strong>$34,080</strong></td></tr>
+        <tr><td class="tm">Yesterday</td><td><span style="padding:3px 10px;border-radius:7px;background:#dcfce7;color:#15803d;font-size:12px;font-weight:600">Order</span></td><td>Angelicoussis Group</td><td>ORD-K3H6N9 — 1,400 tCO₂e (2 items) — <strong>$28,560</strong></td></tr>
+        <tr><td class="tm">15 min ago</td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Investment</span></td><td>Angelicoussis Group</td><td>€200K — INV-001 Mindanao</td></tr>
+        <tr><td class="tm">1 hr ago</td><td><span style="padding:3px 10px;border-radius:7px;background:#e0e7ff;color:#4338ca;font-size:12px;font-weight:600">BP Published</span></td><td>Admin</td><td>INV-001 Mindanao Business Plan live</td></tr>
+        <tr><td class="tm">2 days ago</td><td><span style="padding:3px 10px;border-radius:7px;background:#fef3c7;color:#a16207;font-size:12px;font-weight:600">Processing</span></td><td>Star Bulk Carriers</td><td>ORD-J2G5M8 — 350 tCO₂e GS-1522 — <strong>$11,025</strong></td></tr>
       </tbody></table></div></div>
     </div>
 
@@ -211,6 +214,36 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <div data-panel id="p-marketplace" style="display:none">
       <div class="cd"><div class="ch"><div><div class="ct-t">Carbon Credits</div><div class="ct-s">Manage marketplace listings</div></div><button class="btn bp bsm" onclick="openCM()">+ Add Credit</button></div>
         <div class="cb" style="padding:0"><table><thead><tr><th>Status</th><th>ID</th><th>Project</th><th>Type</th><th>Rating</th><th>Price</th><th>Available</th><th>Vintage</th><th>Origin</th><th>Trend</th><th>Actions</th></tr></thead><tbody id="credTb"></tbody></table></div></div>
+    </div>
+
+    <!-- ORDERS -->
+    <div data-panel id="p-orders" style="display:none">
+      <div class="as">
+        <div class="ast"><div class="al">Total Orders</div><div class="av2">5</div><div class="ac">This month</div></div>
+        <div class="ast"><div class="al">Revenue</div><div class="av2">$89,430</div><div class="ac">↑ +24%</div></div>
+        <div class="ast"><div class="al">Credits Sold</div><div class="av2">4,150 t</div><div class="ac">tCO₂e delivered</div></div>
+        <div class="ast"><div class="al">Avg Order</div><div class="av2">$17,886</div><div class="ac">Per transaction</div></div>
+      </div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Order History</div><div class="ct-s">All credit purchases — matches Place Order on website</div></div></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Order ID</th><th>Date</th><th>Buyer</th><th>Items</th><th>Credits</th><th>Total</th><th>Savings</th><th>Status</th><th>Actions</th></tr></thead><tbody>
+          <tr><td class="tm" style="font-weight:700">ORD-M5K2R7</td><td class="tm">17/03/2026 14:32</td><td style="font-weight:600">Tsakos Energy Nav.</td><td>VCS-2847 (ARR, A)</td><td class="tm">500 tCO₂e</td><td class="tp">$11,250</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($5,794)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
+          <tr><td class="tm" style="font-weight:700">ORD-L4J8P1</td><td class="tm">17/03/2026 11:15</td><td style="font-weight:600">Navios Maritime</td><td>GS-1455 (Blue Carbon, AA)</td><td class="tm">1,200 tCO₂e</td><td class="tp">$34,080</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($17,551)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
+          <tr><td class="tm" style="font-weight:700">ORD-K3H6N9</td><td class="tm">16/03/2026 16:48</td><td style="font-weight:600">Angelicoussis Group</td><td>VCS-3102 (ARR, BBB+)<br>VCS-2991 (ARR, A-)</td><td class="tm">800 + 600<br>= 1,400 tCO₂e</td><td class="tp">$28,560</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($14,708)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
+          <tr><td class="tm" style="font-weight:700">ORD-J2G5M8</td><td class="tm">15/03/2026 09:22</td><td style="font-weight:600">Star Bulk Carriers</td><td>GS-1522 (REDD+, A+)</td><td class="tm">350 tCO₂e</td><td class="tp">$11,025</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($5,678)</td><td><span style="padding:4px 12px;border-radius:8px;background:#fef3c7;color:#a16207;font-size:13px;font-weight:600">⏳ Processing</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
+          <tr><td class="tm" style="font-weight:700">ORD-I1F4L7</td><td class="tm">14/03/2026 13:55</td><td style="font-weight:600">Euronav NV</td><td>VCS-2847 (ARR, A)<br>VCS-3250 (ARR, BBB)</td><td class="tm">500 + 200<br>= 700 tCO₂e</td><td class="tp">$14,770</td><td style="color:var(--g600);font-weight:600;font-size:13px">~34% ($7,607)</td><td><span style="padding:4px 12px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">✓ Completed</span></td><td><button class="btn bs bsm">View</button> <button class="btn bs bsm">Receipt</button></td></tr>
+        </tbody></table></div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Order Flow</div><div class="ct-s">How credits are delivered after Place Order on the website</div></div></div>
+        <div class="cb"><div style="display:flex;gap:12px;align-items:center">
+          <div style="flex:1;padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);text-align:center"><div style="font-size:24px;margin-bottom:6px">🛒</div><div style="font-size:14px;font-weight:700;color:var(--g900)">Place Order</div><div style="font-size:12px;color:var(--x400)">Buyer selects credits</div></div>
+          <div style="font-size:20px;color:var(--g400)">→</div>
+          <div style="flex:1;padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);text-align:center"><div style="font-size:24px;margin-bottom:6px">📧</div><div style="font-size:14px;font-weight:700;color:var(--g900)">Invoice</div><div style="font-size:12px;color:var(--x400)">Sent to buyer email</div></div>
+          <div style="font-size:20px;color:var(--g400)">→</div>
+          <div style="flex:1;padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);text-align:center"><div style="font-size:24px;margin-bottom:6px">💳</div><div style="font-size:14px;font-weight:700;color:var(--g900)">Payment</div><div style="font-size:12px;color:var(--x400)">Net 30 days</div></div>
+          <div style="font-size:20px;color:var(--g400)">→</div>
+          <div style="flex:1;padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);text-align:center"><div style="font-size:24px;margin-bottom:6px">🔄</div><div style="font-size:14px;font-weight:700;color:var(--g900)">Verra Transfer</div><div style="font-size:12px;color:var(--x400)">Within 48h</div></div>
+          <div style="font-size:20px;color:var(--g400)">→</div>
+          <div style="flex:1;padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);text-align:center"><div style="font-size:24px;margin-bottom:6px">📄</div><div style="font-size:14px;font-weight:700;color:var(--g900)">Certificates</div><div style="font-size:12px;color:var(--x400)">Retirement docs</div></div>
+        </div></div></div>
     </div>
 
     <!-- INVESTMENTS -->
