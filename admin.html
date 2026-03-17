@@ -65,7 +65,7 @@ table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;fo
 
 <script>
 /* ═══ ALL JS IN HEAD ═══ */
-var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
+var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},fleet:{t:'Fleet Monitor',s:'Shipowners, vessels, emissions & compliance documents'},ticker:{t:'Ticker Tape',s:'Configure the live price ticker bar'},notifications:{t:'Notifications',s:'Alerts, thresholds & automated messages'},liveconfig:{t:'Live Markets Config',s:'Order Book, Market Intel news & display settings'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
 
 function showPanel(id){
   document.querySelectorAll('[data-panel]').forEach(function(p){p.style.display='none'});
@@ -154,7 +154,80 @@ tb.innerHTML=ii.map(function(i){var bg=i.t==='Compliance'?'#dbeafe':'var(--g50)'
 function openContentEditor(id){document.getElementById('ceMo').classList.add('show')}
 function closeCE(){document.getElementById('ceMo').classList.remove('show')}
 
-function initAdmin(){rCreds();rInvs();rCountries();rSources();rInsts();rBPProjects()}
+function initAdmin(){rCreds();rInvs();rCountries();rSources();rInsts();rBPProjects();rFleet()}
+
+/* Fleet Tabs */
+function setFleetTab(btn,tab){
+  document.querySelectorAll('#fleetTabs .tab').forEach(function(t){t.classList.remove('on')});btn.classList.add('on');
+  ['owners','vessels','docs','ais'].forEach(function(t){var el=document.getElementById('ftab-'+t);if(el)el.style.display=t===tab?'block':'none'});
+}
+
+/* Live Config Tabs */
+function setLCTab(btn,tab){
+  document.querySelectorAll('[id^=lctab-]').forEach(function(e){e.style.display='none'});
+  document.getElementById('lctab-'+tab).style.display='block';
+  btn.parentElement.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});btn.classList.add('on');
+}
+
+/* Fleet Data */
+var fleetOwners=[
+  {f:'🇬🇷',n:'Olympia Maritime Corp.',hq:'Piraeus, Greece',v:8,em:212,eu:102,gap:42.4,ct:'operations@olympia-maritime.gr'},
+  {f:'🇬🇷',n:'Aegean Bulk Carriers',hq:'Athens, Greece',v:6,em:178,eu:89,gap:12.4,ct:'fleet@aegean-bulk.gr'},
+  {f:'🇨🇾',n:'Poseidon Tankers Ltd.',hq:'Limassol, Cyprus',v:5,em:124,eu:62,gap:33.6,ct:'ops@poseidon-tankers.cy'},
+  {f:'🇬🇷',n:'Hellenic Star Shipping',hq:'Piraeus, Greece',v:7,em:120,eu:68,gap:24.8,ct:'admin@hellenic-star.gr'},
+  {f:'🇲🇨',n:'Atlas Navigation SA',hq:'Monaco',v:4,em:127,eu:84,gap:30.2,ct:'fleet@atlas-nav.mc'},
+  {f:'🇮🇹',n:'Mediterranean Lines',hq:'Genoa, Italy',v:6,em:172,eu:95,gap:64.8,ct:'operations@med-lines.it'},
+  {f:'🇹🇷',n:'Black Sea Shipping',hq:'Istanbul, Turkey',v:5,em:127,eu:71,gap:19.9,ct:'fleet@blacksea-ship.tr'},
+  {f:'🇳🇴',n:'Nordic Transport AS',hq:'Oslo, Norway',v:4,em:105,eu:72,gap:16.8,ct:'ops@nordic-transport.no'},
+  {f:'🇸🇬',n:'Eastern Pacific Maritime',hq:'Singapore',v:9,em:285,eu:128,gap:54.2,ct:'fleet@eastern-pacific.sg'},
+  {f:'🇬🇷',n:'Tsakos Energy Navigation',hq:'Athens, Greece',v:8,em:320,eu:192,gap:45.1,ct:'shipping@tsakos-en.gr'},
+  {f:'🇬🇷',n:'Navios Maritime',hq:'Piraeus, Greece',v:7,em:198,eu:118,gap:22.3,ct:'fleet@navios.gr'},
+  {f:'🇬🇷',n:'Star Bulk Carriers',hq:'Athens, Greece',v:9,em:340,eu:180,gap:38.7,ct:'ops@starbulk.gr'},
+  {f:'🇬🇷',n:'Angelicoussis Group',hq:'Athens, Greece',v:6,em:245,eu:147,gap:31.5,ct:'fleet@angelicoussis.gr'},
+  {f:'🇧🇪',n:'Euronav NV',hq:'Antwerp, Belgium',v:5,em:210,eu:126,gap:28.4,ct:'tankers@euronav.be'},
+  {f:'🇩🇰',n:'Norden A/S',hq:'Copenhagen, Denmark',v:4,em:115,eu:69,gap:15.2,ct:'fleet@norden.com'},
+  {f:'🇬🇷',n:'Diana Shipping',hq:'Athens, Greece',v:6,em:165,eu:99,gap:21.8,ct:'ops@diana-shipping.gr'},
+  {f:'🇯🇵',n:'NYK Line Maritime',hq:'Tokyo, Japan',v:8,em:380,eu:152,gap:67.3,ct:'fleet@nyk-maritime.jp'},
+  {f:'🇬🇧',n:'Zodiac Maritime',hq:'London, UK',v:5,em:195,eu:117,gap:25.6,ct:'ops@zodiac-maritime.co.uk'},
+  {f:'🇩🇪',n:'Hapag-Lloyd Marine',hq:'Hamburg, Germany',v:7,em:290,eu:174,gap:41.2,ct:'fleet@hapag-marine.de'},
+  {f:'🇨🇭',n:'MSC Shipmanagement',hq:'Geneva, Switzerland',v:6,em:255,eu:153,gap:35.7,ct:'fleet@msc-mgmt.ch'},
+  {f:'🇬🇷',n:'Costamare Shipping',hq:'Athens, Greece',v:5,em:148,eu:89,gap:18.9,ct:'ops@costamare.gr'},
+  {f:'🇬🇷',n:'Danaos Corporation',hq:'Athens, Greece',v:4,em:132,eu:79,gap:14.1,ct:'fleet@danaos.gr'},
+  {f:'🇬🇷',n:'Gaslog Partners',hq:'Piraeus, Greece',v:3,em:98,eu:59,gap:11.2,ct:'ops@gaslog.gr'}
+];
+
+function rFleet(){
+  var tb=document.getElementById('ownerTb');if(!tb)return;
+  tb.innerHTML=fleetOwners.map(function(o){
+    var cov=o.eu>0?Math.round((1-o.gap/o.eu)*100):100;
+    var covCol=cov>=80?'var(--g600)':cov>=50?'#f59e0b':'#dc2626';
+    return '<tr><td style="font-size:20px">'+o.f+'</td><td style="font-weight:700">'+o.n+'</td><td class="tm">'+o.hq+'</td><td class="tm" style="font-weight:600">'+o.v+'</td><td class="tp">'+o.em+'K t</td><td style="color:#1e40af;font-weight:700;font-family:var(--mono)">'+o.eu+'K t</td><td style="color:#dc2626;font-weight:700;font-family:var(--mono)">'+o.gap+'K</td><td style="color:'+covCol+';font-weight:700">'+cov+'%</td><td style="font-size:12px;color:var(--x400)">'+o.ct+'</td><td><button class="btn bs bsm">Edit</button> <button class="btn bs bsm">Vessels</button></td></tr>';
+  }).join('');
+
+  /* Vessels table */
+  var vtb=document.getElementById('vesselTb');if(!vtb)return;
+  var types=['Bulk Carrier','Container','Tanker','LNG Carrier','RoRo','General Cargo'];
+  var routes=['Rotterdam → Antwerp','Piraeus → Rotterdam','Singapore → Piraeus','Shanghai → Hamburg','Jeddah → Piraeus','Mumbai → Singapore','Houston → Rotterdam','Durban → Shanghai','Santos → Algeciras','Manila → Yokohama','Busan → Los Angeles','Barcelona → Genoa'];
+  var ciis=['A','B','B','C','D','A','B','C'];
+  var vrows=[];
+  fleetOwners.forEach(function(o){
+    for(var i=0;i<Math.min(o.v,3);i++){
+      var tp=types[(o.n.charCodeAt(0)+i)%types.length];
+      var rt=routes[(o.n.charCodeAt(1)+i)%routes.length];
+      var gt=Math.round(20000+Math.random()*80000);
+      var em=Math.round(o.em/o.v*(0.8+Math.random()*0.4));
+      var eue=Math.round(em*(0.4+Math.random()*0.3));
+      var gap=Math.max(0,Math.round(eue*(0.1+Math.random()*0.4)));
+      var cii=ciis[(o.n.charCodeAt(2)+i)%ciis.length];
+      var ciiCol=cii==='A'?'var(--g600)':cii==='B'?'var(--g500)':cii==='C'?'#f59e0b':'#dc2626';
+      var st=Math.random()>0.15?'Active':'In Port';
+      vrows.push('<tr><td style="font-size:12px;color:var(--x400)">'+o.f+' '+o.n.split(' ')[0]+'</td><td style="font-weight:600">M/V '+o.n.split(' ')[0]+' '+(i+1)+'</td><td class="tm">930'+String(1000+vrows.length).slice(1)+'</td><td>'+tp+'</td><td class="tm">'+gt.toLocaleString()+'</td><td style="font-size:12px">'+rt+'</td><td class="tm">'+em+'K</td><td style="color:#1e40af;font-weight:600;font-family:var(--mono)">'+eue+'K</td><td style="color:#dc2626;font-weight:600;font-family:var(--mono)">'+(gap>0?gap+'K':'✓')+'</td><td style="font-weight:800;color:'+ciiCol+'">'+cii+'</td><td><span class="sd '+(st==='Active'?'sl':'sdr')+'"></span>'+st+'</td><td><button class="btn bs bsm">Edit</button></td></tr>');
+    }
+  });
+  vtb.innerHTML=vrows.join('');
+}
+
+function openOwnerModal(){alert('Add Shipowner modal — in production this opens a form for name, HQ, flag, contact, vessel list')}
 
 var bpSelectedProject='INV-001';
 function rBPProjects(){var el=document.getElementById('bpProjectBtns');if(!el)return;
@@ -192,6 +265,12 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <div class="ns"><div class="ns-t">Live Markets</div>
       <button class="ni" onclick="showPanel('datasources')"><span class="ic">📡</span> Data Sources</button>
       <button class="ni" onclick="showPanel('instruments')"><span class="ic">📉</span> Instruments</button>
+      <button class="ni" onclick="showPanel('ticker')"><span class="ic">📺</span> Ticker Tape</button>
+      <button class="ni" onclick="showPanel('liveconfig')"><span class="ic">⚡</span> Live Config</button>
+    </div>
+    <div class="ns"><div class="ns-t">Fleet</div>
+      <button class="ni" onclick="showPanel('fleet')"><span class="ic">🚢</span> Fleet Monitor<span class="bg">23</span></button>
+      <button class="ni" onclick="showPanel('notifications')"><span class="ic">🔔</span> Notifications<span class="bg" style="background:#f59e0b">3</span></button>
     </div>
     <div class="ns"><div class="ns-t">System</div>
       <button class="ni" onclick="showPanel('users')"><span class="ic">👥</span> Users</button>
@@ -392,6 +471,194 @@ document.addEventListener('DOMContentLoaded',initAdmin);
           <tr><td style="font-weight:600">TPA Admin</td><td class="tm"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0362676e6a6d437773622e706671756a6066702d606c6e">[email&#160;protected]</a></td><td><span style="padding:3px 10px;border-radius:7px;background:var(--g100);color:var(--g700);font-size:12px;font-weight:600">Super Admin</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
           <tr><td style="font-weight:600">Operations</td><td class="tm"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c736c6f5c686c7d316f796e6a757f796f327f7371">[email&#160;protected]</a></td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Editor</span></td><td><span class="sd sl"></span>Active</td><td><button class="btn bs bsm">Edit</button></td></tr>
         </tbody></table></div></div>
+    </div>
+
+    <!-- ═══ FLEET MONITOR ADMIN ═══ -->
+    <div data-panel id="p-fleet" style="display:none">
+      <div class="as">
+        <div class="ast"><div class="al">Shipowners</div><div class="av2">23</div><div class="ac">Active clients</div></div>
+        <div class="ast"><div class="al">Total Vessels</div><div class="av2">142</div><div class="ac">Across all owners</div></div>
+        <div class="ast"><div class="al">Total Emissions</div><div class="av2">3.2M t</div><div class="ac">Annual tCO₂e</div></div>
+        <div class="ast"><div class="al">Credit Gap</div><div class="av2" style="color:#dc2626">847K</div><div class="ac">Credits needed</div></div>
+      </div>
+
+      <div class="tabs" id="fleetTabs">
+        <button class="tab on" onclick="setFleetTab(this,'owners')">👥 Shipowners (23)</button>
+        <button class="tab" onclick="setFleetTab(this,'vessels')">🚢 Vessels (142)</button>
+        <button class="tab" onclick="setFleetTab(this,'docs')">📄 Documents</button>
+        <button class="tab" onclick="setFleetTab(this,'ais')">📡 AIS Config</button>
+      </div>
+
+      <!-- Shipowners Tab -->
+      <div id="ftab-owners">
+        <div class="cd"><div class="ch"><div><div class="ct-t">Shipowner Clients</div><div class="ct-s">Manage your 20+ shipowner clients — data feeds Fleet Monitor on the website</div></div><button class="btn bp bsm" onclick="openOwnerModal()">+ Add Owner</button></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>Flag</th><th>Company</th><th>HQ</th><th>Vessels</th><th>Emissions</th><th>EU ETS</th><th>Gap</th><th>Coverage</th><th>Contact</th><th>Actions</th></tr></thead><tbody id="ownerTb"></tbody></table></div></div>
+      </div>
+
+      <!-- Vessels Tab -->
+      <div id="ftab-vessels" style="display:none">
+        <div class="cd"><div class="ch"><div><div class="ct-t">All Vessels</div><div class="ct-s">Click vessel to edit specs, emissions, routes & CII</div></div><button class="btn bp bsm">+ Add Vessel</button></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>Owner</th><th>Vessel</th><th>IMO</th><th>Type</th><th>GT</th><th>Route</th><th>Emissions</th><th>EU ETS</th><th>Gap</th><th>CII</th><th>Status</th><th>Actions</th></tr></thead><tbody id="vesselTb"></tbody></table></div></div>
+      </div>
+
+      <!-- Documents Tab -->
+      <div id="ftab-docs" style="display:none">
+        <div class="as">
+          <div class="ast"><div class="al">Total Docs</div><div class="av2">0/1,420</div><div class="ac">Across all vessels</div></div>
+          <div class="ast"><div class="al">Required Missing</div><div class="av2" style="color:#dc2626">852</div><div class="ac">6 types × 142 vessels</div></div>
+          <div class="ast"><div class="al">Optional Missing</div><div class="av2" style="color:#f59e0b">568</div><div class="ac">4 types × 142 vessels</div></div>
+          <div class="ast"><div class="al">Last Upload</div><div class="av2">—</div><div class="ac">No uploads yet</div></div>
+        </div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">Document Types</div><div class="ct-s">10 document types tracked per vessel — 6 required for EU MRV/ETS compliance</div></div></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>Icon</th><th>Document</th><th>Required</th><th>Frequency</th><th>Format</th><th>Source</th><th>Status</th></tr></thead><tbody>
+            <tr><td>📋</td><td style="font-weight:700">Monitoring Plan (MP)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Once / on change</td><td>XML / PDF</td><td>THETIS-MRV</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
+            <tr><td>📊</td><td style="font-weight:700">Emission Report (ER)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Annual (by 31 Mar)</td><td>XML / CSV</td><td>THETIS-MRV</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
+            <tr><td>✅</td><td style="font-weight:700">Document of Compliance (DoC)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Annual</td><td>PDF</td><td>Verifier</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
+            <tr><td>⛽</td><td style="font-weight:700">Bunker Delivery Notes (BDN)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Per bunkering</td><td>PDF / scan</td><td>Fuel supplier</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
+            <tr><td>📝</td><td style="font-weight:700">Voyage Reports</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Per voyage</td><td>CSV / Excel / PDF</td><td>Ship / Office</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
+            <tr><td>🏢</td><td style="font-weight:700">Company Emission Report (CER)</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">REQUIRED</span></td><td class="tm">Annual (by 31 Mar)</td><td>XML / PDF</td><td>THETIS-MRV</td><td><span style="color:#dc2626;font-weight:600">0/142</span></td></tr>
+            <tr><td>⬇️</td><td>Noon Reports</td><td><span style="padding:3px 10px;border-radius:7px;background:var(--x100);color:var(--x500);font-size:12px;font-weight:600">OPTIONAL</span></td><td class="tm">Daily at sea</td><td>CSV / Excel</td><td>Ship</td><td><span style="color:var(--x400)">0/142</span></td></tr>
+            <tr><td>🔬</td><td>Fuel Analysis Reports</td><td><span style="padding:3px 10px;border-radius:7px;background:var(--x100);color:var(--x500);font-size:12px;font-weight:600">OPTIONAL</span></td><td class="tm">Per bunkering</td><td>PDF</td><td>Lab</td><td><span style="color:var(--x400)">0/142</span></td></tr>
+            <tr><td>⭐</td><td>CII Rating Certificate</td><td><span style="padding:3px 10px;border-radius:7px;background:var(--x100);color:var(--x500);font-size:12px;font-weight:600">OPTIONAL</span></td><td class="tm">Annual</td><td>PDF</td><td>Flag State / Class</td><td><span style="color:var(--x400)">0/142</span></td></tr>
+            <tr><td>📗</td><td>SEEMP Part III</td><td><span style="padding:3px 10px;border-radius:7px;background:var(--x100);color:var(--x500);font-size:12px;font-weight:600">OPTIONAL</span></td><td class="tm">Annual</td><td>PDF</td><td>IMO / Flag State</td><td><span style="color:var(--x400)">0/142</span></td></tr>
+          </tbody></table></div></div>
+      </div>
+
+      <!-- AIS Config Tab -->
+      <div id="ftab-ais" style="display:none">
+        <div class="cd"><div class="ch"><div><div class="ct-t">AIS Integration</div><div class="ct-s">Connect to AIS API for real-time vessel tracking & emission estimation</div></div></div>
+          <div class="cb">
+            <div class="fg">
+              <div class="fgp"><label class="fl">AIS Provider</label><select class="fi"><option>Datalastic (Recommended — €80/mo)</option><option>MarineTraffic (Enterprise)</option><option>Kpler (Enterprise)</option><option>NavAPI (€120/mo)</option><option>Data Docked (€150/mo)</option></select></div>
+              <div class="fgp"><label class="fl">API Key</label><input class="fi" type="password" placeholder="Enter your API key"></div>
+              <div class="fgp"><label class="fl">Refresh Interval</label><select class="fi"><option>5 minutes</option><option>15 minutes</option><option>30 minutes</option><option>1 hour</option></select></div>
+              <div class="fgp"><label class="fl">Status</label><div style="display:flex;align-items:center;gap:8px;padding:12px 0"><span style="width:10px;height:10px;border-radius:50%;background:var(--x300)"></span><span style="font-size:15px;color:var(--x400)">Not Connected — Demo Mode</span></div></div>
+            </div>
+            <div style="padding:18px;background:var(--g50);border-radius:12px;border:1px solid var(--g100);margin-top:16px">
+              <div style="font-size:15px;font-weight:700;color:var(--g900);margin-bottom:8px">📊 Emission Calculation Formula</div>
+              <div style="font-family:var(--mono);font-size:14px;color:var(--g700);margin-bottom:6px">FC [t/h] = SFC × P × (V / V_design)³</div>
+              <div style="font-family:var(--mono);font-size:14px;color:var(--g700);margin-bottom:6px">CO₂ [kg] = FC × Emission Factor</div>
+              <div style="font-size:13px;color:var(--x400);margin-top:8px">IMO 4th GHG Study factors: HFO 3,114 · MDO 3,206 · LNG 2,750 kg/tonne</div>
+            </div>
+            <div class="fa"><button class="btn bp">Test Connection</button><button class="btn bs">Save Config</button></div>
+          </div></div>
+      </div>
+    </div>
+
+    <!-- ═══ TICKER TAPE SETTINGS ═══ -->
+    <div data-panel id="p-ticker" style="display:none">
+      <div class="cd"><div class="ch"><div><div class="ct-t">Ticker Tape Configuration</div><div class="ct-s">Controls the green scrolling price bar at the top of the website</div></div></div>
+        <div class="cb">
+          <div class="fg" style="margin-bottom:20px">
+            <div class="fgp"><label class="fl">Scroll Speed (seconds)</label><input class="fi" type="number" value="18" min="5" max="60"></div>
+            <div class="fgp"><label class="fl">Update Frequency</label><select class="fi"><option>Every 2.5 seconds (live)</option><option>Every 5 seconds</option><option>Every 15 seconds</option><option>Every 60 seconds</option></select></div>
+            <div class="fgp"><label class="fl">Decimal Places</label><select class="fi"><option>2 decimals ($24.14)</option><option>3 decimals ($24.143)</option></select></div>
+            <div class="fgp"><label class="fl">Show % Change</label><select class="fi"><option>Yes — show ▲0.58%</option><option>No — price only</option></select></div>
+          </div>
+        </div></div>
+      <div class="cd"><div class="ch"><div><div class="ct-t">Active Instruments on Ticker</div><div class="ct-s">Drag to reorder — toggle on/off to show/hide on the website ticker</div></div></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Order</th><th>Symbol</th><th>Name</th><th>Type</th><th>Current</th><th>Change</th><th>Color</th><th>Show</th></tr></thead><tbody>
+          <tr><td class="tm">1</td><td style="font-weight:700">GEO</td><td>Global Emissions Offset</td><td>Voluntary</td><td class="tp">$1.85</td><td style="color:var(--g600)">+0.00%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></span> Green</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">2</td><td style="font-weight:700">N-GEO</td><td>Nature-Based GEO</td><td>Voluntary</td><td class="tp">$3.44</td><td style="color:var(--g600)">+1.46%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></span> Green</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">3</td><td style="font-weight:700">C-GEO</td><td>Core GEO (Tech)</td><td>Voluntary</td><td class="tp">$1.15</td><td style="color:var(--g600)">+0.00%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></span> Green</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">4</td><td style="font-weight:700">EUA</td><td>EU Allowance</td><td>Compliance</td><td class="tp">$68.20</td><td style="color:var(--g600)">+1.94%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#3b82f6;display:inline-block"></span> Blue</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">5</td><td style="font-weight:700">UKA</td><td>UK Allowance</td><td>Compliance</td><td class="tp">$42.50</td><td style="color:#dc2626">-0.73%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#3b82f6;display:inline-block"></span> Blue</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">6</td><td style="font-weight:700">CCA</td><td>California Carbon</td><td>Compliance</td><td class="tp">$39.55</td><td style="color:var(--g600)">+1.67%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#6366f1;display:inline-block"></span> Purple</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">7</td><td style="font-weight:700">ARR-A</td><td>ARR (A-rated)</td><td>Spot VCM</td><td class="tp">$24.14</td><td style="color:var(--g600)">+0.58%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#f59e0b;display:inline-block"></span> Gold</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">8</td><td style="font-weight:700">ARR-BBB</td><td>ARR (BBB+)</td><td>Spot VCM</td><td class="tp">$19.71</td><td style="color:var(--g600)">+1.08%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#f59e0b;display:inline-block"></span> Gold</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">9</td><td style="font-weight:700">REDD</td><td>REDD+ (A-rated)</td><td>Spot VCM</td><td class="tp">$18.64</td><td style="color:#dc2626">-0.76%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#dc2626;display:inline-block"></span> Red</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">10</td><td style="font-weight:700">BLUE</td><td>Blue Carbon</td><td>Spot VCM</td><td class="tp">$29.26</td><td style="color:#dc2626">-0.14%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#0ea5e9;display:inline-block"></span> Cyan</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">11</td><td style="font-weight:700">ACCU</td><td>Australian CCU</td><td>Compliance</td><td class="tp">$32.10</td><td style="color:var(--g600)">+0.31%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#22c55e;display:inline-block"></span> Green</td><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+          <tr><td class="tm">12</td><td style="font-weight:700">CORSIA</td><td>CORSIA Phase 1</td><td>Aviation</td><td class="tp">$4.20</td><td style="color:var(--g600)">+0.48%</td><td><span style="width:12px;height:12px;border-radius:50%;background:#8b5cf6;display:inline-block"></span> Violet</td><td><button class="tg off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td></tr>
+        </tbody></table></div></div>
+      <div style="display:flex;gap:10px;margin-top:16px"><button class="btn bp">Save Ticker Config</button><button class="btn bs">Preview on Website</button></div>
+    </div>
+
+    <!-- ═══ NOTIFICATIONS / ALERTS ═══ -->
+    <div data-panel id="p-notifications" style="display:none">
+      <div class="as">
+        <div class="ast"><div class="al">Active Alerts</div><div class="av2" style="color:#dc2626">3</div><div class="ac">Need attention</div></div>
+        <div class="ast"><div class="al">Rules</div><div class="av2">8</div><div class="ac">Automated</div></div>
+        <div class="ast"><div class="al">Sent Today</div><div class="av2">12</div><div class="ac">Email + In-app</div></div>
+        <div class="ast"><div class="al">Resolved</div><div class="av2">47</div><div class="ac">This month</div></div>
+      </div>
+
+      <!-- Active Alerts -->
+      <div class="cd"><div class="ch"><div><div class="ct-t">🔴 Active Alerts</div><div class="ct-s">Unresolved issues that need attention</div></div></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Severity</th><th>Type</th><th>Description</th><th>Owner / Vessel</th><th>Triggered</th><th>Actions</th></tr></thead><tbody>
+          <tr style="background:#fef2f2"><td><span style="padding:4px 12px;border-radius:8px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:700">CRITICAL</span></td><td>Credit Gap</td><td style="font-weight:600">Mediterranean Lines — 64.8K gap, 0% coverage</td><td>Mediterranean Lines</td><td class="tm">2 hrs ago</td><td><button class="btn bd bsm">Resolve</button> <button class="btn bs bsm">Notify</button></td></tr>
+          <tr style="background:#fffbeb"><td><span style="padding:4px 12px;border-radius:8px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:700">WARNING</span></td><td>Missing Docs</td><td style="font-weight:600">Olympia Maritime — 0/80 documents uploaded</td><td>Olympia Maritime Corp.</td><td class="tm">1 day ago</td><td><button class="btn bd bsm">Resolve</button> <button class="btn bs bsm">Remind</button></td></tr>
+          <tr style="background:#fffbeb"><td><span style="padding:4px 12px;border-radius:8px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:700">WARNING</span></td><td>CII Degradation</td><td style="font-weight:600">4 vessels rated CII D — corrective action needed</td><td>Multiple owners</td><td class="tm">3 days ago</td><td><button class="btn bd bsm">Resolve</button> <button class="btn bs bsm">Report</button></td></tr>
+        </tbody></table></div></div>
+
+      <!-- Alert Rules -->
+      <div class="cd"><div class="ch"><div><div class="ct-t">⚙️ Alert Rules</div><div class="ct-s">Automated rules that trigger notifications</div></div><button class="btn bp bsm">+ Add Rule</button></div>
+        <div class="cb" style="padding:0"><table><thead><tr><th>Active</th><th>Rule</th><th>Condition</th><th>Channel</th><th>Recipients</th><th>Last Fired</th></tr></thead><tbody>
+          <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">Credit Gap Alert</td><td class="tm">Gap > 10K tCO₂e for any owner</td><td>📧 Email + 🔔 In-app</td><td>Admin, Operations</td><td class="tm">2 hrs ago</td></tr>
+          <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">Missing Required Docs</td><td class="tm">Required docs missing > 30 days before deadline</td><td>📧 Email</td><td>Owner contact</td><td class="tm">1 day ago</td></tr>
+          <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">CII Rating Drop</td><td class="tm">Vessel CII rating drops to D or E</td><td>📧 Email + 🔔 In-app</td><td>Admin, Owner</td><td class="tm">3 days ago</td></tr>
+          <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">New Order</td><td class="tm">Any new credit purchase</td><td>🔔 In-app</td><td>Admin</td><td class="tm">Today 14:32</td></tr>
+          <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">Investment Milestone</td><td class="tm">Project reaches funding milestone (25%, 50%, 75%)</td><td>📧 Email</td><td>Admin, Investors</td><td class="tm">5 days ago</td></tr>
+          <tr><td><button class="tg on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">Price Alert (EUA)</td><td class="tm">EUA price moves > ±5% in 24h</td><td>📧 Email</td><td>Admin</td><td class="tm">2 weeks ago</td></tr>
+          <tr><td><button class="tg off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">IMO Deadline Reminder</td><td class="tm">30 days before IMO/EU compliance deadlines</td><td>📧 Email</td><td>All owners</td><td class="tm">Never</td></tr>
+          <tr><td><button class="tg off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button></td><td style="font-weight:600">AIS Data Gap</td><td class="tm">No AIS signal from vessel > 24h</td><td>🔔 In-app</td><td>Operations</td><td class="tm">Never</td></tr>
+        </tbody></table></div></div>
+    </div>
+
+    <!-- ═══ LIVE MARKETS CONFIG ═══ -->
+    <div data-panel id="p-liveconfig" style="display:none">
+      <div class="tabs">
+        <button class="tab on" onclick="setLCTab(this,'orderbook')">📊 Order Book</button>
+        <button class="tab" onclick="setLCTab(this,'news')">📰 Market Intel</button>
+        <button class="tab" onclick="setLCTab(this,'chart')">📈 Chart Config</button>
+      </div>
+
+      <!-- Order Book Config -->
+      <div id="lctab-orderbook">
+        <div class="cd"><div class="ch"><div><div class="ct-t">Order Book Settings</div><div class="ct-s">Controls the bid/ask display on Live Markets page</div></div></div>
+          <div class="cb"><div class="fg">
+            <div class="fgp"><label class="fl">Visible Rows</label><select class="fi"><option>5 levels</option><option>7 levels</option><option>10 levels</option></select></div>
+            <div class="fgp"><label class="fl">Update Speed</label><select class="fi"><option>Real-time (500ms)</option><option>1 second</option><option>5 seconds</option></select></div>
+            <div class="fgp"><label class="fl">Spread Display</label><select class="fi"><option>Dollar + Percentage</option><option>Dollar only</option><option>Percentage only</option></select></div>
+            <div class="fgp"><label class="fl">Depth Visualization</label><select class="fi"><option>Bar chart background</option><option>Numbers only</option></select></div>
+          </div><div class="fa"><button class="btn bp">Save</button></div></div></div>
+      </div>
+
+      <!-- News / Market Intel Config -->
+      <div id="lctab-news" style="display:none">
+        <div class="cd"><div class="ch"><div><div class="ct-t">Market Intel / News Feed</div><div class="ct-s">Manage news items shown in the Live Markets sidebar</div></div><button class="btn bp bsm">+ Add News Item</button></div>
+          <div class="cb" style="padding:0"><table><thead><tr><th>Time</th><th>Tag</th><th>Hot</th><th>Headline</th><th>Actions</th></tr></thead><tbody>
+            <tr><td class="tm">14:32</td><td><span style="padding:3px 10px;border-radius:7px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:600">Regulatory</span></td><td>🔥</td><td style="font-weight:600">EU ETS Maritime reaches 100% phase-in 2026 — full compliance ahead</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+            <tr><td class="tm">13:15</td><td><span style="padding:3px 10px;border-radius:7px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:600">Rating</span></td><td></td><td style="font-weight:600">Sylvera upgrades ARR credits outlook to Positive</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+            <tr><td class="tm">12:48</td><td><span style="padding:3px 10px;border-radius:7px;background:#fee2e2;color:#991b1b;font-size:12px;font-weight:600">IMO</span></td><td>🔥</td><td style="font-weight:600">IMO NZF adoption rescheduled Oct 2026 — earliest force Mar 2028</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+            <tr><td class="tm">11:20</td><td><span style="padding:3px 10px;border-radius:7px;background:#dcfce7;color:#15803d;font-size:12px;font-weight:600">Volume</span></td><td></td><td style="font-weight:600">Xpansiv CBL: Record 4.2M tCO₂e in single session</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+            <tr><td class="tm">10:05</td><td><span style="padding:3px 10px;border-radius:7px;background:#fef3c7;color:#92400e;font-size:12px;font-weight:600">Regulatory</span></td><td></td><td style="font-weight:600">UK ETS Maritime expansion confirmed July 2026</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+            <tr><td class="tm">09:30</td><td><span style="padding:3px 10px;border-radius:7px;background:#ecfdf5;color:#047857;font-size:12px;font-weight:600">Registry</span></td><td></td><td style="font-weight:600">Verra quality label for ARR — first issuances 2026</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+            <tr><td class="tm">08:45</td><td><span style="padding:3px 10px;border-radius:7px;background:#dcfce7;color:#15803d;font-size:12px;font-weight:600">Supply</span></td><td></td><td style="font-weight:600">Philippines DENR approves 3 new Mindanao zones</td><td><button class="btn bs bsm">Edit</button> <button class="btn bd bsm">Del</button></td></tr>
+          </tbody></table></div></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">News Tag Colors</div></div></div>
+          <div class="cb"><div class="fg3">
+            <div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 14px;border-radius:8px;background:#fef3c7;color:#92400e;font-size:13px;font-weight:600">Regulatory</span><input class="fi bsm" value="#fef3c7" style="width:100px"></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 14px;border-radius:8px;background:#dbeafe;color:#1e40af;font-size:13px;font-weight:600">Rating</span><input class="fi bsm" value="#dbeafe" style="width:100px"></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 14px;border-radius:8px;background:#fee2e2;color:#991b1b;font-size:13px;font-weight:600">IMO</span><input class="fi bsm" value="#fee2e2" style="width:100px"></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 14px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">Volume</span><input class="fi bsm" value="#dcfce7" style="width:100px"></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 14px;border-radius:8px;background:#ecfdf5;color:#047857;font-size:13px;font-weight:600">Registry</span><input class="fi bsm" value="#ecfdf5" style="width:100px"></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="padding:4px 14px;border-radius:8px;background:#dcfce7;color:#15803d;font-size:13px;font-weight:600">Supply</span><input class="fi bsm" value="#dcfce7" style="width:100px"></div>
+          </div></div></div>
+      </div>
+
+      <!-- Chart Config -->
+      <div id="lctab-chart" style="display:none">
+        <div class="cd"><div class="ch"><div><div class="ct-t">Candlestick Chart Settings</div></div></div>
+          <div class="cb"><div class="fg">
+            <div class="fgp"><label class="fl">Default Timeframe</label><select class="fi"><option>1 Hour (1H)</option><option>15 Minutes</option><option>4 Hours</option><option>1 Day</option></select></div>
+            <div class="fgp"><label class="fl">Candles Visible</label><input class="fi" type="number" value="60" min="20" max="200"></div>
+            <div class="fgp"><label class="fl">Bull Color</label><input class="fi" type="color" value="#22c55e" style="height:44px"></div>
+            <div class="fgp"><label class="fl">Bear Color</label><input class="fi" type="color" value="#ef4444" style="height:44px"></div>
+            <div class="fgp"><label class="fl">Show Volume Bars</label><select class="fi"><option>Yes</option><option>No</option></select></div>
+            <div class="fgp"><label class="fl">Price Labels</label><select class="fi"><option>High, Low on chart</option><option>Tooltip only</option></select></div>
+          </div><div class="fa"><button class="btn bp">Save Chart Config</button></div></div></div>
+      </div>
     </div>
 
     <!-- SETTINGS -->
