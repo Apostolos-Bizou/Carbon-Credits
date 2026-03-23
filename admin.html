@@ -72,7 +72,7 @@ table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;fo
 
 <script>
 /* ═══ ALL JS IN HEAD ═══ */
-var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},fleet:{t:'Fleet Monitor',s:'Shipowners, vessels, emissions & compliance documents'},ticker:{t:'Ticker Tape',s:'Configure the live price ticker bar'},notifications:{t:'Notifications',s:'Alerts, thresholds & automated messages'},liveconfig:{t:'Live Markets Config',s:'Order Book, Market Intel news & display settings'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
+var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},compliance:{t:'Compliance Admin',s:'EU ETS calculator settings, emission factors, FuelEU & CII parameters'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},fleet:{t:'Fleet Monitor',s:'Shipowners, vessels, emissions & compliance documents'},ticker:{t:'Ticker Tape',s:'Configure the live price ticker bar'},notifications:{t:'Notifications',s:'Alerts, thresholds & automated messages'},liveconfig:{t:'Live Markets Config',s:'Order Book, Market Intel news & display settings'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
 
 function showPanel(id){
   document.querySelectorAll('[data-panel]').forEach(function(p){p.style.display='none'});
@@ -260,6 +260,9 @@ document.addEventListener('DOMContentLoaded',initAdmin);
   <div class="sb-logo"><h1>GreenCredit<span>X</span></h1><p>Admin Panel</p></div>
   <nav class="sb-nav">
     <div class="ns"><div class="ns-t">Overview</div><button class="ni on tt" title="Συνοπτική εικόνα: credits, orders, investors, raised. Πρόσφατη δραστηριότητα." onclick="showPanel('dashboard')"><span class="ic">📊</span> Dashboard</button></div>
+    <div class="ns"><div class="ns-t">Compliance</div>
+      <button class="ni tt" title="Ρυθμίσεις EU ETS Calculator: emission factors, τιμή EUA, phase-in, geographic scope, FuelEU targets, CII thresholds. Τροφοδοτεί το Compliance tab." onclick="showPanel('compliance')"><span class="ic">⚖️</span> Compliance<span class="bg" style="background:#dc2626">ΝΕΟ</span></button>
+    </div>
     <div class="ns"><div class="ns-t">Content Management</div>
       <button class="ni tt" title="Διαχείριση credits στο Marketplace. Add/Edit τιμές, ratings, ποσότητες." onclick="showPanel('marketplace')"><span class="ic">🛒</span> Marketplace<span class="bg">6</span></button>
       <button class="ni tt" title="Ιστορικό παραγγελιών. Κάθε αγορά credits εμφανίζεται εδώ." onclick="showPanel('orders')"><span class="ic">📦</span> Orders<span class="bg">5</span></button>
@@ -665,6 +668,96 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl">Show Volume Bars</label><select class="fi"><option>Yes</option><option>No</option></select></div>
             <div class="fgp"><label class="fl">Price Labels</label><select class="fi"><option>High, Low on chart</option><option>Tooltip only</option></select></div>
           </div><div class="fa"><button class="btn bp">Save Chart Config</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ COMPLIANCE ADMIN ═══ -->
+    <div data-panel id="p-compliance" style="display:none">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:20px">
+        <div class="sc tt" title="Τρέχουσα τιμή EUA στο EU carbon market. Χρησιμοποιείται για τον υπολογισμό κόστους στον calculator."><div class="sl">EUA Price</div><div class="sv" style="color:var(--g600)">€68.00</div><div class="ss">Last updated: Mar 2026</div></div>
+        <div class="sc tt" title="Ποσοστό phase-in EU ETS. 2025=70%, 2026+=100%."><div class="sl">Phase-in 2025</div><div class="sv">70%</div><div class="ss">2026: 100%</div></div>
+        <div class="sc tt" title="Πλοία που έχουν υπολογιστεί μέσω Compliance Calculator."><div class="sl">Vessels Calculated</div><div class="sv">1</div><div class="ss">SCIO SPIRIT</div></div>
+        <div class="sc tt" title="Συνολικά EUAs που χρειάζονται οι πελάτες μας."><div class="sl">Total EUAs Required</div><div class="sv" style="color:#dc2626">3,725</div><div class="ss">Estimated fleet total</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+        <!-- Emission Factors -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">Emission Factors (EU MRV)</div><div class="ct-s tt" title="Οι επίσημοι συντελεστές εκπομπών ανά τύπο καυσίμου. Βασίζονται στο Annex I του EU MRV Regulation 2015/757.">gCO₂ per gram of fuel — used in EUA Calculator</div></div></div>
+        <div class="cb">
+          <div class="fg">
+            <div class="fgp"><label class="fl tt" title="Heavy Fuel Oil: 3.114 gCO₂/g. Το πιο κοινό καύσιμο πλοίων.">HFO (Heavy Fuel Oil)</label><input class="fi" type="number" step="0.001" value="3.114"></div>
+            <div class="fgp"><label class="fl tt" title="Marine Gas Oil: 3.206 gCO₂/g. Χρησιμοποιείται κοντά σε EU λιμάνια (low sulfur).">MGO (Marine Gas Oil)</label><input class="fi" type="number" step="0.001" value="3.206"></div>
+            <div class="fgp"><label class="fl tt" title="Light Fuel Oil: 3.151 gCO₂/g.">LFO (Light Fuel Oil)</label><input class="fi" type="number" step="0.001" value="3.151"></div>
+            <div class="fgp"><label class="fl tt" title="Marine Diesel Oil: 3.206 gCO₂/g.">MDO (Marine Diesel Oil)</label><input class="fi" type="number" step="0.001" value="3.206"></div>
+            <div class="fgp"><label class="fl tt" title="Liquefied Natural Gas — αν χρησιμοποιείται από LNG-powered πλοία.">LNG (Liquefied Natural Gas)</label><input class="fi" type="number" step="0.001" value="2.750"></div>
+            <div class="fgp"><label class="fl tt" title="Methanol — εναλλακτικό καύσιμο, χαμηλότερος EF.">Methanol</label><input class="fi" type="number" step="0.001" value="1.375"></div>
+          </div>
+          <div class="fa"><button class="btn bp">Save Emission Factors</button><span style="font-size:12px;color:var(--x400);margin-left:10px">Source: EU Reg. 2015/757, Annex I</span></div>
+        </div></div>
+
+        <!-- EUA Market Settings -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">EUA Market Settings</div><div class="ct-s tt" title="Ρυθμίσεις τιμής EUA και phase-in. Η τιμή χρησιμοποιείται στον calculator και στο Fleet Overview.">EUA pricing and phase-in percentages for the Compliance Calculator</div></div></div>
+        <div class="cb">
+          <div class="fg">
+            <div class="fgp"><label class="fl tt" title="Τρέχουσα τιμή EUA σε ευρώ. Ενημερώνεται χειροκίνητα ή αυτόματα.">Current EUA Price (€)</label><input class="fi" type="number" step="0.01" value="68.00"></div>
+            <div class="fgp"><label class="fl tt" title="Πηγή τιμής: manual, ICE, Bloomberg.">Price Source</label><select class="fi"><option>Manual</option><option>ICE Futures (Auto)</option><option>Bloomberg (Auto)</option></select></div>
+            <div class="fgp"><label class="fl tt" title="Phase-in 2025 = 70%. Σημαίνει ότι μόνο το 70% των EU-scope εκπομπών χρεώνεται.">Phase-in 2025 (%)</label><input class="fi" type="number" value="70"></div>
+            <div class="fgp"><label class="fl tt" title="Phase-in 2026+ = 100%. Πλήρης χρέωση.">Phase-in 2026+ (%)</label><input class="fi" type="number" value="100"></div>
+          </div>
+          <div class="fa"><button class="btn bp">Save EUA Settings</button></div>
+        </div></div>
+
+        <!-- Geographic Scope -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">Geographic Scope Rules</div><div class="ct-s tt" title="Κανόνες EU ETS βάσει δρομολογίου. EU→EU = 100%, EU↔Non-EU = 50%, Non-EU→Non-EU = 0%.">Percentage of emissions covered based on voyage type</div></div></div>
+        <div class="cb">
+          <div class="fg">
+            <div class="fgp"><label class="fl tt" title="Ταξίδια εντός EU: 100% εκπομπών καλύπτεται.">EU → EU</label><input class="fi" type="number" value="100" disabled style="background:#f0fdf4;font-weight:700;color:var(--g700)"><span style="font-size:11px;color:var(--x400)">Fixed by regulation</span></div>
+            <div class="fgp"><label class="fl tt" title="Ταξίδια EU↔τρίτες χώρες: 50% εκπομπών.">EU ↔ Non-EU</label><input class="fi" type="number" value="50" disabled style="background:#fffbeb;font-weight:700;color:#d97706"><span style="font-size:11px;color:var(--x400)">Fixed by regulation</span></div>
+            <div class="fgp"><label class="fl tt" title="Ταξίδια εκτός EU: 0% — δεν χρεώνονται.">Non-EU → Non-EU</label><input class="fi" type="number" value="0" disabled style="background:#fef2f2;font-weight:700;color:#dc2626"><span style="font-size:11px;color:var(--x400)">Fixed by regulation</span></div>
+            <div class="fgp"><label class="fl tt" title="Port at berth εντός EU: ξεχωριστή χρέωση 100%.">At berth in EU port</label><input class="fi" type="number" value="100" disabled style="background:#f0fdf4;font-weight:700;color:var(--g700)"><span style="font-size:11px;color:var(--x400)">Fixed by regulation</span></div>
+          </div>
+        </div></div>
+
+        <!-- FuelEU Settings -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">FuelEU Maritime Settings</div><div class="ct-s tt" title="GHG intensity targets ανά έτος. Βασίζονται στο FuelEU Maritime Regulation. Penalty υπολογίζεται βάσει deficit × energy × rate.">GHG intensity targets and penalty calculation parameters</div></div></div>
+        <div class="cb">
+          <div class="fg">
+            <div class="fgp"><label class="fl tt" title="Reference GHG intensity well-to-wake σε gCO₂eq/MJ.">Reference Intensity (gCO₂eq/MJ)</label><input class="fi" type="number" step="0.01" value="91.16"></div>
+            <div class="fgp"><label class="fl tt" title="Μείωση target: 2025 = -2%.">Target 2025</label><input class="fi" value="-2%" disabled style="background:#f0fdf4"></div>
+            <div class="fgp"><label class="fl tt" title="Μείωση target: 2030 = -6%.">Target 2030</label><input class="fi" value="-6%" disabled style="background:#f0fdf4"></div>
+            <div class="fgp"><label class="fl tt" title="Μείωση target: 2035 = -14.5%.">Target 2035</label><input class="fi" value="-14.5%" disabled style="background:#fffbeb"></div>
+            <div class="fgp"><label class="fl tt" title="Penalty rate σε €/GJ για deficit.">Penalty Rate (€/GJ)</label><input class="fi" type="number" step="0.01" value="2400"></div>
+          </div>
+          <div class="fa"><button class="btn bp">Save FuelEU Settings</button></div>
+        </div></div>
+
+        <!-- CII Thresholds -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">CII Rating Thresholds</div><div class="ct-s tt" title="Όρια CII rating ανά ship type. Τα thresholds μειώνονται κάθε χρόνο κατά ~2%.">CII boundaries per rating grade — Bulk Carriers (adjustable per ship type)</div></div></div>
+        <div class="cb">
+          <div class="fg">
+            <div class="fgp"><label class="fl">Ship Type</label><select class="fi"><option>Bulk Carrier</option><option>Tanker</option><option>Container</option><option>General Cargo</option><option>Gas Carrier</option></select></div>
+            <div class="fgp"><label class="fl tt" title="CII κάτω από αυτό = Rating A.">A Threshold (≤)</label><input class="fi" type="number" step="0.1" value="3.5"></div>
+            <div class="fgp"><label class="fl tt" title="A < CII ≤ B = Rating B.">B Threshold (≤)</label><input class="fi" type="number" step="0.1" value="5.0"></div>
+            <div class="fgp"><label class="fl tt" title="B < CII ≤ C = Rating C.">C Threshold (≤)</label><input class="fi" type="number" step="0.1" value="6.5"></div>
+            <div class="fgp"><label class="fl tt" title="C < CII ≤ D = Rating D. Απαιτείται corrective action plan.">D Threshold (≤)</label><input class="fi" type="number" step="0.1" value="8.5"></div>
+            <div class="fgp"><label class="fl tt" title="CII > D = Rating E. Κίνδυνος λειτουργικών περιορισμών.">E Threshold (>)</label><input class="fi" value="> 8.5" disabled style="background:#fef2f2;color:#dc2626;font-weight:700"></div>
+          </div>
+          <div class="fa"><button class="btn bp">Save CII Thresholds</button></div>
+        </div></div>
+
+        <!-- Verifiers -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">Accredited Verifiers</div><div class="ct-s tt" title="Οι πιστοποιημένοι verifiers που χρησιμοποιούν οι πελάτες μας. Αυτοί παράγουν τα Emission Reports.">Companies that verify vessel emissions for EU MRV compliance</div></div><button class="btn bp bsm">+ Add Verifier</button></div>
+        <div class="cb">
+          <table style="width:100%;font-size:13px;border-collapse:collapse">
+            <tr style="background:var(--g50)"><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Name</th><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Location</th><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Accreditation</th><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Clients</th><th style="padding:10px 12px"></th></tr>
+            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">ICS Saraidaris Technical Bureau</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ESYD 1101-3</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Varship</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
+            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">DNV Maritime</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">UKAS 123</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
+            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">RINA Services</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ACCREDIA</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
+          </table>
+        </div></div>
+
       </div>
     </div>
 
