@@ -71,6 +71,55 @@ input { font-family: var(--sans); }
 .ticker-dn { color: #fca5a5; }
 
 /* Sections */
+/* ═══ COMPLIANCE TAB ═══ */
+.comp-tabs{display:flex;gap:2px;border-bottom:1px solid var(--gray-200);margin-bottom:20px}
+.comp-tab{padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:transparent;border-bottom:3px solid transparent;color:var(--gray-400);transition:all .2s;font-family:var(--sans)}
+.comp-tab.active{color:var(--green-700);border-bottom-color:var(--green-600)}
+.comp-tab:hover:not(.active){color:var(--gray-600)}
+.comp-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.comp-card{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--gray-100);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.comp-card-label{font-size:11px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.comp-card-value{font-size:24px;font-weight:700;font-family:var(--mono);line-height:1.1}
+.comp-card-sub{font-size:12px;color:var(--gray-400);margin-top:4px}
+.comp-section{margin-bottom:20px}
+.comp-section-title{font-size:13px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.comp-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.comp-form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.comp-fg{display:flex;flex-direction:column;gap:4px}
+.comp-fg label{font-size:12px;font-weight:600;color:var(--gray-500)}
+.comp-fg input,.comp-fg select{padding:8px 12px;border:1px solid var(--gray-200);border-radius:10px;font-size:14px;font-family:var(--sans);color:var(--green-900);background:#fff;outline:none;transition:border .2s}
+.comp-fg input:focus,.comp-fg select:focus{border-color:var(--green-500)}
+.comp-fuel-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;border-radius:12px;overflow:hidden;border:1px solid var(--gray-100)}
+.comp-fuel-table th{text-align:left;padding:10px 12px;background:var(--green-50);font-weight:600;font-size:12px;color:var(--gray-500);border-bottom:1px solid var(--gray-100)}
+.comp-fuel-table td{padding:8px 12px;border-bottom:1px solid var(--gray-100)}
+.comp-fuel-table input{width:80px;padding:6px 8px;border:1px solid var(--gray-200);border-radius:8px;font-size:13px;text-align:right;font-family:var(--mono);color:var(--green-900);background:#fff;outline:none}
+.comp-fuel-table input:focus{border-color:var(--green-500)}
+.comp-fuel-table .fuel-subtotal{font-weight:700;font-family:var(--mono);background:var(--green-50)}
+.comp-btn{padding:10px 24px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:var(--sans)}
+.comp-btn-primary{background:linear-gradient(135deg,var(--green-600),var(--green-700));color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.25)}
+.comp-btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(22,163,74,.35)}
+.comp-btn-outline{background:#fff;border:1px solid var(--gray-200);color:var(--green-800)}
+.comp-btn-outline:hover{background:var(--green-50)}
+.comp-result{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;margin-top:16px;font-size:14px;line-height:1.5}
+.comp-result.warn{background:#fffbeb;border-left:4px solid #f59e0b}
+.comp-result.danger{background:#fef2f2;border-left:4px solid #ef4444}
+.comp-result.ok{background:#f0fdf4;border-left:4px solid #22c55e}
+.comp-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.comp-bd-item{background:var(--green-50);border-radius:12px;padding:12px;text-align:center}
+.comp-bd-item .bd-val{font-size:18px;font-weight:700;font-family:var(--mono);color:var(--green-800)}
+.comp-bd-item .bd-lbl{font-size:11px;color:var(--gray-500);margin-top:4px}
+.cii-badge{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;font-weight:700;font-size:15px;color:#fff}
+.cii-A{background:#16a34a}.cii-B{background:#65a30d}.cii-C{background:#eab308}.cii-D{background:#ea580c}.cii-E{background:#dc2626}
+.comp-fleet-table{width:100%;border-collapse:collapse;font-size:14px;border-radius:12px;overflow:hidden;border:1px solid var(--gray-100)}
+.comp-fleet-table th{text-align:left;padding:12px 16px;background:var(--green-50);font-weight:600;font-size:12px;color:var(--gray-500)}
+.comp-fleet-table td{padding:10px 16px;border-bottom:1px solid var(--gray-100)}
+@media(max-width:768px){
+  .comp-cards{grid-template-columns:repeat(2,1fr)}
+  .comp-form-grid,.comp-form-grid-3{grid-template-columns:1fr}
+  .comp-breakdown{grid-template-columns:1fr}
+  .comp-fuel-table input{width:60px}
+}
+
 .section { display: none; }
 .section.active { display: block; }
 .section-flex { display: none; }
@@ -317,7 +366,8 @@ input { font-family: var(--sans); }
     </div>
   </div>
   <nav class="nav" id="nav">
-    <button class="nav-btn active" data-section="marketplace" onclick="switchSection('marketplace')">🛒 <span class="hide-mobile">Marketplace</span></button>
+    <button class="nav-btn active" data-section="compliance" onclick="switchSection('compliance')">⚖️ <span class="hide-mobile">Compliance</span></button>
+    <button class="nav-btn" data-section="marketplace" onclick="switchSection('marketplace')">🛒 <span class="hide-mobile">Marketplace</span></button>
     <button class="nav-btn" data-section="invest" onclick="switchSection('invest')">📈 <span class="hide-mobile">Invest</span></button>
     <button class="nav-btn" data-section="markets" onclick="switchSection('markets')">◉ <span class="hide-mobile">Live Markets</span></button>
     <button class="nav-btn" data-section="fleet" onclick="switchSection('fleet')">🚢 <span class="hide-mobile">Fleet Monitor</span></button>
@@ -334,8 +384,172 @@ input { font-family: var(--sans); }
 <div class="ticker" id="tickerWrap">
 </div>
 
+<!-- ═══ SECTION 0: COMPLIANCE ═══ -->
+<div class="section active" id="sec-compliance">
+  <div class="container" style="max-width:1100px;margin:0 auto">
+
+    <div class="comp-tabs">
+      <button class="comp-tab active" onclick="switchCompTab('eua',this)">EUA Calculator</button>
+      <button class="comp-tab" onclick="switchCompTab('fueleu',this)">FuelEU Penalty</button>
+      <button class="comp-tab" onclick="switchCompTab('cii',this)">CII Rating</button>
+      <button class="comp-tab" onclick="switchCompTab('compfleet',this)">Fleet Overview</button>
+    </div>
+
+    <!-- ═══ EUA CALCULATOR ═══ -->
+    <div id="comp-eua">
+      <div class="comp-cards">
+        <div class="comp-card tt"><div class="comp-card-label">Total CO₂eq</div><div class="comp-card-value" id="c-co2">—</div><div class="comp-card-sub">metric tonnes</div><span class="tt-text"><div class="tt-title">Συνολικές Εκπομπές CO₂eq</div>Υπολογίζονται πολλαπλασιάζοντας κάθε τύπο καυσίμου × emission factor (HFO: 3.114, MGO: 3.206, LFO: 3.151, MDO: 3.206 gCO₂/gFuel). Περιλαμβάνει ΟΛΕΣ τις πηγές: κύρια μηχανή, βοηθητικές, boiler.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">EU Scope</div><div class="comp-card-value" id="c-euscope">—</div><div class="comp-card-sub">after geographic filter</div><span class="tt-text"><div class="tt-title">EU Geographic Scope</div>Εφαρμόζεται ο κανόνας: EU→EU = 100%, EU↔Non-EU = 50%, Non-EU→Non-EU = 0%. Μόνο τα ταξίδια που αφορούν EU λιμάνια μετράνε.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">EUAs Required</div><div class="comp-card-value" id="c-euas" style="color:var(--green-700)">—</div><div class="comp-card-sub" id="c-phasein">after phase-in</div><span class="tt-text"><div class="tt-title">EUA Υποχρέωση</div>European Union Allowances που πρέπει να αγοραστούν. Phase-in: 2025 = 70%, 2026+ = 100%. Deadline παράδοσης: 30 Σεπτεμβρίου του επόμενου έτους.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">Estimated Cost</div><div class="comp-card-value" id="c-cost" style="color:#dc2626">—</div><div class="comp-card-sub" id="c-price">@ current EUA price</div><span class="tt-text"><div class="tt-title">Εκτιμώμενο Κόστος</div>EUAs × τρέχουσα τιμή αγοράς. Η πραγματική τιμή μπορεί να διαφέρει ανάλογα με τον χρόνο αγοράς. Τα EUAs αγοράζονται στο EU carbon market.</span></div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">Στοιχεία πλοίου & αναφοράς</div>
+        <div class="comp-form-grid">
+          <div class="comp-fg"><label>Όνομα πλοίου</label><input id="cf-vessel" value="SCIO SPIRIT" oninput="calcEUA()"></div>
+          <div class="comp-fg"><label>IMO Number</label><input id="cf-imo" value="9502738" oninput="calcEUA()"></div>
+          <div class="comp-fg"><label>Έτος αναφοράς</label><select id="cf-year" onchange="calcEUA()"><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select></div>
+          <div class="comp-fg"><label>Τιμή EUA (€/τόνο)</label><input type="number" id="cf-eua-price" value="68" step="1" oninput="calcEUA()"></div>
+        </div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">Κατανάλωση καυσίμου ανά πηγή εκπομπών (MT)</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-bottom:6px">M/E = Κύρια Μηχανή &nbsp;|&nbsp; A/E = Βοηθητικές Μηχανές &nbsp;|&nbsp; BLR = Boiler/Καυστήρας &nbsp;|&nbsp; Other = Λοιπά</div>
+        <table class="comp-fuel-table">
+          <thead>
+            <tr><th style="width:80px">Καύσιμο</th><th>M/E</th><th>A/E</th><th>BLR</th><th>Other</th><th style="width:90px">Σύνολο</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:700">HFO</td>
+              <td><input id="cf-hfo-me" type="number" value="2269.9" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-hfo-ae" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-hfo-blr" type="number" value="97.1" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-hfo-oth" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td class="fuel-subtotal" id="cf-hfo-tot">—</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">LFO</td>
+              <td><input id="cf-lfo-me" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-lfo-ae" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-lfo-blr" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-lfo-oth" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td class="fuel-subtotal" id="cf-lfo-tot">—</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">MGO</td>
+              <td><input id="cf-mgo-me" type="number" value="698.2" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-mgo-ae" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-mgo-blr" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-mgo-oth" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td class="fuel-subtotal" id="cf-mgo-tot">—</td>
+            </tr>
+            <tr>
+              <td style="font-weight:700">MDO</td>
+              <td><input id="cf-mdo-me" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-mdo-ae" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-mdo-blr" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td><input id="cf-mdo-oth" type="number" value="0" step="0.1" oninput="calcEUA()"></td>
+              <td class="fuel-subtotal" id="cf-mdo-tot">—</td>
+            </tr>
+            <tr class="fuel-subtotal"><td style="font-weight:700">Σύνολο</td><td colspan="4"></td><td class="fuel-subtotal" id="cf-all-tot" style="font-size:15px;font-weight:800">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">Γεωγραφική κατανομή ταξιδιών (% εκπομπών CO₂)</div>
+        <div class="comp-form-grid-3">
+          <div class="comp-fg"><label>EU → EU (100%)</label><input type="number" id="cf-eueu" value="8" step="1" min="0" max="100" oninput="calcEUA()"><div style="font-size:11px;color:var(--gray-400);margin-top:2px">% εκπομπών</div></div>
+          <div class="comp-fg"><label>EU ↔ Non-EU (50%)</label><input type="number" id="cf-eunon" value="89" step="1" min="0" max="100" oninput="calcEUA()"><div style="font-size:11px;color:var(--gray-400);margin-top:2px">% εκπομπών</div></div>
+          <div class="comp-fg"><label>Non-EU → Non-EU (0%)</label><input type="number" id="cf-noneu" value="3" step="1" min="0" max="100" oninput="calcEUA()"><div style="font-size:11px;color:var(--gray-400);margin-top:2px">% εκπομπών</div></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="comp-btn comp-btn-primary" onclick="calcEUA()">⚡ Υπολογισμός EUA</button>
+        <button class="comp-btn comp-btn-outline" onclick="resetCompForm()">↻ Καθαρισμός</button>
+      </div>
+
+      <div id="c-result" class="comp-result warn" style="display:none"></div>
+
+      <div class="comp-breakdown" id="c-breakdown" style="display:none">
+        <div class="comp-bd-item"><div class="bd-val" id="c-bd-hfo">—</div><div class="bd-lbl">Εκπομπές HFO (t)</div></div>
+        <div class="comp-bd-item"><div class="bd-val" id="c-bd-mgo">—</div><div class="bd-lbl">Εκπομπές MGO (t)</div></div>
+        <div class="comp-bd-item"><div class="bd-val" id="c-bd-lfo">—</div><div class="bd-lbl">Εκπομπές LFO+MDO (t)</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ FUELEU PENALTY ═══ -->
+    <div id="comp-fueleu" style="display:none">
+      <div class="comp-cards" style="grid-template-columns:repeat(3,1fr)">
+        <div class="comp-card tt"><div class="comp-card-label">GHG Intensity</div><div class="comp-card-value" id="c-fu-ghg">—</div><div class="comp-card-sub">gCO₂eq/MJ (well-to-wake)</div><span class="tt-text"><div class="tt-title">GHG Intensity</div>Η ένταση εκπομπών αερίων θερμοκηπίου ανά μονάδα ενέργειας καυσίμου (well-to-wake). Το FuelEU θέτει ανώτατα όρια που μειώνονται σταδιακά.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">Compliance Balance</div><div class="comp-card-value" id="c-fu-bal" style="color:#dc2626">—</div><div class="comp-card-sub">GHG intensity gap</div><span class="tt-text"><div class="tt-title">Compliance Balance</div>Θετικό = surplus (μπορεί να μεταφερθεί). Αρνητικό = deficit → penalty. Η Varship SCIO SPIRIT είχε balance -138 για 2025.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">Εκτιμ. Penalty</div><div class="comp-card-value" id="c-fu-pen" style="color:#dc2626">—</div><div class="comp-card-sub">€ ετησίως</div><span class="tt-text"><div class="tt-title">FuelEU Penalty</div>Υπολογίζεται βάσει του deficit και της ενεργειακής κατανάλωσης. Η Varship SCIO SPIRIT = €88,448 penalty για 2025.</span></div>
+      </div>
+      <div class="comp-section" style="margin-top:16px">
+        <div class="comp-section-title">Παράμετροι FuelEU</div>
+        <div class="comp-form-grid">
+          <div class="comp-fg"><label>Ενεργειακή κατανάλωση (MJ)</label><input type="number" id="cf-fu-energy" value="127500000" oninput="calcFuelEU()"></div>
+          <div class="comp-fg"><label>Reference GHG intensity (gCO₂eq/MJ)</label><input type="number" id="cf-fu-ref" value="91.16" step="0.01" oninput="calcFuelEU()"></div>
+          <div class="comp-fg"><label>Target μείωση (%)</label><select id="cf-fu-target" onchange="calcFuelEU()"><option value="2">2025: -2%</option><option value="6">2030: -6%</option><option value="14.5">2035: -14.5%</option><option value="31">2040: -31%</option><option value="62">2045: -62%</option><option value="80">2050: -80%</option></select></div>
+          <div class="comp-fg"><label>Πραγματικό GHG intensity</label><input type="number" id="cf-fu-actual" value="92.5" step="0.1" oninput="calcFuelEU()"></div>
+        </div>
+      </div>
+      <button class="comp-btn comp-btn-primary" onclick="calcFuelEU()" style="margin-top:10px">⚡ Υπολογισμός FuelEU Penalty</button>
+      <div id="c-fu-result" class="comp-result warn" style="display:none;margin-top:16px"></div>
+    </div>
+
+    <!-- ═══ CII RATING ═══ -->
+    <div id="comp-cii" style="display:none">
+      <div class="comp-cards">
+        <div class="comp-card tt"><div class="comp-card-label">CII Value</div><div class="comp-card-value" id="c-cii-val">—</div><div class="comp-card-sub">gCO₂/DWT·nm</div><span class="tt-text"><div class="tt-title">CII — Carbon Intensity Indicator</div>Μετρά τη λειτουργική ένταση εκπομπών: CO₂ / (DWT × Distance). Χαμηλότερο = καλύτερο. Κατηγορίες A (best) έως E (worst).</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">Rating</div><div class="comp-card-value" id="c-cii-rate"><span class="cii-badge cii-D">D</span></div><div class="comp-card-sub">2025</div><span class="tt-text"><div class="tt-title">CII Rating</div>A-B: Minor/no action. C: Moderate. D: Corrective action plan required. E: May face operational restrictions.</span></div>
+        <div class="comp-card"><div class="comp-card-label">Απόσταση</div><div class="comp-card-value" id="c-cii-dist">—</div><div class="comp-card-sub">ναυτικά μίλια</div></div>
+        <div class="comp-card"><div class="comp-card-label">DWT</div><div class="comp-card-value" id="c-cii-dwt">—</div><div class="comp-card-sub">metric tonnes</div></div>
+      </div>
+      <div class="comp-section" style="margin-top:16px">
+        <div class="comp-section-title">Παράμετροι CII</div>
+        <div class="comp-form-grid">
+          <div class="comp-fg"><label>DWT (deadweight tonnage)</label><input type="number" id="cf-dwt" value="35214" oninput="calcCII()"></div>
+          <div class="comp-fg"><label>Συνολική απόσταση (nm)</label><input type="number" id="cf-dist" value="36356" oninput="calcCII()"></div>
+          <div class="comp-fg"><label>Ship type</label><select id="cf-shiptype" onchange="calcCII()"><option value="bulk">Bulk Carrier</option><option value="tanker">Tanker</option><option value="container">Container</option><option value="general">General Cargo</option><option value="gas">Gas Carrier</option></select></div>
+          <div class="comp-fg"><label>Έτος</label><select id="cf-cii-year" onchange="calcCII()"><option>2025</option><option>2026</option><option>2027</option><option>2028</option></select></div>
+        </div>
+      </div>
+      <button class="comp-btn comp-btn-primary" onclick="calcCII()" style="margin-top:10px">⚡ Υπολογισμός CII</button>
+      <div id="c-cii-result" class="comp-result" style="display:none;margin-top:16px"></div>
+    </div>
+
+    <!-- ═══ FLEET OVERVIEW ═══ -->
+    <div id="comp-compfleet" style="display:none">
+      <div class="comp-cards" style="grid-template-columns:repeat(3,1fr)">
+        <div class="comp-card"><div class="comp-card-label">Πλοία</div><div class="comp-card-value" id="c-fl-count">1</div><div class="comp-card-sub">στον στόλο</div></div>
+        <div class="comp-card"><div class="comp-card-label">Σύνολο EUAs</div><div class="comp-card-value" id="c-fl-euas" style="color:var(--green-700)">—</div><div class="comp-card-sub">όλα τα πλοία</div></div>
+        <div class="comp-card"><div class="comp-card-label">Συνολικό Κόστος</div><div class="comp-card-value" id="c-fl-cost" style="color:#dc2626">—</div><div class="comp-card-sub">εκτίμηση</div></div>
+      </div>
+      <table class="comp-fleet-table" style="margin-top:16px">
+        <thead>
+          <tr><th>Πλοίο</th><th>IMO</th><th>Τύπος</th><th>CO₂ Total</th><th>EUAs</th><th>CII</th><th>FuelEU €</th><th>EUA Cost</th></tr>
+        </thead>
+        <tbody id="c-fl-tbody">
+          <tr><td style="font-weight:700">SCIO SPIRIT</td><td style="font-family:var(--mono)">9502738</td><td>Bulk Carrier</td><td id="c-fl-co2">—</td><td id="c-fl-eua2">—</td><td id="c-fl-cii2"><span class="cii-badge cii-D" style="width:28px;height:28px;font-size:12px">D</span></td><td id="c-fl-fueleu2">—</td><td id="c-fl-cost2">—</td></tr>
+        </tbody>
+      </table>
+      <div style="text-align:center;margin-top:20px;padding:24px;border:2px dashed var(--gray-200);border-radius:16px;color:var(--gray-400)">
+        <div style="font-size:32px;margin-bottom:8px">🚢</div>
+        <div style="font-weight:600;color:var(--gray-500);margin-bottom:4px">Προσθήκη πλοίου</div>
+        <div style="font-size:13px">Θα μπορείτε σύντομα να προσθέσετε πλοία και να βλέπετε συγκεντρωτικά το compliance κόστος του στόλου σας.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ═══ SECTION 1: MARKETPLACE ═══ -->
-<div class="section active" id="sec-marketplace">
+<div class="section" id="sec-marketplace">
   <div class="container" style="display:flex;gap:20px">
     <div style="flex:1;min-width:0">
       <div class="stats-grid">
@@ -465,7 +679,6 @@ input { font-family: var(--sans); }
       <button class="filter-btn" onclick="showGuide('ratings',this)">Ratings</button>
       <button class="filter-btn" onclick="showGuide('how',this)">Πώς Δημιουργούνται</button>
       <button class="filter-btn" onclick="showGuide('why',this)">Γιατί Χρειάζονται</button>
-      <button class="filter-btn" style="background:#dc2626;color:#fff;border-color:#dc2626" onclick="showGuide('euets',this)">⚖️ EU ETS & Compliance</button>
       <button class="filter-btn" onclick="showGuide('platform',this)">Η Πλατφόρμα</button>
       <button class="filter-btn" onclick="showGuide('glossary',this)">Γλωσσάριο</button>
     </div>
@@ -583,18 +796,8 @@ why: `
 
 platform: `
 <div style="font-size:32px;font-weight:800;color:var(--green-900);margin-bottom:24px">💻 Η Πλατφόρμα GreenCreditX</div>
-<div style="font-size:17px;color:#555;margin-bottom:28px;line-height:1.6">Η πλατφόρμα έχει <strong>έξι sections</strong>:</div>
+<div style="font-size:17px;color:#555;margin-bottom:28px;line-height:1.6">Η πλατφόρμα έχει <strong>τέσσερα βασικά sections</strong> + αυτόν τον οδηγό:</div>
 <div style="display:grid;gap:20px">
-  <div style="background:linear-gradient(135deg,#fef2f2,#fff);border:2px solid #dc2626;border-radius:16px;padding:28px">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:22px;font-weight:700;color:#dc2626">⚖️ Compliance — EU ETS Calculator</div><span style="background:#dc2626;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">ΝΕΟ</span></div>
-    <div style="font-size:16px;color:#555;line-height:1.7">
-      <strong>Τι κάνει:</strong> Υπολογίζει αυτόματα τα EUAs, FuelEU penalty, και CII rating για κάθε πλοίο.<br>
-      <strong>EUA Calculator:</strong> Εισάγετε κατανάλωση καυσίμου ανά πηγή (M/E, A/E, Boiler) × τύπο (HFO, MGO, LFO, MDO) + geographic split → βγαίνουν CO₂eq, EUAs, κόστος σε €.<br>
-      <strong>FuelEU Penalty:</strong> Υπολογίζει GHG intensity gap και penalty βάσει FuelEU Maritime targets.<br>
-      <strong>CII Rating:</strong> Carbon Intensity Indicator (A-E) βάσει CO₂/DWT×nm.<br>
-      <strong>Fleet Overview:</strong> Συγκεντρωτικό compliance κόστος όλου του στόλου.
-    </div>
-  </div>
   <div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;padding:28px">
     <div style="font-size:22px;font-weight:700;color:var(--green-900);margin-bottom:12px">🛒 Marketplace — Αγορά Credits</div>
     <div style="font-size:16px;color:#555;line-height:1.7">
@@ -637,125 +840,6 @@ platform: `
 </div>
 `,
 
-euets: `
-<div style="background:linear-gradient(135deg,#fef2f2,#fff5f5);padding:48px;border-radius:20px;margin-bottom:32px;border:2px solid #dc2626;text-align:center">
-  <div style="font-size:42px;font-weight:800;color:#991b1b">⚖️ EU ETS & Compliance</div>
-  <div style="font-size:18px;color:#dc2626;margin-top:8px;font-weight:600">Πώς λειτουργεί στην πράξη η ναυτιλιακή αγορά σήμερα</div>
-  <div style="font-size:14px;color:#999;margin-top:6px">Βασισμένο σε πραγματικά δεδομένα ελληνικής ναυτιλιακής εταιρείας</div>
-</div>
-
-<div style="font-size:18px;line-height:1.8;color:#333;margin-bottom:28px">
-  Από το <strong>2024</strong>, κάθε πλοίο >5.000 GT που ταξιδεύει σε EU λιμάνια <strong>πρέπει να αγοράσει EUAs</strong> (EU Allowances) για τις εκπομπές του. Αυτό <strong>δεν αντικαθίσταται</strong> από voluntary carbon credits — είναι υποχρεωτικό. Παράλληλα ισχύουν το <strong>FuelEU Maritime</strong> (penalty για μη-καθαρά καύσιμα) και ο <strong>CII Rating</strong> (λειτουργική αξιολόγηση A-E).
-</div>
-
-<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">📋 Η αλυσίδα συμμόρφωσης (5 βήματα)</div>
-<div style="display:grid;gap:12px;margin-bottom:32px">
-  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
-    <div style="min-width:44px;height:44px;border-radius:50%;background:var(--green-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">1</div>
-    <div><div style="font-weight:700;font-size:17px;color:var(--green-900)">Συλλογή δεδομένων στο πλοίο</div><div style="font-size:15px;color:#555;margin-top:4px">Master & Chief Engineer καταγράφουν: κατανάλωση καυσίμου (HFO, MGO, LFO, MDO), λιμάνια, αποστάσεις, φορτίο. Ανά event: Noon Report, Departure, Arrival, Bunkering.</div></div>
-  </div>
-  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
-    <div style="min-width:44px;height:44px;border-radius:50%;background:var(--green-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">2</div>
-    <div><div style="font-weight:700;font-size:17px;color:var(--green-900)">Έλεγχος στο γραφείο</div><div style="font-size:15px;color:#555;margin-top:4px">Το τεχνικό τμήμα ελέγχει τα BDNs (Bunker Delivery Notes), επικυρώνει τα στοιχεία ταξιδιών, και υποβάλλει στον verifier.</div></div>
-  </div>
-  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
-    <div style="min-width:44px;height:44px;border-radius:50%;background:var(--green-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">3</div>
-    <div><div style="font-weight:700;font-size:17px;color:var(--green-900)">Verifier (π.χ. ICS Saraidaris, Πειραιάς)</div><div style="font-size:15px;color:#555;margin-top:4px">Υπολογίζει τις εκπομπές CO₂eq, εφαρμόζει geographic scope (EU→EU 100%, EU↔Non-EU 50%), phase-in factor, και παράγει Verification Report + Emission Report.</div></div>
-  </div>
-  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
-    <div style="min-width:44px;height:44px;border-radius:50%;background:var(--green-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">4</div>
-    <div><div style="font-weight:700;font-size:17px;color:var(--green-900)">Upload στο THETIS-MRV</div><div style="font-size:15px;color:#555;margin-top:4px">Τα reports ανεβαίνουν στην επίσημη πλατφόρμα της EU. Ο πλοιοκτήτης μπορεί να τα κατεβάσει.</div></div>
-  </div>
-  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
-    <div style="min-width:44px;height:44px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">5</div>
-    <div><div style="font-weight:700;font-size:17px;color:#991b1b">Αγορά EUAs — Πληρωμή!</div><div style="font-size:15px;color:#555;margin-top:4px">Ο πλοιοκτήτης αγοράζει τα EUAs στην αγορά. Deadline: <strong>30 Σεπτεμβρίου</strong> του επόμενου έτους. Τιμή ~€68/τόνο (Μάρτιος 2026).</div></div>
-  </div>
-</div>
-
-<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">⛽ Πηγές εκπομπών σε ένα πλοίο</div>
-<div style="font-size:16px;color:#555;margin-bottom:16px">Σημαντικό: Μετράνε <strong>ΟΛΕΣ</strong> οι πηγές καύσης, όχι μόνο η κύρια μηχανή!</div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:32px">
-  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;text-align:center">
-    <div style="font-size:36px;margin-bottom:8px">⚙️</div>
-    <div style="font-size:18px;font-weight:700;color:var(--green-900)">Κύρια Μηχανή (M/E)</div>
-    <div style="font-size:14px;color:#555;margin-top:6px">Πρόωση πλοίου</div>
-    <div style="font-size:28px;font-weight:800;color:var(--green-700);margin-top:8px">~77%</div>
-    <div style="font-size:12px;color:#999">των εκπομπών</div>
-  </div>
-  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;text-align:center">
-    <div style="font-size:36px;margin-bottom:8px">🔌</div>
-    <div style="font-size:18px;font-weight:700;color:var(--green-900)">Βοηθ. Μηχανές (A/E)</div>
-    <div style="font-size:14px;color:#555;margin-top:6px">Γεννήτριες, αντλίες, φωτισμός</div>
-    <div style="font-size:28px;font-weight:800;color:#d97706;margin-top:8px">~18%</div>
-    <div style="font-size:12px;color:#999">των εκπομπών</div>
-  </div>
-  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;text-align:center">
-    <div style="font-size:36px;margin-bottom:8px">🔥</div>
-    <div style="font-size:18px;font-weight:700;color:var(--green-900)">Καυστήρας (Boiler)</div>
-    <div style="font-size:14px;color:#555;margin-top:6px">Θέρμανση, steam, φ/ε</div>
-    <div style="font-size:28px;font-weight:800;color:#dc2626;margin-top:8px">~5%</div>
-    <div style="font-size:12px;color:#999">των εκπομπών</div>
-  </div>
-</div>
-
-<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">📊 Emission Factors (EU MRV Regulation)</div>
-<div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;overflow:hidden;margin-bottom:32px">
-  <table style="width:100%;border-collapse:collapse">
-    <thead><tr style="background:var(--green-900)"><th style="padding:14px 20px;color:#fff;font-size:14px;text-align:left">Καύσιμο</th><th style="padding:14px 20px;color:#fff;font-size:14px;text-align:center">Emission Factor</th><th style="padding:14px 20px;color:#fff;font-size:14px;text-align:left">Χρήση</th></tr></thead>
-    <tbody>
-      <tr><td style="padding:14px 20px;font-weight:700;border-bottom:1px solid #f3f4f6">HFO (Heavy Fuel Oil)</td><td style="padding:14px 20px;text-align:center;font-family:var(--mono);font-weight:700;color:var(--green-700);border-bottom:1px solid #f3f4f6">3.114</td><td style="padding:14px 20px;border-bottom:1px solid #f3f4f6;color:#555">Κύριο καύσιμο — ανοιχτή θάλασσα</td></tr>
-      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-weight:700;border-bottom:1px solid #f3f4f6">MGO (Marine Gas Oil)</td><td style="padding:14px 20px;text-align:center;font-family:var(--mono);font-weight:700;color:var(--green-700);border-bottom:1px solid #f3f4f6">3.206</td><td style="padding:14px 20px;border-bottom:1px solid #f3f4f6;color:#555">Κοντά σε EU λιμάνια (low sulfur)</td></tr>
-      <tr><td style="padding:14px 20px;font-weight:700;border-bottom:1px solid #f3f4f6">LFO (Light Fuel Oil)</td><td style="padding:14px 20px;text-align:center;font-family:var(--mono);font-weight:700;color:var(--green-700);border-bottom:1px solid #f3f4f6">3.151</td><td style="padding:14px 20px;border-bottom:1px solid #f3f4f6;color:#555">Ενδιάμεσο καύσιμο</td></tr>
-      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-weight:700">MDO (Marine Diesel Oil)</td><td style="padding:14px 20px;text-align:center;font-family:var(--mono);font-weight:700;color:var(--green-700)">3.206</td><td style="padding:14px 20px;color:#555">Diesel πλοίου</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">🗺️ Geographic Scope & Phase-in</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px">
-  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px">
-    <div style="font-size:18px;font-weight:700;color:var(--green-900);margin-bottom:12px">Geographic Scope</div>
-    <div style="font-size:15px;line-height:2;color:#555">
-      🟢 EU → EU: <strong>100%</strong> εκπομπών<br>
-      🟡 EU ↔ Non-EU: <strong>50%</strong> εκπομπών<br>
-      🔴 Non-EU → Non-EU: <strong>0%</strong> (δεν μετράνε)<br>
-      🟢 At berth σε EU port: <strong>100%</strong>
-    </div>
-  </div>
-  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px">
-    <div style="font-size:18px;font-weight:700;color:var(--green-900);margin-bottom:12px">Phase-in</div>
-    <div style="font-size:15px;line-height:2;color:#555">
-      📅 2024: <strong>40%</strong> χρέωση<br>
-      📅 2025: <strong>70%</strong> χρέωση<br>
-      📅 2026+: <strong>100%</strong> πλήρης χρέωση<br>
-      ⏰ Deadline: <strong>30 Σεπτεμβρίου</strong> επόμενου έτους
-    </div>
-  </div>
-</div>
-
-<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">🚢 Πραγματικό Παράδειγμα: SCIO SPIRIT (2025)</div>
-<div style="background:linear-gradient(135deg,#fef2f2,#fff);border:2px solid #fca5a5;border-radius:16px;padding:28px;margin-bottom:28px">
-  <div style="font-size:15px;color:#555;margin-bottom:16px">Bulk Carrier, IMO 9502738, Varship Shipping (Crossworld Group)</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
-    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px">CO₂ Total</div><div style="font-size:26px;font-weight:800;color:#991b1b;font-family:var(--mono)">9.609 t</div></div>
-    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px">EUAs Required</div><div style="font-size:26px;font-weight:800;color:var(--green-700);font-family:var(--mono)">3.725</div></div>
-    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px">EUA Cost</div><div style="font-size:26px;font-weight:800;color:#dc2626;font-family:var(--mono)">~€253K</div></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;padding-top:16px;border-top:1px solid #fecaca">
-    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px">FuelEU Penalty</div><div style="font-size:20px;font-weight:800;color:#dc2626;font-family:var(--mono)">€88.448</div></div>
-    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px">CII Rating</div><div style="font-size:20px;font-weight:800;color:#ea580c;font-family:var(--mono)">D (7,556)</div></div>
-    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase;letter-spacing:1px">Σύνολο Κόστους</div><div style="font-size:20px;font-weight:800;color:#dc2626;font-family:var(--mono)">~€341K/έτος</div></div>
-  </div>
-</div>
-
-<div style="background:#f0fdf4;border:2px solid var(--green-200);border-radius:16px;padding:28px">
-  <div style="font-size:20px;font-weight:700;color:var(--green-700);margin-bottom:12px">💡 Γι' αυτό φτιάξαμε τον Compliance Calculator</div>
-  <div style="font-size:16px;line-height:1.7;color:#333">
-    Πατήστε το tab <strong>⚖️ Compliance</strong> για να υπολογίσετε μόνοι σας τα EUAs, FuelEU penalty, και CII rating για κάθε πλοίο σας. Χρειάζεστε μόνο: κατανάλωση καυσίμου ανά πηγή + γεωγραφική κατανομή ταξιδιών.
-  </div>
-</div>
-`,
-
 glossary: `
 <div style="font-size:32px;font-weight:800;color:var(--green-900);margin-bottom:24px">📖 Γλωσσάριο Όρων</div>
 <div style="font-size:17px;color:#555;margin-bottom:24px">Όλοι οι όροι που θα συναντήσετε στην πλατφόρμα, με απλή εξήγηση:</div>
@@ -771,14 +855,6 @@ glossary: `
       <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">EU ETS</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Ευρωπαϊκό Σύστημα Εμπορίας Εκπομπών — υποχρεωτικό</td></tr>
       <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">EUA</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">EU Allowance — δικαίωμα εκπομπής 1 τόνου CO₂ (~€68)</td></tr>
       <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">IMO</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Διεθνής Ναυτιλιακός Οργανισμός — ρυθμίζει τη ναυτιλία</td></tr>
-      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">FuelEU Maritime <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Κανονισμός GHG intensity καυσίμων — penalty για μη συμμόρφωση</td></tr>
-      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">CII Rating <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Carbon Intensity Indicator — λειτουργική αξιολόγηση A (best) έως E (worst)</td></tr>
-      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">THETIS-MRV <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Επίσημη EU πλατφόρμα reporting εκπομπών πλοίων</td></tr>
-      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">Phase-in <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Σταδιακή εφαρμογή EU ETS: 2024=40%, 2025=70%, 2026+=100%</td></tr>
-      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">Geographic Scope <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">EU→EU 100%, EU↔Non-EU 50%, Non-EU→Non-EU 0%</td></tr>
-      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">Emission Factor <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Συντελεστής εκπομπών: HFO=3.114, MGO=3.206 gCO₂/gFuel</td></tr>
-      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">M/E, A/E, BLR <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Main Engine, Auxiliary Engine, Boiler — πηγές εκπομπών πλοίου</td></tr>
-      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">BDN <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Bunker Delivery Note — απόδειξη παράδοσης καυσίμου</td></tr>
       <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">Spot Price</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Τρέχουσα τιμή αγοράς — άμεση παράδοση</td></tr>
       <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">ROI</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Return on Investment — πόσο κερδίζεις ως % της επένδυσης</td></tr>
       <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">Break-even</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Το σημείο που τα έσοδα καλύπτουν την επένδυση</td></tr>
@@ -912,7 +988,7 @@ const PRICE_TIP = "<div class='tt-title'>\u03A4\u03B9\u03BC\u03AE \u03B1\u03BD\u
 // ═══════════════════════════════════════════════
 let cart = [];
 let cartVisible = false;
-let currentSection = "marketplace";
+let currentSection = "compliance";
 let typeFilter = "all";
 let mktFilter = "all";
 let selectedInst = "ARR-A";
@@ -1915,7 +1991,147 @@ function init() {
   setInterval(tickLiveData, 2500);
 }
 
+// ═══════════════════════════════════════════════
+// COMPLIANCE CALCULATOR
+// ═══════════════════════════════════════════════
+const COMP_EF = { HFO: 3.114, LFO: 3.151, MGO: 3.206, MDO: 3.206 };
+const COMP_PHASEIN = { '2025': 0.70, '2026': 1.0, '2027': 1.0, '2028': 1.0 };
+
+function compVal(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function compFmt(n) { return n.toLocaleString('el-GR', { maximumFractionDigits: 1 }); }
+function compFmtE(n) { return '€' + n.toLocaleString('el-GR', { maximumFractionDigits: 0 }); }
+
+function switchCompTab(tab, btn) {
+  ['eua','fueleu','cii','compfleet'].forEach(t => {
+    const el = document.getElementById('comp-' + t);
+    if (el) el.style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.comp-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+function calcEUA() {
+  const hfo = compVal('cf-hfo-me') + compVal('cf-hfo-ae') + compVal('cf-hfo-blr') + compVal('cf-hfo-oth');
+  const lfo = compVal('cf-lfo-me') + compVal('cf-lfo-ae') + compVal('cf-lfo-blr') + compVal('cf-lfo-oth');
+  const mgo = compVal('cf-mgo-me') + compVal('cf-mgo-ae') + compVal('cf-mgo-blr') + compVal('cf-mgo-oth');
+  const mdo = compVal('cf-mdo-me') + compVal('cf-mdo-ae') + compVal('cf-mdo-blr') + compVal('cf-mdo-oth');
+
+  document.getElementById('cf-hfo-tot').textContent = compFmt(hfo);
+  document.getElementById('cf-lfo-tot').textContent = compFmt(lfo);
+  document.getElementById('cf-mgo-tot').textContent = compFmt(mgo);
+  document.getElementById('cf-mdo-tot').textContent = compFmt(mdo);
+  document.getElementById('cf-all-tot').textContent = compFmt(hfo + lfo + mgo + mdo) + ' MT';
+
+  const co2_hfo = hfo * COMP_EF.HFO;
+  const co2_lfo = lfo * COMP_EF.LFO;
+  const co2_mgo = mgo * COMP_EF.MGO;
+  const co2_mdo = mdo * COMP_EF.MDO;
+  const co2 = co2_hfo + co2_lfo + co2_mgo + co2_mdo;
+
+  const eueu = compVal('cf-eueu') / 100;
+  const eunon = compVal('cf-eunon') / 100;
+  const euScope = co2 * (eueu * 1.0 + eunon * 0.5);
+
+  const yr = document.getElementById('cf-year').value;
+  const pi = COMP_PHASEIN[yr] || 1.0;
+  const euas = euScope * pi;
+  const price = compVal('cf-eua-price');
+  const cost = euas * price;
+
+  document.getElementById('c-co2').textContent = compFmt(co2);
+  document.getElementById('c-euscope').textContent = compFmt(euScope);
+  document.getElementById('c-euas').textContent = compFmt(Math.round(euas));
+  document.getElementById('c-phasein').textContent = 'phase-in ' + yr + ': ' + (pi * 100) + '%';
+  document.getElementById('c-cost').textContent = compFmtE(cost);
+  document.getElementById('c-price').textContent = '@ €' + price + '/EUA';
+
+  document.getElementById('c-bd-hfo').textContent = compFmt(co2_hfo);
+  document.getElementById('c-bd-mgo').textContent = compFmt(co2_mgo);
+  document.getElementById('c-bd-lfo').textContent = compFmt(co2_lfo + co2_mdo);
+  document.getElementById('c-breakdown').style.display = 'grid';
+
+  const rb = document.getElementById('c-result');
+  rb.style.display = 'flex';
+  rb.className = 'comp-result ' + (cost > 200000 ? 'danger' : cost > 100000 ? 'warn' : 'ok');
+  const vessel = document.getElementById('cf-vessel').value;
+  const nextYr = parseInt(yr) + 1;
+  rb.innerHTML = 'Το <strong>' + vessel + '</strong> οφείλει <strong>' + compFmt(Math.round(euas)) + ' EUAs</strong> για το ' + yr + '. Εκτιμώμενο κόστος: <strong>' + compFmtE(cost) + '</strong>. Deadline παράδοσης: 30 Σεπτεμβρίου ' + nextYr + '.';
+
+  document.getElementById('c-fl-euas').textContent = compFmt(Math.round(euas));
+  document.getElementById('c-fl-cost').textContent = compFmtE(cost);
+  document.getElementById('c-fl-co2').textContent = compFmt(co2);
+  document.getElementById('c-fl-eua2').textContent = compFmt(Math.round(euas));
+  document.getElementById('c-fl-cost2').textContent = compFmtE(cost);
+
+  calcCII();
+  calcFuelEU();
+}
+
+function calcFuelEU() {
+  const energy = compVal('cf-fu-energy');
+  const ref = compVal('cf-fu-ref');
+  const targetPct = compVal('cf-fu-target');
+  const actual = compVal('cf-fu-actual');
+  const target = ref * (1 - targetPct / 100);
+  const balance = target - actual;
+  const penalty = balance < 0 ? Math.abs(balance) * energy / 1000000 * 2400 / 100 : 0;
+
+  document.getElementById('c-fu-ghg').textContent = actual.toFixed(1);
+  document.getElementById('c-fu-bal').textContent = balance.toFixed(1);
+  document.getElementById('c-fu-pen').textContent = compFmtE(Math.round(penalty));
+
+  const rb = document.getElementById('c-fu-result');
+  rb.style.display = 'flex';
+  if (balance >= 0) {
+    rb.className = 'comp-result ok';
+    rb.innerHTML = 'Το πλοίο πληροί τα FuelEU targets. Surplus: <strong>' + balance.toFixed(1) + ' gCO₂eq/MJ</strong> — μπορεί να μεταφερθεί στο επόμενο έτος ή σε άλλο πλοίο.';
+  } else {
+    rb.className = 'comp-result danger';
+    rb.innerHTML = 'Deficit: <strong>' + balance.toFixed(1) + ' gCO₂eq/MJ</strong>. Εκτιμώμενο FuelEU penalty: <strong>' + compFmtE(Math.round(penalty)) + '</strong>. Επιλογές: biofuels, pooling με πλοίο surplus, ή πληρωμή penalty.';
+  }
+  document.getElementById('c-fl-fueleu2').textContent = penalty > 0 ? compFmtE(Math.round(penalty)) : '—';
+}
+
+function calcCII() {
+  const co2Text = document.getElementById('c-co2').textContent;
+  const co2 = parseFloat(co2Text.replace(/\./g, '').replace(',', '.')) || 9609;
+  const dwt = compVal('cf-dwt');
+  const dist = compVal('cf-dist');
+  if (dwt > 0 && dist > 0) {
+    const cii = (co2 * 1000000) / (dwt * dist);
+    document.getElementById('c-cii-val').textContent = cii.toFixed(2);
+    document.getElementById('c-cii-dist').textContent = compFmt(dist);
+    document.getElementById('c-cii-dwt').textContent = compFmt(dwt);
+    let r = cii < 3.5 ? 'A' : cii < 5.0 ? 'B' : cii < 6.5 ? 'C' : cii < 8.5 ? 'D' : 'E';
+    document.getElementById('c-cii-rate').innerHTML = '<span class="cii-badge cii-' + r + '">' + r + '</span>';
+    const rb = document.getElementById('c-cii-result');
+    rb.style.display = 'flex';
+    if (r === 'A' || r === 'B') {
+      rb.className = 'comp-result ok';
+      rb.innerHTML = 'Rating <strong>' + r + '</strong> — Εξαιρετική απόδοση. Δεν απαιτείται corrective action plan.';
+    } else if (r === 'C') {
+      rb.className = 'comp-result warn';
+      rb.innerHTML = 'Rating <strong>C</strong> — Αποδεκτό. Συνιστάται βελτιστοποίηση ταχύτητας/δρομολογίων.';
+    } else {
+      rb.className = 'comp-result danger';
+      rb.innerHTML = 'Rating <strong>' + r + '</strong> — Απαιτείται corrective action plan. Κίνδυνος λειτουργικών περιορισμών αν παραμείνει ' + r + ' για 3 συνεχόμενα έτη.';
+    }
+    document.getElementById('c-fl-cii2').innerHTML = '<span class="cii-badge cii-' + r + '" style="width:28px;height:28px;font-size:12px">' + r + '</span>';
+  }
+}
+
+function resetCompForm() {
+  ['cf-hfo-me','cf-hfo-ae','cf-hfo-blr','cf-hfo-oth','cf-lfo-me','cf-lfo-ae','cf-lfo-blr','cf-lfo-oth','cf-mgo-me','cf-mgo-ae','cf-mgo-blr','cf-mgo-oth','cf-mdo-me','cf-mdo-ae','cf-mdo-blr','cf-mdo-oth'].forEach(id => document.getElementById(id).value = '0');
+  document.getElementById('cf-vessel').value = '';
+  document.getElementById('cf-imo').value = '';
+  document.getElementById('cf-eueu').value = '0';
+  document.getElementById('cf-eunon').value = '0';
+  document.getElementById('cf-noneu').value = '0';
+  calcEUA();
+}
+
 document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', function() { setTimeout(calcEUA, 500); });
 
 function showBusinessPlan(invId) {
   const inv = INVESTMENTS.find(i=>i.id===invId);
