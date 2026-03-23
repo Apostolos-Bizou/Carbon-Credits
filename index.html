@@ -335,26 +335,9 @@ input { font-family: var(--sans); }
 </div>
 
 <!-- ═══ SECTION 1: MARKETPLACE ═══ -->
-<div class="section" id="sec-marketplace">
+<div class="section active" id="sec-marketplace">
   <div class="container" style="display:flex;gap:20px">
     <div style="flex:1;min-width:0">
-      <!-- EUA PROCUREMENT BANNER -->
-      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:16px;padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap" class="tt">
-        <div>
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-            <span style="background:#2563eb;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">EUA PROCUREMENT</span>
-            <span style="font-size:18px;font-weight:800;color:#1e3a5f">EU Allowances — Υποχρεωτικά για EU ETS</span>
-          </div>
-          <div style="font-size:14px;color:#6b7280;line-height:1.5">Bulk αγορά EUAs για τον στόλο σας. Τιμή: <strong style="color:#2563eb;font-family:var(--mono)">€68.20</strong>/tCO₂. Πρώτα υπολογίστε τις ανάγκες στο ⚖️ Compliance.</div>
-        </div>
-        <button style="background:#2563eb;color:#fff;border:none;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;font-family:var(--sans)" onclick="switchSection('compliance')">⚖️ Υπολογισμός →</button>
-        <span class="tt-text" style="width:300px"><div class="tt-title">EUA Procurement Service</div>Τα EUAs (EU Allowances) είναι υποχρεωτικά. ΔΕΝ αντικαθίστανται από voluntary credits. Υπολογίστε πόσα χρειάζεστε στο Compliance tab.</span>
-      </div>
-      <!-- VCU / EUA TYPE TABS -->
-      <div style="display:flex;gap:6px;margin-bottom:14px">
-        <button style="padding:7px 16px;border-radius:10px;border:1px solid var(--green-200);background:var(--green-50);color:var(--green-700);font-weight:600;font-size:13px;cursor:pointer;font-family:var(--sans)">🌱 Voluntary Credits (VCU)</button>
-        <button style="padding:7px 16px;border-radius:10px;border:1px solid #bfdbfe;background:#eff6ff;color:#2563eb;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--sans);opacity:.6" class="tt" title="Σύντομα: αγορά EUAs μέσω πλατφόρμας.">🏛️ Compliance (EUA) <span style="font-size:10px">SOON</span></button>
-      </div>
       <div class="stats-grid">
         <div class="stat-card tt"><div class="stat-label">Credits Traded</div><div class="stat-value" id="stat1">0</div><div class="stat-sub">tCO₂e YTD</div><span class="tt-text"><div class="tt-title">Credits Traded</div>Συνολικοί τόνοι CO₂ που έχουν διαπραγματευτεί μέσω GreenCreditX από την αρχή του έτους (Year To Date). Κάθε credit = 1 τόνος CO₂.</span></div>
         <div class="stat-card tt"><div class="stat-label">Active Clients</div><div class="stat-value" id="stat2">0</div><div class="stat-sub">Shipowners</div><span class="tt-text"><div class="tt-title">Active Clients</div>Αριθμός πλοιοκτητών που αγοράζουν credits μέσω της πλατφόρμας. Αυτοί είναι οι 20+ πελάτες TPA που χρειάζονται credits για EU ETS/IMO compliance.</span></div>
@@ -414,25 +397,6 @@ input { font-family: var(--sans); }
       <div id="instrumentList"></div>
     </div>
     <div class="mkt-center">
-      <!-- EUA SPOTLIGHT -->
-      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd;border-radius:14px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap" class="tt">
-        <div style="display:flex;align-items:center;gap:14px">
-          <div style="width:42px;height:42px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px">EUA</div>
-          <div>
-            <div style="font-size:13px;color:#6b7280">EU Allowance — ICE/EEX</div>
-            <div style="display:flex;align-items:baseline;gap:10px">
-              <span style="font-size:26px;font-weight:800;color:#1e3a5f;font-family:var(--mono)" id="euaSpotPrice">€68.20</span>
-              <span style="font-size:14px;font-weight:600;color:var(--green-600)" id="euaSpotChange">+0.45 (+0.66%)</span>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:20px;font-size:13px;color:#6b7280">
-          <div><div style="font-weight:600;color:#1e3a5f" id="euaHi">€69.10</div><div>24h High</div></div>
-          <div><div style="font-weight:600;color:#1e3a5f" id="euaLo">€67.05</div><div>24h Low</div></div>
-          <div><div style="font-weight:600;color:#1e3a5f" id="euaVol">142K</div><div>Volume</div></div>
-        </div>
-        <span class="tt-text" style="width:280px"><div class="tt-title">EUA — EU Allowance</div>Η τιμή του δικαιώματος εκπομπής 1 τόνου CO₂ στην ΕΕ. Αυτή η τιμή καθορίζει πόσο πληρώνουν οι πλοιοκτήτες για EU ETS compliance. Χρησιμοποιείται στον Compliance Calculator.</span>
-      </div>
       <div class="sel-header">
         <div><div style="display:flex;align-items:center;gap:8px"><span class="inst-dot" id="selDot"></span><span class="sel-sym" id="selSym"></span><span class="sel-name" id="selName"></span></div><div class="sel-exch" id="selExch"></div></div>
         <div style="text-align:right"><div class="sel-price" id="selPrice"></div><div class="sel-change" id="selChange"></div></div>
@@ -1342,14 +1306,6 @@ function tickLiveData() {
   if(currentSection==='markets') {
     renderInstrumentList();
     renderMarketCenter();
-  }
-  var eua=liveData.find(function(d){return d.sym==='EUA'});
-  if(eua){
-    var ep=document.getElementById('euaSpotPrice');if(ep)ep.textContent='€'+eua.price.toFixed(2);
-    var ec=document.getElementById('euaSpotChange');if(ec){ec.textContent=(eua.ch>=0?'+':'')+eua.ch.toFixed(2)+' ('+(eua.chPct>=0?'+':'')+eua.chPct.toFixed(2)+'%)';ec.style.color=eua.ch>=0?'var(--green-600)':'#dc2626';}
-    var eh=document.getElementById('euaHi');if(eh)eh.textContent='€'+eua.hi.toFixed(2);
-    var el=document.getElementById('euaLo');if(el)el.textContent='€'+eua.lo.toFixed(2);
-    var ev=document.getElementById('euaVol');if(ev)ev.textContent=(eua.vol/1000).toFixed(0)+'K';
   }
 }
 
