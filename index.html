@@ -395,6 +395,7 @@ input { font-family: var(--sans); }
       <button class="comp-tab" onclick="switchCompTab('fueleu',this)">FuelEU Penalty</button>
       <button class="comp-tab" onclick="switchCompTab('cii',this)">CII Rating</button>
       <button class="comp-tab" onclick="switchCompTab('compfleet',this)">Fleet Overview</button>
+      <button class="comp-tab" onclick="switchCompTab('poolsave',this)" style="background:#fef2f2;color:#dc2626;border-color:#fca5a5">🏊 Pooling Savings</button>
     </div>
 
     <!-- ═══ EUA CALCULATOR ═══ -->
@@ -547,10 +548,37 @@ input { font-family: var(--sans); }
       </div>
     </div>
 
+    <!-- ═══ POOLING SAVINGS CALCULATOR ═══ -->
+    <div id="comp-poolsave" style="display:none">
+      <div class="comp-cards">
+        <div class="comp-card tt"><div class="comp-card-label">FuelEU Penalty</div><div class="comp-card-value" id="c-ps-penalty" style="color:#dc2626">—</div><div class="comp-card-sub">κόστος χωρίς pooling</div><span class="tt-text"><div class="tt-title">FuelEU Penalty</div>Αυτό θα πληρώνατε αν ΔΕΝ χρησιμοποιούσατε pooling. Penalty cap: €642/tCO₂e. Αποφύγετέ το!</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">GCX Pooling Cost</div><div class="comp-card-value" id="c-ps-gcx" style="color:var(--green-700)">—</div><div class="comp-card-sub">με GreenCreditX</div><span class="tt-text"><div class="tt-title">GreenCreditX Pooling</div>Το κόστος αν αγοράσετε FuelEU Compliance Units μέσω GreenCreditX. Η καλύτερη τιμή στην αγορά.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">Εξοικονόμηση</div><div class="comp-card-value" id="c-ps-save" style="color:#15803d">—</div><div class="comp-card-sub" id="c-ps-savepct">vs penalty</div><span class="tt-text"><div class="tt-title">Συνολική Εξοικονόμηση</div>Πόσα γλιτώνετε επιλέγοντας pooling αντί να πληρώσετε το FuelEU penalty. Μεγαλύτερα πλοία = μεγαλύτερη εξοικονόμηση.</span></div>
+        <div class="comp-card tt"><div class="comp-card-label">Best Provider</div><div class="comp-card-value" id="c-ps-best" style="color:#f97316">—</div><div class="comp-card-sub">χαμηλότερη τιμή</div><span class="tt-text"><div class="tt-title">Best Provider</div>Ο πάροχος pooling με τη χαμηλότερη τιμή αυτή τη στιγμή. GCX = GreenCreditX (εμείς!).</span></div>
+      </div>
+
+      <div class="comp-section">
+        <div class="comp-section-title">Στοιχεία FuelEU Compliance</div>
+        <div class="comp-form-grid">
+          <div class="comp-fg"><label>FuelEU Deficit (tCO₂e)</label><input type="number" id="cf-ps-deficit" value="140" step="1" oninput="calcPoolSave()"></div>
+          <div class="comp-fg"><label>Penalty Rate (€/tCO₂e)</label><input type="number" id="cf-ps-penrate" value="642" step="1" oninput="calcPoolSave()"></div>
+          <div class="comp-fg"><label>Αριθμός πλοίων</label><input type="number" id="cf-ps-vessels" value="1" step="1" min="1" max="50" oninput="calcPoolSave()"></div>
+          <div class="comp-fg"><label>Έτος αναφοράς</label><select id="cf-ps-year" onchange="calcPoolSave()"><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select></div>
+        </div>
+      </div>
+
+      <button class="comp-btn comp-btn-primary" onclick="calcPoolSave()">⚡ Σύγκριση Κόστους Pooling</button>
+
+      <div id="c-ps-results" style="display:none;margin-top:20px">
+        <div style="font-size:18px;font-weight:800;color:var(--green-900);margin-bottom:16px">📊 Σύγκριση Παρόχων FuelEU Pooling</div>
+        <div id="c-ps-table"></div>
+        <div id="c-ps-bars" style="margin-top:20px"></div>
+        <div id="c-ps-recommend" style="margin-top:20px"></div>
+      </div>
+    </div>
+
   </div>
 </div>
-
-<!-- ═══ SECTION 1: MARKETPLACE ═══ -->
 <div class="section" id="sec-marketplace">
   <div class="container" style="display:flex;gap:20px">
     <div style="flex:1;min-width:0">
@@ -2133,12 +2161,13 @@ function compFmt(n) { return n.toLocaleString('el-GR', { maximumFractionDigits: 
 function compFmtE(n) { return '€' + n.toLocaleString('el-GR', { maximumFractionDigits: 0 }); }
 
 function switchCompTab(tab, btn) {
-  ['eua','fueleu','cii','compfleet'].forEach(t => {
+  ['eua','fueleu','cii','compfleet','poolsave'].forEach(t => {
     const el = document.getElementById('comp-' + t);
     if (el) el.style.display = t === tab ? 'block' : 'none';
   });
   document.querySelectorAll('.comp-tab').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  if (tab === 'poolsave') calcPoolSave();
 }
 
 function calcEUA() {
@@ -2259,6 +2288,95 @@ function resetCompForm() {
   document.getElementById('cf-eunon').value = '0';
   document.getElementById('cf-noneu').value = '0';
   calcEUA();
+}
+
+function calcPoolSave() {
+  var deficit = parseFloat(document.getElementById('cf-ps-deficit').value)||0;
+  var penRate = parseFloat(document.getElementById('cf-ps-penrate').value)||642;
+  var vessels = parseInt(document.getElementById('cf-ps-vessels').value)||1;
+  var year = document.getElementById('cf-ps-year').value;
+  var totalDeficit = deficit * vessels;
+  var totalPenalty = totalDeficit * penRate;
+
+  var providers = [
+    {name:'GreenCreditX',sym:'GCX',price:220,color:'#15803d',bg:'linear-gradient(135deg,#14532d,#166534)',txtCol:'#fff',isBest:true},
+    {name:'OceanScore OPX',sym:'OPX',price:year==='2025'?200:205,color:'#dc2626',bg:'#fff',txtCol:'#333',isBest:false},
+    {name:'Gasum Pool',sym:'GASUM',price:235,color:'#0ea5e9',bg:'#fff',txtCol:'#333',isBest:false},
+    {name:'STX Group',sym:'STX',price:253,color:'#a855f7',bg:'#fff',txtCol:'#333',isBest:false}
+  ];
+
+  // Use live prices if available
+  providers.forEach(function(p){
+    var live = liveData.find(function(d){return d.sym===p.sym+'-POOL'||d.sym===p.sym+'-25'||d.sym===p.sym+'-FEU'||d.sym===p.sym;});
+    if(live) p.price = Math.round(live.price);
+  });
+
+  providers.sort(function(a,b){return a.price-b.price;});
+  var bestProvider = providers[0];
+
+  // KPI Cards
+  document.getElementById('c-ps-penalty').textContent = '\u20AC'+totalPenalty.toLocaleString();
+  document.getElementById('c-ps-gcx').textContent = '\u20AC'+(totalDeficit*220).toLocaleString();
+  var gcxSave = totalPenalty - totalDeficit*220;
+  var gcxSavePct = totalPenalty>0?Math.round(gcxSave/totalPenalty*100):0;
+  document.getElementById('c-ps-save').textContent = '\u20AC'+gcxSave.toLocaleString();
+  document.getElementById('c-ps-savepct').textContent = gcxSavePct+'% vs penalty';
+  document.getElementById('c-ps-best').textContent = bestProvider.name;
+
+  // Comparison table
+  var tbl = '<table style="width:100%;border-collapse:collapse;border-radius:14px;overflow:hidden;font-size:14px">';
+  tbl += '<thead><tr style="background:#14532d;color:#fff"><th style="padding:12px 16px;text-align:left">\u03A0\u03AC\u03C1\u03BF\u03C7\u03BF\u03C2</th><th style="padding:12px 16px;text-align:right">\u20AC/tCO\u2082e</th><th style="padding:12px 16px;text-align:right">\u039A\u03CC\u03C3\u03C4\u03BF\u03C2 ('+totalDeficit.toLocaleString()+' t)</th><th style="padding:12px 16px;text-align:right">\u0395\u03BE\u03BF\u03B9\u03BA\u03BF\u03BD\u03CC\u03BC\u03B7\u03C3\u03B7</th><th style="padding:12px 16px;text-align:right">vs Penalty</th></tr></thead><tbody>';
+  providers.forEach(function(p,i){
+    var cost = totalDeficit * p.price;
+    var save = totalPenalty - cost;
+    var savePct = totalPenalty>0?Math.round(save/totalPenalty*100):0;
+    var isGCX = p.name==='GreenCreditX';
+    var rowBg = isGCX?'#f0fdf4':i%2===0?'#f9fafb':'#fff';
+    var fw = isGCX?'800':'400';
+    tbl += '<tr style="background:'+rowBg+'"><td style="padding:12px 16px;font-weight:'+fw+'"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:'+p.color+';margin-right:8px"></span>'+p.name+(isGCX?' \u2B50':'')+'</td>';
+    tbl += '<td style="padding:12px 16px;text-align:right;font-family:var(--mono);font-weight:700">\u20AC'+p.price+'</td>';
+    tbl += '<td style="padding:12px 16px;text-align:right;font-family:var(--mono);font-weight:700">\u20AC'+cost.toLocaleString()+'</td>';
+    tbl += '<td style="padding:12px 16px;text-align:right;font-family:var(--mono);font-weight:700;color:#15803d">\u20AC'+save.toLocaleString()+'</td>';
+    tbl += '<td style="padding:12px 16px;text-align:right;font-weight:700;color:#15803d">-'+savePct+'%</td></tr>';
+  });
+  // Penalty row
+  tbl += '<tr style="background:#fef2f2"><td style="padding:12px 16px;font-weight:800;color:#991b1b">\u274C FuelEU Penalty</td>';
+  tbl += '<td style="padding:12px 16px;text-align:right;font-family:var(--mono);font-weight:700;color:#dc2626">\u20AC'+penRate+'</td>';
+  tbl += '<td style="padding:12px 16px;text-align:right;font-family:var(--mono);font-weight:700;color:#dc2626">\u20AC'+totalPenalty.toLocaleString()+'</td>';
+  tbl += '<td style="padding:12px 16px;text-align:right;color:#dc2626;font-weight:700">\u20AC0</td>';
+  tbl += '<td style="padding:12px 16px;text-align:right;color:#dc2626;font-weight:700">0%</td></tr>';
+  tbl += '</tbody></table>';
+  document.getElementById('c-ps-table').innerHTML = tbl;
+
+  // Visual bars comparison
+  var barsHtml = '<div style="font-size:16px;font-weight:800;color:var(--green-900);margin-bottom:14px">\uD83D\uDCC9 \u039F\u03C0\u03C4\u03B9\u03BA\u03AE \u03A3\u03CD\u03B3\u03BA\u03C1\u03B9\u03C3\u03B7 \u039A\u03CC\u03C3\u03C4\u03BF\u03C5\u03C2</div>';
+  providers.concat([{name:'PENALTY \u274C',price:penRate,color:'#dc2626'}]).forEach(function(p){
+    var cost = totalDeficit * p.price;
+    var barPct = Math.max(3,Math.round(cost/totalPenalty*100));
+    var isGCX = p.name==='GreenCreditX';
+    var isPen = p.name.indexOf('PENALTY')>=0;
+    barsHtml += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">';
+    barsHtml += '<div style="width:130px;font-size:13px;font-weight:'+(isGCX||isPen?'800':'600')+';color:'+(isPen?'#dc2626':isGCX?'#14532d':'#333')+';text-align:right">'+p.name+'</div>';
+    barsHtml += '<div style="flex:1;height:28px;background:#f3f4f6;border-radius:8px;overflow:hidden;position:relative">';
+    barsHtml += '<div style="height:100%;width:'+barPct+'%;background:'+(isPen?'#dc2626':isGCX?'linear-gradient(90deg,#22c55e,#15803d)':p.color)+';border-radius:8px;transition:width .5s"></div>';
+    barsHtml += '<div style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:13px;font-weight:700;font-family:var(--mono);color:'+(barPct>60?'#fff':'#333')+'">\u20AC'+cost.toLocaleString()+'</div>';
+    barsHtml += '</div></div>';
+  });
+  document.getElementById('c-ps-bars').innerHTML = barsHtml;
+
+  // Recommendation
+  var gcxCost = totalDeficit * 220;
+  var rec = '<div style="background:linear-gradient(135deg,#14532d,#166534);border-radius:18px;padding:28px 32px;color:#fff">';
+  rec += '<div style="font-size:22px;font-weight:800;margin-bottom:8px">\uD83C\uDFC6 \u03A3\u03CD\u03C3\u03C4\u03B1\u03C3\u03B7 GreenCreditX</div>';
+  rec += '<div style="font-size:16px;opacity:.9;line-height:1.6;margin-bottom:16px">\u0393\u03B9\u03B1 '+vessels+' \u03C0\u03BB\u03BF\u03AF'+(vessels>1?'\u03B1':'\u03BF')+' \u03BC\u03B5 \u03C3\u03C5\u03BD\u03BF\u03BB\u03B9\u03BA\u03CC deficit '+totalDeficit.toLocaleString()+' tCO\u2082e, \u03B7 \u03B5\u03C0\u03B9\u03BB\u03BF\u03B3\u03AE GreenCreditX Pooling (\u20AC220/t) \u03C3\u03B1\u03C2 <strong>\u03B5\u03BE\u03BF\u03B9\u03BA\u03BF\u03BD\u03BF\u03BC\u03B5\u03AF \u20AC'+gcxSave.toLocaleString()+'</strong> \u03C3\u03B5 \u03C3\u03C7\u03AD\u03C3\u03B7 \u03BC\u03B5 \u03C4\u03BF FuelEU penalty.</div>';
+  rec += '<div style="display:flex;gap:12px;flex-wrap:wrap">';
+  rec += '<div style="background:rgba(255,255,255,.15);border-radius:12px;padding:14px 20px;flex:1;min-width:140px;text-align:center"><div style="font-size:12px;opacity:.7">\u039A\u03CC\u03C3\u03C4\u03BF\u03C2 Penalty</div><div style="font-size:24px;font-weight:800;font-family:var(--mono);text-decoration:line-through;opacity:.5">\u20AC'+totalPenalty.toLocaleString()+'</div></div>';
+  rec += '<div style="background:rgba(255,255,255,.15);border-radius:12px;padding:14px 20px;flex:1;min-width:140px;text-align:center"><div style="font-size:12px;opacity:.7">\u039A\u03CC\u03C3\u03C4\u03BF\u03C2 GCX Pooling</div><div style="font-size:24px;font-weight:800;font-family:var(--mono);color:#4ade80">\u20AC'+gcxCost.toLocaleString()+'</div></div>';
+  rec += '<div style="background:#4ade80;color:#14532d;border-radius:12px;padding:14px 20px;flex:1;min-width:140px;text-align:center"><div style="font-size:12px;font-weight:600">\u0395\u03BE\u03BF\u03B9\u03BA\u03BF\u03BD\u03BF\u03BC\u03B5\u03AF\u03C4\u03B5</div><div style="font-size:24px;font-weight:800;font-family:var(--mono)">\u20AC'+gcxSave.toLocaleString()+'</div></div>';
+  rec += '</div></div>';
+  document.getElementById('c-ps-recommend').innerHTML = rec;
+
+  document.getElementById('c-ps-results').style.display = 'block';
 }
 
 document.addEventListener('DOMContentLoaded', init);
