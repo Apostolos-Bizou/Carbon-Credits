@@ -72,7 +72,7 @@ table{width:100%;border-collapse:collapse}th{padding:14px 18px;font-size:13px;fo
 
 <script>
 /* ═══ ALL JS IN HEAD ═══ */
-var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},compliance:{t:'Compliance Admin',s:'EU ETS calculator settings, emission factors, FuelEU & CII parameters'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},fleet:{t:'Fleet Monitor',s:'Shipowners, vessels, emissions & compliance documents'},ticker:{t:'Ticker Tape',s:'Configure the live price ticker bar'},notifications:{t:'Notifications',s:'Alerts, thresholds & automated messages'},liveconfig:{t:'Live Markets Config',s:'Order Book, Market Intel news & display settings'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
+var PT={dashboard:{t:'Dashboard',s:'Overview of your platform'},compliance:{t:'Compliance Admin',s:'EU ETS calculator settings, emission factors, FuelEU & CII parameters'},pooling:{t:'FuelEU Pooling',s:'Manage pooling offers, providers, pricing & competitor benchmarks'},marketplace:{t:'Marketplace',s:'Manage credit listings and pricing'},orders:{t:'Orders',s:'Credit purchases and order history'},investments:{t:'Investments',s:'Manage projects, funding, and content'},bpbuilder:{t:'Business Plan Builder',s:'Create & edit business plans for investment projects'},countries:{t:'Countries & Regions',s:'Land base locations'},content:{t:'Content Pages',s:'Business plans, presentations, guides'},guide:{t:'Guide Pages',s:'Manage the educational guide shown on the website'},datasources:{t:'Data Sources',s:'API connections and live feeds'},instruments:{t:'Instruments',s:'Configure market instruments'},fleet:{t:'Fleet Monitor',s:'Shipowners, vessels, emissions & compliance documents'},ticker:{t:'Ticker Tape',s:'Configure the live price ticker bar'},notifications:{t:'Notifications',s:'Alerts, thresholds & automated messages'},liveconfig:{t:'Live Markets Config',s:'Order Book, Market Intel news & display settings'},users:{t:'Users & Access',s:'Admin and client accounts'},settings:{t:'Settings',s:'Platform configuration'}};
 
 function showPanel(id){
   document.querySelectorAll('[data-panel]').forEach(function(p){p.style.display='none'});
@@ -262,6 +262,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
     <div class="ns"><div class="ns-t">Overview</div><button class="ni on tt" title="Συνοπτική εικόνα: credits, orders, investors, raised. Πρόσφατη δραστηριότητα." onclick="showPanel('dashboard')"><span class="ic">📊</span> Dashboard</button></div>
     <div class="ns"><div class="ns-t">Compliance</div>
       <button class="ni tt" title="Ρυθμίσεις EU ETS Calculator: emission factors, τιμή EUA, phase-in, geographic scope, FuelEU targets, CII thresholds. Τροφοδοτεί το Compliance tab." onclick="showPanel('compliance')"><span class="ic">⚖️</span> Compliance<span class="bg" style="background:#dc2626">ΝΕΟ</span></button>
+      <button class="ni tt" title="Διαχείριση FuelEU Pooling: offers, τιμές GCX/STX/Gasum/OceanScore, competitors, pooling contracts. Τροφοδοτεί Marketplace Pooling + Live Markets." onclick="showPanel('pooling')"><span class="ic">🏊</span> FuelEU Pooling<span class="bg" style="background:#dc2626">NEW</span></button>
     </div>
     <div class="ns"><div class="ns-t">Content Management</div>
       <button class="ni tt" title="Διαχείριση credits στο Marketplace. Add/Edit τιμές, ratings, ποσότητες." onclick="showPanel('marketplace')"><span class="ic">🛒</span> Marketplace<span class="bg">6</span></button>
@@ -768,6 +769,92 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">DNV Maritime</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">UKAS 123</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
             <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">RINA Services</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ACCREDIA</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
           </table>
+        </div></div>
+
+      </div>
+    </div>
+
+    <!-- ═══ FUELEU POOLING ADMIN ═══ -->
+    <div data-panel id="p-pooling" style="display:none">
+
+      <div class="as">
+        <div class="ast tt" title="Η τιμή pooling units που χρεώνουμε εμείς. Εμφανίζεται στο Marketplace Pooling, Live Markets, Fleet Monitor."><div class="al">GCX Pool Price</div><div class="av2" style="color:var(--g700)">€220</div><div class="ac">/tCO₂e — our rate</div></div>
+        <div class="ast tt" title="Penalty cap FuelEU Maritime. Αν ο πλοιοκτήτης δεν κάνει pooling, αυτό πληρώνει."><div class="al">FuelEU Penalty</div><div class="av2" style="color:#dc2626">€642</div><div class="ac">/tCO₂e — penalty cap</div></div>
+        <div class="ast tt" title="Πόσο γλιτώνει ο πελάτης μας σε σχέση με το penalty."><div class="al">Client Savings</div><div class="av2" style="color:var(--g600)">66%</div><div class="ac">vs penalty (€422/t)</div></div>
+        <div class="ast tt" title="Ενεργά pooling offers στο Marketplace."><div class="al">Active Offers</div><div class="av2">5</div><div class="ac">GCX + competitors</div></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+
+        <!-- GCX Pooling Pricing -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">🏊 GCX Pooling Pricing</div><div class="ct-s tt" title="Ρυθμίσεις τιμών GreenCreditX pooling. Αυτές οι τιμές εμφανίζονται στο Marketplace Pooling tab, Live Markets ticker, και Fleet Monitor Compliance Strategy.">Οι τιμές που χρεώνουμε τους πελάτες για FuelEU compliance units</div></div></div>
+        <div class="cb">
+          <div class="fg">
+            <div class="fgp"><label class="fl tt" title="Τιμή pooling unit 2025 σε €/tCO₂e. Εμφανίζεται ως GCX-POOL στο ticker.">GCX Price 2025 (€/tCO₂e)</label><input class="fi" type="number" step="1" value="220"></div>
+            <div class="fgp"><label class="fl tt" title="Τιμή pooling unit 2026. Early bird — χαμηλότερη.">GCX Price 2026 (€/tCO₂e)</label><input class="fi" type="number" step="1" value="210"></div>
+            <div class="fgp"><label class="fl tt" title="Διαθέσιμα compliance units 2025.">Available Volume 2025 (tCO₂e)</label><input class="fi" type="number" value="5000"></div>
+            <div class="fgp"><label class="fl tt" title="Διαθέσιμα compliance units 2026.">Available Volume 2026 (tCO₂e)</label><input class="fi" type="number" value="8000"></div>
+            <div class="fgp"><label class="fl tt" title="Ελάχιστη παραγγελία σε τόνους.">Min Order (tCO₂e)</label><input class="fi" type="number" value="50"></div>
+            <div class="fgp"><label class="fl tt" title="Χρόνος delivery μετά την παραγγελία.">Delivery Time</label><input class="fi" value="48h"></div>
+          </div>
+          <div class="fa"><button class="btn bp">💾 Save GCX Pricing</button></div>
+        </div></div>
+
+        <!-- Competitor Benchmarks -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">📊 Competitor Benchmarks</div><div class="ct-s tt" title="Τιμές ανταγωνιστών. Εμφανίζονται στο Live Markets (FuelEU Pooling filter) και στο Compliance Pooling Savings Calculator.">Τιμές STX, Gasum, OceanScore — εμφανίζονται στο Provider Comparison</div></div></div>
+        <div class="cb">
+          <table style="width:100%">
+            <thead><tr><th>Provider</th><th>€/tCO₂e</th><th>Min Order</th><th>Source</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#dc2626;margin-right:6px"></span>OceanScore OPX</td><td class="tp">€200</td><td class="tm">500 t</td><td>oceanscore.com</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#0ea5e9;margin-right:6px"></span>Gasum Pool</td><td class="tp">€235</td><td class="tm">500 t</td><td>gasum.com/fueleu</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#a855f7;margin-right:6px"></span>STX Group</td><td class="tp">€253</td><td class="tm">100 t</td><td>stxgroup.com</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm">Edit</button></td></tr>
+            </tbody>
+          </table>
+          <div class="fa"><button class="btn bp bsm">+ Add Competitor</button><button class="btn bs bsm" style="margin-left:8px">↻ Refresh Prices</button></div>
+        </div></div>
+
+        <!-- Pooling Offers Management -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">🎯 Pooling Offers (Marketplace)</div><div class="ct-s tt" title="Αυτά τα offers εμφανίζονται στο Marketplace → FuelEU Pooling tab. Κάθε card δείχνει τιμή, available volume, delivery, guarantee.">Cards που εμφανίζονται στο Marketplace Pooling section</div></div><button class="btn bp bsm">+ New Offer</button></div>
+        <div class="cb">
+          <table style="width:100%">
+            <thead><tr><th>ID</th><th>Provider</th><th>Year</th><th>€/t</th><th>Available</th><th>Badge</th><th>Featured</th><th></th></tr></thead>
+            <tbody>
+              <tr><td class="tm">POOL-GCX-25</td><td style="font-weight:700">GreenCreditX</td><td>2025</td><td class="tp">€220</td><td class="tm">5,000 t</td><td><span style="background:var(--g100);color:var(--g700);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">BEST VALUE</span></td><td>⭐ Yes</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td class="tm">POOL-GCX-26</td><td style="font-weight:700">GreenCreditX</td><td>2026</td><td class="tp">€210</td><td class="tm">8,000 t</td><td><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">EARLY BIRD</span></td><td>⭐ Yes</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td class="tm">POOL-OPX-25</td><td>OceanScore</td><td>2025</td><td class="tp">€200</td><td class="tm">3,200 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">INDEX</span></td><td>No</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td class="tm">POOL-GASUM-25</td><td>Gasum</td><td>2025</td><td class="tp">€235</td><td class="tm">4,500 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">VERIFIED</span></td><td>No</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td class="tm">POOL-STX-25</td><td>STX Group</td><td>2025</td><td class="tp">€253</td><td class="tm">6,000 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">—</span></td><td>No</td><td><button class="btn bs bsm">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+
+        <!-- Pooling Contracts -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">📋 Pooling Contracts</div><div class="ct-s tt" title="Ενεργά pooling contracts με πελάτες. Κάθε contract ορίζει: πλοιοκτήτη, volume, τιμή, compliance year.">Active & pending FuelEU pooling agreements with shipowners</div></div><button class="btn bp bsm">+ New Contract</button></div>
+        <div class="cb">
+          <table style="width:100%">
+            <thead><tr><th>Shipowner</th><th>Vessel</th><th>Year</th><th>Deficit (t)</th><th>Rate €/t</th><th>Value</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:700">Varship / SCIO SPIRIT</td><td class="tm">IMO 9502738</td><td>2025</td><td class="tm">140</td><td class="tp">€253</td><td class="tp">€35,420</td><td><span class="sd sl"></span>Active (STX)</td><td><button class="btn bp bsm">Offer GCX @€220</button></td></tr>
+              <tr><td style="font-weight:700">Olympia Maritime</td><td class="tm">8 vessels</td><td>2025</td><td class="tm">890</td><td style="color:var(--x400)">—</td><td style="color:var(--x400)">—</td><td><span class="sd sp"></span>Pending</td><td><button class="btn bp bsm">Send Offer</button></td></tr>
+              <tr><td style="font-weight:700">Aegean Bulk Carriers</td><td class="tm">6 vessels</td><td>2025</td><td class="tm">620</td><td style="color:var(--x400)">—</td><td style="color:var(--x400)">—</td><td><span class="sd sp"></span>Pending</td><td><button class="btn bp bsm">Send Offer</button></td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:16px;padding:16px;background:linear-gradient(135deg,#14532d,#166534);border-radius:12px;color:#fff;display:flex;justify-content:space-between;align-items:center">
+            <div><div style="font-size:16px;font-weight:800">💡 Ευκαιρία: Varship πληρώνει €253/t στην STX</div><div style="font-size:13px;opacity:.8;margin-top:4px">Προσφέρετε €220/t μέσω GCX — εξοικονόμηση €33/t × 140t = €4,620 για τον πελάτη</div></div>
+            <button class="btn" style="background:#4ade80;color:#14532d;font-weight:800;padding:12px 24px;border-radius:10px;border:none;font-size:14px">📧 Prepare Offer</button>
+          </div>
+        </div></div>
+
+        <!-- FuelEU Regulation Info -->
+        <div class="cd"><div class="ch"><div><div class="ct-t">📖 FuelEU Maritime Reference</div><div class="ct-s tt" title="Βασικές πληροφορίες FuelEU regulation για αναφορά.">Βασικά στοιχεία κανονισμού — Quick Reference</div></div></div>
+        <div class="cb" style="font-size:14px;color:var(--x500);line-height:1.7">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div style="background:var(--x50);padding:14px;border-radius:10px"><div style="font-weight:700;color:var(--g900);margin-bottom:6px">GHG Reduction Timeline</div>2025: -2% · 2030: -6% · 2035: -14.5% · 2040: -31% · 2045: -62% · 2050: -80%</div>
+            <div style="background:var(--x50);padding:14px;border-radius:10px"><div style="font-weight:700;color:var(--g900);margin-bottom:6px">Key Facts</div>~12,000 vessels (>5,000 GT) · Penalty: €2,400/t VLSFO eq (~€642/tCO₂e) · WtW scope · Pool window: April</div>
+            <div style="background:var(--x50);padding:14px;border-radius:10px"><div style="font-weight:700;color:var(--g900);margin-bottom:6px">Flexibility Mechanisms</div>Banking · Borrowing · Pooling · 50% energy from non-EU voyages</div>
+            <div style="background:#fef2f2;padding:14px;border-radius:10px"><div style="font-weight:700;color:#991b1b;margin-bottom:6px">⚠️ DNV Warning</div>7x more deficit than surplus expected — pooling demand far exceeds supply. Early action critical.</div>
+          </div>
         </div></div>
 
       </div>
