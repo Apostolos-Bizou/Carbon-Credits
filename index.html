@@ -64,6 +64,8 @@ input { font-family: var(--sans); }
 .ticker-inner { display: flex; width: max-content; animation: scroll 50s linear infinite; }
 .ticker-half { display: flex; gap: 48px; padding-right: 48px; }
 .ticker-item { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; flex-shrink: 0; }
+.ticker-pool .ticker-sym { color: #fca5a5; }
+.ticker-pool .ticker-price { color: #fef2f2; font-weight: 700; }
 .ticker-sym { color: var(--green-300); font-weight: 700; }
 .ticker-price { color: #fff; font-family: var(--mono); font-weight: 500; }
 .ticker-chg { font-family: var(--mono); font-weight: 600; }
@@ -657,15 +659,19 @@ input { font-family: var(--sans); }
         <svg id="candleChart" width="100%" height="420" style="display:block;margin-top:10px"></svg>
       </div>
       <div class="mkt-stats" id="mktStats"></div>
+      <div id="poolingCompPanel" style="display:none"></div>
       <div class="sources">
         <div class="sources-title">CONNECTED DATA SOURCES</div>
         <div class="sources-list">
+          <div class="source tt"><span class="source-dot" style="background:#dc2626"></span><span class="source-name">OceanScore OPX</span><span class="tt-text" style="width:260px"><div class="tt-title">OceanScore Pool-Price Index</div>Πρώτος FuelEU Maritime pooling price index. Δείχνει τιμή surplus compliance units ανά tCO₂e. Benchmark αγοράς.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:#a855f7"></span><span class="source-name">STX Group</span><span class="tt-text" style="width:260px"><div class="tt-title">STX Group — FuelEU Compliance</div>Παγκόσμιος trader environmental commodities. FuelEU Compliance Units μέσω pooling με Azolla CASPER™. €290M credit facility.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:#0ea5e9"></span><span class="source-name">Gasum Pool</span><span class="tt-text" style="width:260px"><div class="tt-title">Gasum — Nordic Pooling Provider</div>Φινλανδική κρατική εταιρεία. Ελέγχει end-to-end bio-LNG value chain. 18 biogas plants. Δημοσιεύει daily FuelEU τιμές.</span></div>
           <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">Xpansiv CBL</span><span class="tt-text" style="width:240px"><div class="tt-title">Xpansiv CBL</div>Κορυφαίο spot marketplace για voluntary carbon credits. 330M+ credits traded. San Francisco, USA.</span></div>
-          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CME NYMEX</span><span class="tt-text" style="width:240px"><div class="tt-title">CME NYMEX</div>Chicago Mercantile Exchange. Derivatives για carbon και energy markets. Παγκόσμιο benchmark.</span></div>
-          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">ICE Endex</span><span class="tt-text" style="width:240px"><div class="tt-title">ICE Endex</div>Intercontinental Exchange. Μεγαλύτερο derivatives market για EU ETS allowances (EUA). 20.9M contracts (2025).</span></div>
-          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CIX Exchange</span><span class="tt-text" style="width:240px"><div class="tt-title">Climate Impact X</div>Singapore-based exchange. JV: DBS, SGX, Standard Chartered, Temasek. Εστίαση σε ΝΑ Ασία.</span></div>
-          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">BeZero Ratings</span><span class="tt-text" style="width:240px"><div class="tt-title">BeZero Carbon</div>Ανεξάρτητος οίκος αξιολόγησης carbon credits (A-D rating). Σαν Moody's/S&P για carbon.</span></div>
-          <div class="source tt"><span class="source-dot" style="background:#f59e0b"></span><span class="source-name">Verra Registry</span><span class="tt-text" style="width:240px"><div class="tt-title">Verra VCS Registry</div>Το μεγαλύτερο registry πιστοποίησης (~80% αγοράς). Εκδίδει VCUs. Κίτρινο = delayed feed.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CME NYMEX</span><span class="tt-text" style="width:240px"><div class="tt-title">CME NYMEX</div>Chicago Mercantile Exchange. Derivatives για carbon και energy markets.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">ICE Endex</span><span class="tt-text" style="width:240px"><div class="tt-title">ICE Endex</div>Intercontinental Exchange. EU ETS allowances (EUA). 20.9M contracts (2025).</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">CIX Exchange</span><span class="tt-text" style="width:240px"><div class="tt-title">Climate Impact X</div>Singapore-based exchange. JV: DBS, SGX, Standard Chartered, Temasek.</span></div>
+          <div class="source tt"><span class="source-dot" style="background:var(--green-500)"></span><span class="source-name">BeZero Ratings</span><span class="tt-text" style="width:240px"><div class="tt-title">BeZero Carbon</div>Ανεξάρτητος οίκος αξιολόγησης carbon credits (A-D rating).</span></div>
+          <div class="source tt"><span class="source-dot" style="background:#f59e0b"></span><span class="source-name">Verra Registry</span><span class="tt-text" style="width:240px"><div class="tt-title">Verra VCS Registry</div>Το μεγαλύτερο registry πιστοποίησης (~80% αγοράς). Κίτρινο = delayed feed.</span></div>
         </div>
       </div>
     </div>
@@ -989,15 +995,25 @@ const INSTRUMENTS = [
   {sym:"BLUE",name:"Blue Carbon",exch:"CIX/CBL",base:29.30,type:"Spot VCM",color:"#06b6d4"},
   {sym:"ACCU",name:"Australian CCU",exch:"CBL",base:32.10,type:"Compliance",color:"#f59e0b"},
   {sym:"CORSIA",name:"CORSIA Phase 1",exch:"CBL/ACE",base:4.20,type:"Aviation",color:"#6366f1"},
+  {sym:"OPX-25",name:"FuelEU Pool 2025",exch:"OceanScore",base:200.00,type:"FuelEU Pooling",color:"#dc2626"},
+  {sym:"OPX-26",name:"FuelEU Pool 2026",exch:"OceanScore",base:205.00,type:"FuelEU Pooling",color:"#ef4444"},
+  {sym:"GCX-POOL",name:"GCX Pooling Rate",exch:"GreenCreditX",base:220.00,type:"FuelEU Pooling",color:"#f97316"},
+  {sym:"STX-FEU",name:"STX FuelEU Unit",exch:"STX Group",base:253.00,type:"FuelEU Pooling",color:"#a855f7"},
+  {sym:"GASUM",name:"Gasum Pool Price",exch:"Gasum",base:235.00,type:"FuelEU Pooling",color:"#0ea5e9"},
+  {sym:"FEUM-PEN",name:"FuelEU Penalty Cap",exch:"EU Regulation",base:642.00,type:"FuelEU Pooling",color:"#991b1b"},
 ];
 
 const NEWS = [
-  {time:"14:32",text:"EU ETS Maritime reaches 100% phase-in 2026 — full compliance ahead",tag:"Regulatory",hot:true},
+  {time:"15:10",text:"FuelEU Pooling: OPX 2025 at \u20AC200/tCO\u2082e \u2014 April deadline drives demand",tag:"FuelEU",hot:true},
+  {time:"14:45",text:"Gasum publishes daily FuelEU compliance unit price \u2014 transparency push",tag:"FuelEU"},
+  {time:"14:32",text:"EU ETS Maritime 100% phase-in 2026 \u2014 full allowance surrender ahead",tag:"Regulatory",hot:true},
+  {time:"13:50",text:"DNV: 7x more deficit than surplus in FuelEU \u2014 pooling demand surges",tag:"FuelEU",hot:true},
   {time:"13:15",text:"Sylvera upgrades ARR credits outlook to Positive",tag:"Rating"},
-  {time:"12:48",text:"IMO NZF adoption rescheduled Oct 2026 — earliest force Mar 2028",tag:"IMO",hot:true},
-  {time:"11:20",text:"Xpansiv CBL: Record 4.2M tCO₂e in single session",tag:"Volume"},
+  {time:"12:48",text:"STX Group launches FuelEU Compliance Unit with Azolla CASPER\u2122",tag:"FuelEU"},
+  {time:"12:10",text:"GreenCreditX Pooling: \u20AC220/tCO\u2082e \u2014 Save 66% vs \u20AC642 penalty",tag:"GCX",hot:true},
+  {time:"11:20",text:"Xpansiv CBL: Record 4.2M tCO\u2082e in single session",tag:"Volume"},
   {time:"10:05",text:"UK ETS Maritime expansion confirmed July 2026",tag:"Regulatory"},
-  {time:"09:30",text:"Verra quality label for ARR — first issuances 2026",tag:"Registry"},
+  {time:"09:30",text:"Verra quality label for ARR \u2014 first issuances 2026",tag:"Registry"},
   {time:"08:45",text:"Philippines DENR approves 3 new Mindanao zones",tag:"Supply"},
 ];
 
@@ -1307,13 +1323,12 @@ function renderInvestments() {
 // ═══════════════════════════════════════════════
 function renderTicker() {
   const container = document.getElementById('tickerWrap');
-  const itemsHtml = liveData.map(d=>`
-    <span class="ticker-item">
-      <span class="ticker-sym">${d.sym}</span>
-      <span class="ticker-price">$${d.price.toFixed(2)}</span>
-      <span class="ticker-chg ${d.ch>=0?'ticker-up':'ticker-dn'}">${d.ch>=0?'▲':'▼'}${Math.abs(d.chPct).toFixed(2)}%</span>
-    </span>
-  `).join('');
+  const itemsHtml = liveData.map(d=>{
+    const cur=(d.type==='Compliance'||d.type==='FuelEU Pooling')?'\u20AC':'$';
+    const isPool=d.type==='FuelEU Pooling';
+    const extraCls=isPool?' ticker-pool':'';
+    return `<span class="ticker-item${extraCls}"><span class="ticker-sym">${d.sym}</span><span class="ticker-price">${cur}${d.price.toFixed(2)}</span><span class="ticker-chg ${d.ch>=0?'ticker-up':'ticker-dn'}">${d.ch>=0?'\u25B2':'\u25BC'}${Math.abs(d.chPct).toFixed(2)}%</span></span>`;
+  }).join('');
   container.innerHTML = '<div class="ticker-inner"><div class="ticker-half">' + itemsHtml + '</div><div class="ticker-half">' + itemsHtml + '</div></div>';
 }
 
@@ -1324,13 +1339,14 @@ function renderInstrumentList() {
     "Voluntary":"<div class='tt-title'>Voluntary Market</div>\u0395\u03B8\u03B5\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC carbon credits. \u0395\u03C4\u03B1\u03B9\u03C1\u03B5\u03AF\u03B5\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC\u03B6\u03BF\u03C5\u03BD \u03B3\u03B9\u03B1 ESG/Net-Zero \u03C3\u03C4\u03CC\u03C7\u03BF\u03C5\u03C2. \u03A7\u03B1\u03BC\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B5\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2 \u03B1\u03C0\u03CC compliance.",
     "Compliance":"<div class='tt-title'>Compliance Market</div>\u03A5\u03C0\u03BF\u03C7\u03C1\u03B5\u03C9\u03C4\u03B9\u03BA\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC. EU ETS, UK ETS, California. \u039D\u03BF\u03BC\u03B9\u03BA\u03AC \u03B4\u03B5\u03C3\u03BC\u03B5\u03C5\u03C4\u03B9\u03BA\u03CC, \u03C5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B5\u03C2 \u03C4\u03B9\u03BC\u03AD\u03C2 (~\u20AC100/t).",
     "Spot VCM":"<div class='tt-title'>Spot VCM</div>\u0386\u03BC\u03B5\u03C3\u03B7 \u03B1\u03B3\u03BF\u03C1\u03B1\u03C0\u03C9\u03BB\u03B7\u03C3\u03AF\u03B1 credits \u03C3\u03C4\u03B7\u03BD \u03B5\u03B8\u03B5\u03BB\u03BF\u03BD\u03C4\u03B9\u03BA\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC (CBL Spot). \u0391\u03C5\u03C4\u03AD\u03C2 \u03B5\u03AF\u03BD\u03B1\u03B9 \u03BF\u03B9 \u03C4\u03B9\u03BC\u03AD\u03C2 \u03C0\u03BF\u03C5 \u03B1\u03BD\u03C4\u03B1\u03B3\u03C9\u03BD\u03B9\u03B6\u03CC\u03BC\u03B1\u03C3\u03C4\u03B5.",
-    "Aviation":"<div class='tt-title'>Aviation (CORSIA)</div>Carbon credits \u03B3\u03B9\u03B1 \u03B1\u03B5\u03C1\u03BF\u03C0\u03BF\u03C1\u03AF\u03B1. \u03A5\u03C0\u03BF\u03C7\u03C1\u03B5\u03C9\u03C4\u03B9\u03BA\u03AE \u03C6\u03AC\u03C3\u03B7 \u03B1\u03C0\u03CC 2027."
+    "Aviation":"<div class='tt-title'>Aviation (CORSIA)</div>Carbon credits \u03B3\u03B9\u03B1 \u03B1\u03B5\u03C1\u03BF\u03C0\u03BF\u03C1\u03AF\u03B1. \u03A5\u03C0\u03BF\u03C7\u03C1\u03B5\u03C9\u03C4\u03B9\u03BA\u03AE \u03C6\u03AC\u03C3\u03B7 \u03B1\u03C0\u03CC 2027.",
+    "FuelEU Pooling":"<div class='tt-title'>FuelEU Maritime Pooling</div>\u039D\u03AD\u03B1 \u03B1\u03B3\u03BF\u03C1\u03AC compliance units! \u03A0\u03BB\u03BF\u03AF\u03B1 \u03BC\u03B5 bio-LNG/biofuels \u03B4\u03B7\u03BC\u03B9\u03BF\u03C5\u03C1\u03B3\u03BF\u03CD\u03BD surplus \u03C0\u03BF\u03C5 \u03BC\u03B5\u03C4\u03B1\u03C6\u03AD\u03C1\u03B5\u03C4\u03B1\u03B9 \u03C3\u03B5 \u03C3\u03C5\u03BC\u03B2\u03B1\u03C4\u03B9\u03BA\u03AC \u03C0\u03BB\u03BF\u03AF\u03B1 \u03BC\u03AD\u03C3\u03C9 pooling. Penalty: \u20AC642/t, Pooling: \u20AC200-253/t. \u0395\u03BE\u03BF\u03B9\u03BA\u03BF\u03BD\u03CC\u03BC\u03B7\u03C3\u03B7 60%+."
   };
   list.innerHTML = filtered.map(d=>{
     const up = d.ch>=0;
     const sel = d.sym===selectedInst;
-    const typeBg = d.type==='Compliance'?'#dbeafe':d.type==='Aviation'?'#e0e7ff':'#dcfce7';
-    const typeCol = d.type==='Compliance'?'#1e40af':d.type==='Aviation'?'#4338ca':'#15803d';
+    const typeBg = d.type==='Compliance'?'#dbeafe':d.type==='Aviation'?'#e0e7ff':d.type==='FuelEU Pooling'?'#fef2f2':'#dcfce7';
+    const typeCol = d.type==='Compliance'?'#1e40af':d.type==='Aviation'?'#4338ca':d.type==='FuelEU Pooling'?'#991b1b':'#15803d';
     const hist = d.hist;
     const mn=Math.min(...hist),mx=Math.max(...hist),rng=mx-mn||1;
     const pts=hist.map((v,i)=>`${(i/(hist.length-1))*320},${28-((v-mn)/rng)*24}`).join(' ');
@@ -1364,16 +1380,17 @@ function selectInstrument(sym) { selectedInst=sym; renderMarketCenter(); renderI
 function renderMarketCenter() {
   const d = liveData.find(x=>x.sym===selectedInst)||liveData[0];
   const up = d.ch>=0;
+  const cur = (d.type==='Compliance'||d.type==='FuelEU Pooling')?'\u20AC':'$';
   document.getElementById('selDot').style.background = d.color;
   document.getElementById('selSym').textContent = d.sym;
   document.getElementById('selName').textContent = d.name;
-  document.getElementById('selExch').textContent = d.exch+' · Updated 2.5s';
-  document.getElementById('selPrice').textContent = '$'+d.price.toFixed(2);
+  document.getElementById('selExch').textContent = d.exch+' \u00B7 Updated 2.5s';
+  document.getElementById('selPrice').textContent = cur+d.price.toFixed(2);
   const chEl = document.getElementById('selChange');
-  chEl.textContent = `${up?'▲':'▼'} $${Math.abs(d.ch).toFixed(2)} (${up?'+':''}${d.chPct.toFixed(2)}%)`;
+  chEl.textContent = (up?'\u25B2':'\u25BC')+' '+cur+Math.abs(d.ch).toFixed(2)+' ('+(up?'+':'')+d.chPct.toFixed(2)+'%)';
   chEl.className = 'sel-change '+(up?'up':'dn');
-  document.getElementById('chartStats').innerHTML = `H:<span>$${d.hi.toFixed(2)}</span> L:<span>$${d.lo.toFixed(2)}</span> Vol:<span>${d.vol.toLocaleString()}</span>`;
-  document.getElementById('obSub').textContent = d.sym+' · '+d.exch;
+  document.getElementById('chartStats').innerHTML = 'H:<span>'+cur+d.hi.toFixed(2)+'</span> L:<span>'+cur+d.lo.toFixed(2)+'</span> Vol:<span>'+d.vol.toLocaleString()+'</span>';
+  document.getElementById('obSub').textContent = d.sym+' \u00B7 '+d.exch;
 
   // Candle chart
   const hist = d.hist;
@@ -1384,20 +1401,69 @@ function renderMarketCenter() {
   const W=800,H=400,cw=W/candles.length*.6,g=W/candles.length*.4;
   const tY=v=>H-6-((v-mn)/rng)*(H-12);
   let svg='';
-  [0,.25,.5,.75,1].forEach(p=>{const v=mn+rng*p,y=tY(v);svg+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#f0fdf4" stroke-width="1"/><text x="${W-2}" y="${y-3}" text-anchor="end" font-size="8" fill="#9ca3af" font-family="'DM Mono',monospace">$${v.toFixed(2)}</text>`;});
-  candles.forEach((c,i)=>{const x=i*(cw+g)+g/2,bt=tY(Math.max(c.o,c.cl)),bb=tY(Math.min(c.o,c.cl)),bh=Math.max(bb-bt,1),col=c.up?'#22c55e':'#ef4444';svg+=`<line x1="${x+cw/2}" y1="${tY(c.h)}" x2="${x+cw/2}" y2="${tY(c.l)}" stroke="${col}" stroke-width="1"/><rect x="${x}" y="${bt}" width="${cw}" height="${bh}" rx="1" fill="${col}" opacity=".85"/>`;});
+  [0,.25,.5,.75,1].forEach(p=>{const v=mn+rng*p,y=tY(v);svg+='<line x1="0" y1="'+y+'" x2="'+W+'" y2="'+y+'" stroke="#f0fdf4" stroke-width="1"/><text x="'+(W-2)+'" y="'+(y-3)+'" text-anchor="end" font-size="8" fill="#9ca3af" font-family="\'DM Mono\',monospace">'+cur+v.toFixed(2)+'</text>';});
+  candles.forEach((c,i)=>{const x=i*(cw+g)+g/2,bt=tY(Math.max(c.o,c.cl)),bb=tY(Math.min(c.o,c.cl)),bh=Math.max(bb-bt,1),col=c.up?'#22c55e':'#ef4444';svg+='<line x1="'+(x+cw/2)+'" y1="'+tY(c.h)+'" x2="'+(x+cw/2)+'" y2="'+tY(c.l)+'" stroke="'+col+'" stroke-width="1"/><rect x="'+x+'" y="'+bt+'" width="'+cw+'" height="'+bh+'" rx="1" fill="'+col+'" opacity=".85"/>';});
   document.getElementById('candleChart').innerHTML = svg;
 
-  // Stats with tooltips
+  // Stats
   var statTips = {
-    "24h Volume":"<div class='tt-title'>24h Volume</div>\u039F\u03B3\u03BA\u03BF\u03C2 \u03C3\u03C5\u03BD\u03B1\u03BB\u03BB\u03B1\u03B3\u03CE\u03BD \u03C3\u03B5 \u03C4\u03CC\u03BD\u03BF\u03C5\u03C2 CO\u2082 \u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2. \u03A5\u03C8\u03B7\u03BB\u03CC volume = \u03C5\u03B3\u03B9\u03AE\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC \u03BC\u03B5 \u03C1\u03B5\u03C5\u03C3\u03C4\u03CC\u03C4\u03B7\u03C4\u03B1.",
-    "24h High":"<div class='tt-title'>24h High</div>\u0397 \u03C5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE \u03C3\u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2. \u0394\u03B5\u03AF\u03C7\u03BD\u03B5\u03B9 \u03C4\u03B7\u03BD \u03BA\u03BF\u03C1\u03C5\u03C6\u03AE \u03B6\u03AE\u03C4\u03B7\u03C3\u03B7\u03C2.",
-    "24h Low":"<div class='tt-title'>24h Low</div>\u0397 \u03C7\u03B1\u03BC\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE \u03C3\u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2. \u039A\u03B1\u03BB\u03AE \u03C4\u03B9\u03BC\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC\u03C2.",
-    "Spread":"<div class='tt-title'>Spread</div>\u0394\u03B9\u03B1\u03C6\u03BF\u03C1\u03AC \u03BC\u03B5\u03C4\u03B1\u03BE\u03CD \u03C4\u03B9\u03BC\u03AE\u03C2 \u03B1\u03B3\u03BF\u03C1\u03AC\u03C2 (bid) \u03BA\u03B1\u03B9 \u03C0\u03CE\u03BB\u03B7\u03C3\u03B7\u03C2 (ask). \u039C\u03B9\u03BA\u03C1\u03CC\u03C4\u03B5\u03C1\u03BF spread = \u03C0\u03B9\u03BF \u03C1\u03B5\u03C5\u03C3\u03C4\u03AE \u03B1\u03B3\u03BF\u03C1\u03AC."
+    "24h Volume":"<div class='tt-title'>24h Volume</div>\u039F\u03B3\u03BA\u03BF\u03C2 \u03C3\u03C5\u03BD\u03B1\u03BB\u03BB\u03B1\u03B3\u03CE\u03BD \u03C3\u03B5 \u03C4\u03CC\u03BD\u03BF\u03C5\u03C2 CO\u2082 \u03C4\u03B9\u03C2 \u03C4\u03B5\u03BB\u03B5\u03C5\u03C4\u03B1\u03AF\u03B5\u03C2 24 \u03CE\u03C1\u03B5\u03C2.",
+    "24h High":"<div class='tt-title'>24h High</div>\u0397 \u03C5\u03C8\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE 24h.",
+    "24h Low":"<div class='tt-title'>24h Low</div>\u0397 \u03C7\u03B1\u03BC\u03B7\u03BB\u03CC\u03C4\u03B5\u03C1\u03B7 \u03C4\u03B9\u03BC\u03AE 24h.",
+    "Spread":"<div class='tt-title'>Spread</div>\u0394\u03B9\u03B1\u03C6\u03BF\u03C1\u03AC bid/ask.",
+    "vs Penalty":"<div class='tt-title'>Savings vs Penalty</div>\u0395\u03BE\u03BF\u03B9\u03BA\u03BF\u03BD\u03CC\u03BC\u03B7\u03C3\u03B7 \u03C3\u03B5 \u03C3\u03C7\u03AD\u03C3\u03B7 \u03BC\u03B5 \u03C4\u03BF FuelEU penalty \u20AC642/tCO\u2082e. \u039C\u03B5\u03B3\u03B1\u03BB\u03CD\u03C4\u03B5\u03C1\u03BF % = \u03C0\u03B5\u03C1\u03B9\u03C3\u03C3\u03CC\u03C4\u03B5\u03C1\u03B1 \u03BB\u03B5\u03C6\u03C4\u03AC \u03C3\u03C4\u03B7\u03BD \u03C4\u03C3\u03AD\u03C0\u03B7 \u03C3\u03B1\u03C2!"
   };
-  document.getElementById('mktStats').innerHTML = [
-    {l:"24h Volume",v:d.vol.toLocaleString()+' t'},{l:"24h High",v:'$'+d.hi.toFixed(2)},{l:"24h Low",v:'$'+d.lo.toFixed(2)},{l:"Spread",v:'$0.10'}
-  ].map(s=>`<div class="mkt-stat tt"><div class="mkt-stat-label">${s.l}</div><div class="mkt-stat-value">${s.v}</div><span class="tt-text">${statTips[s.l]||''}</span></div>`).join('');
+  var statsArr;
+  if(d.type==='FuelEU Pooling' && d.sym!=='FEUM-PEN') {
+    var savPct = Math.round((1-d.price/642)*100);
+    var savAmt = (642-d.price).toFixed(0);
+    statsArr = [
+      {l:"24h Volume",v:d.vol.toLocaleString()+' t'},{l:"24h High",v:cur+d.hi.toFixed(2)},{l:"24h Low",v:cur+d.lo.toFixed(2)},{l:"vs Penalty",v:'\u20AC'+savAmt+' ('+savPct+'%)'}
+    ];
+  } else {
+    statsArr = [
+      {l:"24h Volume",v:d.vol.toLocaleString()+' t'},{l:"24h High",v:cur+d.hi.toFixed(2)},{l:"24h Low",v:cur+d.lo.toFixed(2)},{l:"Spread",v:cur+'0.10'}
+    ];
+  }
+  document.getElementById('mktStats').innerHTML = statsArr.map(s=>'<div class="mkt-stat tt"><div class="mkt-stat-label">'+s.l+'</div><div class="mkt-stat-value">'+s.v+'</div><span class="tt-text">'+(statTips[s.l]||'')+'</span></div>').join('');
+
+  // FuelEU Pooling Comparison Panel
+  var compPanel = document.getElementById('poolingCompPanel');
+  if(d.type==='FuelEU Pooling') {
+    var providers = liveData.filter(x=>x.type==='FuelEU Pooling'&&x.sym!=='FEUM-PEN');
+    var penalty = liveData.find(x=>x.sym==='FEUM-PEN');
+    var penPrice = penalty?penalty.price:642;
+    var html = '<div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:1px solid #fecaca;border-radius:16px;padding:20px;margin-top:16px">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div style="font-size:16px;font-weight:800;color:#991b1b">\u26A0\uFE0F FuelEU Pooling \u2014 Provider Comparison</div><div style="font-size:12px;color:#991b1b;background:#fee2e2;padding:4px 12px;border-radius:8px;font-weight:700">Penalty Cap: \u20AC'+penPrice.toFixed(0)+'/tCO\u2082e</div></div>';
+    html += '<div style="display:grid;gap:8px">';
+    providers.sort(function(a,b){return a.price-b.price;}).forEach(function(prov){
+      var sav = Math.round((1-prov.price/penPrice)*100);
+      var isGCX = prov.sym==='GCX-POOL';
+      var barW = Math.max(5,Math.round(prov.price/penPrice*100));
+      var bg = isGCX?'linear-gradient(135deg,#14532d,#166534)':'#fff';
+      var txtCol = isGCX?'#fff':'#333';
+      var borderCol = isGCX?'#15803d':'#e5e7eb';
+      html += '<div style="background:'+bg+';border:2px solid '+borderCol+';border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px'+(isGCX?';box-shadow:0 4px 16px rgba(21,128,61,.25)':'')+'">';
+      html += '<div style="width:110px;flex-shrink:0"><div style="font-size:14px;font-weight:800;color:'+txtCol+'">'+prov.sym+'</div><div style="font-size:11px;color:'+(isGCX?'rgba(255,255,255,.7)':'#9ca3af')+'">'+prov.exch+'</div></div>';
+      html += '<div style="flex:1"><div style="height:8px;background:'+(isGCX?'rgba(255,255,255,.2)':'#f3f4f6')+';border-radius:4px;overflow:hidden"><div style="height:100%;width:'+barW+'%;background:'+(isGCX?'#4ade80':prov.color)+';border-radius:4px"></div></div></div>';
+      html += '<div style="width:90px;text-align:right"><div style="font-size:18px;font-weight:800;color:'+txtCol+';font-family:var(--mono)">\u20AC'+prov.price.toFixed(0)+'</div></div>';
+      html += '<div style="width:70px;text-align:center"><div style="font-size:14px;font-weight:800;color:'+(isGCX?'#4ade80':'#15803d')+'">-'+sav+'%</div><div style="font-size:9px;color:'+(isGCX?'rgba(255,255,255,.6)':'#9ca3af')+'">vs penalty</div></div>';
+      if(isGCX) html += '<div style="background:#4ade80;color:#14532d;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:800;white-space:nowrap">\u2B50 BEST VALUE</div>';
+      html += '</div>';
+    });
+    // Penalty bar
+    html += '<div style="background:#fef2f2;border:2px dashed #fca5a5;border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;opacity:.7">';
+    html += '<div style="width:110px"><div style="font-size:14px;font-weight:800;color:#991b1b">PENALTY</div><div style="font-size:11px;color:#dc2626">EU Regulation</div></div>';
+    html += '<div style="flex:1"><div style="height:8px;background:#fee2e2;border-radius:4px;overflow:hidden"><div style="height:100%;width:100%;background:#dc2626;border-radius:4px"></div></div></div>';
+    html += '<div style="width:90px;text-align:right"><div style="font-size:18px;font-weight:800;color:#991b1b;font-family:var(--mono)">\u20AC'+penPrice.toFixed(0)+'</div></div>';
+    html += '<div style="width:70px;text-align:center"><div style="font-size:14px;font-weight:800;color:#dc2626">0%</div><div style="font-size:9px;color:#dc2626">max cost</div></div>';
+    html += '<div style="padding:6px 14px;font-size:12px;font-weight:700;color:#dc2626;white-space:nowrap">\u274C AVOID</div>';
+    html += '</div></div></div>';
+    compPanel.innerHTML = html;
+    compPanel.style.display = 'block';
+  } else {
+    compPanel.style.display = 'none';
+  }
 }
 
 function renderOrderBook() {
@@ -1413,7 +1479,7 @@ function renderOrderBook() {
 
 function renderNews() {
   const el = document.getElementById('newsFeed');
-  const tagColors={Regulatory:{bg:'#fef3c7',c:'#92400e'},IMO:{bg:'#fee2e2',c:'#991b1b'},Rating:{bg:'#dbeafe',c:'#1e40af'},Volume:{bg:'#f0fdf4',c:'#15803d'},Registry:{bg:'#ecfdf5',c:'#047857'},Supply:{bg:'#f0fdf4',c:'#15803d'}};
+  const tagColors={FuelEU:{bg:'#fef2f2',c:'#dc2626'},GCX:{bg:'#f0fdf4',c:'#15803d'},Regulatory:{bg:'#fef3c7',c:'#92400e'},IMO:{bg:'#fee2e2',c:'#991b1b'},Rating:{bg:'#dbeafe',c:'#1e40af'},Volume:{bg:'#f0fdf4',c:'#15803d'},Registry:{bg:'#ecfdf5',c:'#047857'},Supply:{bg:'#f0fdf4',c:'#15803d'}};
   el.innerHTML = NEWS.map(n=>{
     const tc=tagColors[n.tag]||{bg:'#f3f4f6',c:'#6b7280'};
     return `<div class="news-item"><div class="news-meta"><span class="news-time">${n.time}</span><span class="news-tag" style="background:${tc.bg};color:${tc.c}">${n.tag}</span>${n.hot?'<span style="font-size:7px">🔥</span>':''}</div><div class="news-text">${n.text}</div></div>`;
@@ -1422,7 +1488,7 @@ function renderNews() {
 
 function renderMktFilters() {
   const el = document.getElementById('mktFilters');
-  el.innerHTML = ['all','Spot VCM','Compliance','Voluntary','Aviation'].map(f=>`<button class="mkt-filter-btn ${mktFilter===f?'active':''}" onclick="setMktFilter('${f}')">${f==='all'?'All':f}</button>`).join('');
+  el.innerHTML = ['all','FuelEU Pooling','Spot VCM','Compliance','Voluntary','Aviation'].map(f=>`<button class="mkt-filter-btn ${mktFilter===f?'active':''}" onclick="setMktFilter('${f}')">${f==='all'?'All':f}</button>`).join('');
 }
 function setMktFilter(f) { mktFilter=f; renderMktFilters(); renderInstrumentList(); }
 
