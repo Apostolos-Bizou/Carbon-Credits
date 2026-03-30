@@ -594,9 +594,34 @@ input { font-family: var(--sans); }
         <span class="tt-text" style="width:300px"><div class="tt-title">EUA Procurement Service</div>Τα EUAs είναι υποχρεωτικά. ΔΕΝ αντικαθίστανται από voluntary credits. Υπολογίστε πόσα χρειάζεστε στο Compliance tab.</span>
       </div>
       <div style="display:flex;gap:6px;margin-bottom:14px">
-        <button style="padding:7px 16px;border-radius:10px;border:1px solid var(--green-200);background:var(--green-50);color:var(--green-700);font-weight:600;font-size:13px;cursor:pointer;font-family:var(--sans)">🌱 Voluntary Credits (VCU)</button>
+        <button id="mktModeVcu" style="padding:7px 16px;border-radius:10px;border:1px solid var(--green-200);background:var(--green-50);color:var(--green-700);font-weight:600;font-size:13px;cursor:pointer;font-family:var(--sans)" onclick="setMktMode('vcu')">🌱 Voluntary Credits (VCU)</button>
+        <button id="mktModePool" style="padding:7px 16px;border-radius:10px;border:1px solid #fca5a5;background:#fef2f2;color:#dc2626;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--sans)" onclick="setMktMode('pooling')">🏊 FuelEU Pooling <span style="font-size:10px;background:#dc2626;color:#fff;padding:1px 6px;border-radius:4px;margin-left:4px">NEW</span></button>
         <button style="padding:7px 16px;border-radius:10px;border:1px solid #bfdbfe;background:#eff6ff;color:#2563eb;font-weight:600;font-size:13px;cursor:pointer;font-family:var(--sans);opacity:.6" class="tt" title="Σύντομα: αγορά EUAs μέσω πλατφόρμας.">🏛️ Compliance (EUA) <span style="font-size:10px">SOON</span></button>
       </div>
+      <!-- POOLING MARKETPLACE SECTION -->
+      <div id="poolingMarketplace" style="display:none">
+        <div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:1px solid #fecaca;border-radius:16px;padding:24px;margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+                <span style="background:#dc2626;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">FUELEU POOLING</span>
+                <span style="font-size:18px;font-weight:800;color:#991b1b">FuelEU Maritime Compliance Units</span>
+              </div>
+              <div style="font-size:14px;color:#6b7280;line-height:1.5">Αγοράστε <strong>FuelEU compliance surplus</strong> μέσω pooling. Αποφύγετε το penalty <strong style="text-decoration:line-through;color:#dc2626">€642/t</strong> — πληρώστε μόνο <strong style="color:#15803d">€220/t</strong>. Εξοικονόμηση 66%.</div>
+            </div>
+            <button style="background:#dc2626;color:#fff;border:none;padding:10px 20px;border-radius:12px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;font-family:var(--sans)" onclick="switchCompTab('poolsave',null);switchSection('compliance')">⚖️ Calculator →</button>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card tt" style="border-color:#fecaca"><div class="stat-label" style="color:#dc2626">FuelEU Penalty</div><div class="stat-value" style="color:#dc2626;text-decoration:line-through">€642</div><div class="stat-sub">/tCO₂e — AVOID</div><span class="tt-text"><div class="tt-title">FuelEU Penalty Cap</div>Αυτό πληρώνετε αν ΔΕΝ κάνετε pooling. €2,400 ανά τόνο VLSFO energy equivalent ≈ €642/tCO₂e.</span></div>
+          <div class="stat-card tt" style="border-color:var(--green-200)"><div class="stat-label">GCX Pool Price</div><div class="stat-value" style="color:var(--green-700)">€220</div><div class="stat-sub">/tCO₂e — Best Value</div><span class="tt-text"><div class="tt-title">GreenCreditX Pooling Rate</div>Η τιμή pooling της GreenCreditX. Η χαμηλότερη στην αγορά μαζί με full compliance guarantee.</span></div>
+          <div class="stat-card tt"><div class="stat-label">You Save</div><div class="stat-value" style="color:#15803d">66%</div><div class="stat-sub">vs FuelEU Penalty</div><span class="tt-text"><div class="tt-title">Εξοικονόμηση</div>€642 - €220 = €422/tCO₂e εξοικονόμηση. Για 140 tCO₂e deficit = €59,080 savings.</span></div>
+          <div class="stat-card tt"><div class="stat-label">Pool Partners</div><div class="stat-value">4</div><div class="stat-sub">Active providers</div><span class="tt-text"><div class="tt-title">Pooling Providers</div>GreenCreditX, OceanScore, Gasum, STX Group. Συγκρίνετε τιμές στο Live Markets tab.</span></div>
+        </div>
+        <div id="poolingCards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:16px"></div>
+      </div>
+      <!-- VCU SECTION -->
+      <div id="vcuMarketplace">
       <div class="stats-grid">
         <div class="stat-card tt"><div class="stat-label">Credits Traded</div><div class="stat-value" id="stat1">0</div><div class="stat-sub">tCO₂e YTD</div><span class="tt-text"><div class="tt-title">Credits Traded</div>Συνολικοί τόνοι CO₂ που έχουν διαπραγματευτεί μέσω GreenCreditX από την αρχή του έτους (Year To Date). Κάθε credit = 1 τόνος CO₂.</span></div>
         <div class="stat-card tt"><div class="stat-label">Active Clients</div><div class="stat-value" id="stat2">0</div><div class="stat-sub">Shipowners</div><span class="tt-text"><div class="tt-title">Active Clients</div>Αριθμός πλοιοκτητών που αγοράζουν credits μέσω της πλατφόρμας. Αυτοί είναι οι 20+ πελάτες TPA που χρειάζονται credits για EU ETS/IMO compliance.</span></div>
@@ -611,6 +636,7 @@ input { font-family: var(--sans); }
         <button class="filter-btn" data-type="REDD+" onclick="setTypeFilter(this,'REDD+')">REDD+</button>
       </div>
       <div class="credits-grid" id="creditsGrid"></div>
+      </div><!-- end vcuMarketplace -->
     </div>
     <div class="cart-sidebar" id="cartSidebar" style="display:none">
       <div class="cart-header"><div class="cart-title">Order Summary</div><button class="cart-close" onclick="toggleCart()">×</button></div>
@@ -1166,6 +1192,74 @@ function setTypeFilter(btn, type) {
   renderCredits();
 }
 function filterCredits() { renderCredits(); }
+
+let mktMode = 'vcu';
+function setMktMode(mode) {
+  mktMode = mode;
+  var vcu = document.getElementById('vcuMarketplace');
+  var pool = document.getElementById('poolingMarketplace');
+  var btnVcu = document.getElementById('mktModeVcu');
+  var btnPool = document.getElementById('mktModePool');
+  if(mode==='pooling') {
+    if(vcu) vcu.style.display='none';
+    if(pool) pool.style.display='block';
+    if(btnVcu) { btnVcu.style.background='transparent'; btnVcu.style.color='var(--gray-400)'; btnVcu.style.borderColor='var(--gray-200)'; }
+    if(btnPool) { btnPool.style.background='#fef2f2'; btnPool.style.color='#dc2626'; btnPool.style.borderColor='#fca5a5'; }
+    renderPoolingCards();
+  } else {
+    if(vcu) vcu.style.display='block';
+    if(pool) pool.style.display='none';
+    if(btnVcu) { btnVcu.style.background='var(--green-50)'; btnVcu.style.color='var(--green-700)'; btnVcu.style.borderColor='var(--green-200)'; }
+    if(btnPool) { btnPool.style.background='transparent'; btnPool.style.color='var(--gray-400)'; btnPool.style.borderColor='var(--gray-200)'; }
+  }
+}
+
+var POOLING_OFFERS = [
+  {id:'POOL-GCX-25',provider:'GreenCreditX',year:2025,price:220,available:5000,minOrder:50,delivery:'48h',guarantee:'Full compliance guarantee',badge:'BEST VALUE',color:'#15803d',bg:'linear-gradient(135deg,#14532d,#166534)',featured:true},
+  {id:'POOL-GCX-26',provider:'GreenCreditX',year:2026,price:210,available:8000,minOrder:50,delivery:'48h',guarantee:'Full compliance guarantee',badge:'EARLY BIRD',color:'#15803d',bg:'linear-gradient(135deg,#166534,#15803d)',featured:true},
+  {id:'POOL-OPX-25',provider:'OceanScore',year:2025,price:200,available:3200,minOrder:500,delivery:'Pool window Apr',guarantee:'Marketplace — variable',badge:'INDEX',color:'#dc2626',bg:'#fff',featured:false},
+  {id:'POOL-GASUM-25',provider:'Gasum',year:2025,price:235,available:4500,minOrder:500,delivery:'Contract-based',guarantee:'End-to-end bio-LNG chain',badge:'VERIFIED',color:'#0ea5e9',bg:'#fff',featured:false},
+  {id:'POOL-STX-25',provider:'STX Group',year:2025,price:253,available:6000,minOrder:100,delivery:'Pool registration',guarantee:'Azolla CASPER\u2122 platform',badge:'',color:'#a855f7',bg:'#fff',featured:false},
+];
+
+function renderPoolingCards() {
+  var container = document.getElementById('poolingCards');
+  if(!container) return;
+  var html = '';
+  POOLING_OFFERS.forEach(function(offer){
+    var savPct = Math.round((1-offer.price/642)*100);
+    var isFeatured = offer.featured;
+    var cardBg = isFeatured ? offer.bg : '#fff';
+    var txtCol = isFeatured ? '#fff' : '#333';
+    var subCol = isFeatured ? 'rgba(255,255,255,.7)' : '#9ca3af';
+    var borderCol = isFeatured ? offer.color : '#e5e7eb';
+    html += '<div style="background:'+cardBg+';border:2px solid '+borderCol+';border-radius:20px;padding:24px;position:relative;'+(isFeatured?'box-shadow:0 8px 32px rgba(21,128,61,.2)':'')+'">';
+    // Badge
+    if(offer.badge) html += '<div style="position:absolute;top:12px;right:12px;background:'+(isFeatured?'#4ade80':'#f3f4f6')+';color:'+(isFeatured?'#14532d':'#6b7280')+';padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800;letter-spacing:.5px">'+offer.badge+'</div>';
+    // Header
+    html += '<div style="font-size:12px;color:'+subCol+';text-transform:uppercase;letter-spacing:1px;font-weight:600">'+offer.provider+'</div>';
+    html += '<div style="font-size:14px;color:'+subCol+';margin-top:2px">FuelEU Compliance '+offer.year+'</div>';
+    // Price
+    html += '<div style="margin:16px 0;display:flex;align-items:baseline;gap:8px"><span style="font-size:36px;font-weight:800;color:'+(isFeatured?'#4ade80':offer.color)+';font-family:var(--mono)">\u20AC'+offer.price+'</span><span style="font-size:14px;color:'+subCol+'">/tCO\u2082e</span></div>';
+    // Savings badge
+    html += '<div style="display:inline-flex;align-items:center;gap:6px;background:'+(isFeatured?'rgba(255,255,255,.15)':'#f0fdf4')+';padding:6px 14px;border-radius:8px;margin-bottom:16px"><span style="font-size:14px;font-weight:800;color:'+(isFeatured?'#4ade80':'#15803d')+'">-'+savPct+'%</span><span style="font-size:12px;color:'+subCol+'">vs \u20AC642 penalty</span></div>';
+    // Details
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 0;border-top:1px solid '+(isFeatured?'rgba(255,255,255,.15)':'#f3f4f6')+';border-bottom:1px solid '+(isFeatured?'rgba(255,255,255,.15)':'#f3f4f6')+';margin-bottom:14px">';
+    html += '<div><div style="font-size:10px;color:'+subCol+';text-transform:uppercase;font-weight:600">Available</div><div style="font-size:15px;font-weight:700;color:'+txtCol+';font-family:var(--mono)">'+offer.available.toLocaleString()+' t</div></div>';
+    html += '<div><div style="font-size:10px;color:'+subCol+';text-transform:uppercase;font-weight:600">Min Order</div><div style="font-size:15px;font-weight:700;color:'+txtCol+';font-family:var(--mono)">'+offer.minOrder+' t</div></div>';
+    html += '<div><div style="font-size:10px;color:'+subCol+';text-transform:uppercase;font-weight:600">Delivery</div><div style="font-size:15px;font-weight:700;color:'+txtCol+'">'+offer.delivery+'</div></div>';
+    html += '<div><div style="font-size:10px;color:'+subCol+';text-transform:uppercase;font-weight:600">Guarantee</div><div style="font-size:13px;font-weight:600;color:'+txtCol+'">'+offer.guarantee+'</div></div>';
+    html += '</div>';
+    // CTA
+    if(isFeatured) {
+      html += '<button onclick="alert(\'FuelEU Pooling order for '+offer.provider+' '+offer.year+' @ \u20AC'+offer.price+'/tCO\u2082e.\\n\\nContact: pooling@greencreditx.com\')" style="width:100%;padding:14px;border-radius:14px;border:none;background:#4ade80;color:#14532d;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit">\uD83C\uDF0A Reserve Pooling Units</button>';
+    } else {
+      html += '<button onclick="alert(\'Request quote from '+offer.provider+' for '+offer.year+' FuelEU compliance units @ \u20AC'+offer.price+'/tCO\u2082e.\')" style="width:100%;padding:14px;border-radius:14px;border:1px solid '+offer.color+';background:transparent;color:'+offer.color+';font-weight:700;font-size:14px;cursor:pointer;font-family:inherit">Request Quote</button>';
+    }
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
 
 // ═══════════════════════════════════════════════
 // CART
