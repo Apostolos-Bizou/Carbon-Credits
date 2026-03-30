@@ -773,6 +773,7 @@ input { font-family: var(--sans); }
       <button class="filter-btn" onclick="showGuide('how',this)">Πώς Δημιουργούνται</button>
       <button class="filter-btn" onclick="showGuide('why',this)">Γιατί Χρειάζονται</button>
       <button class="filter-btn" style="background:#dc2626;color:#fff;border-color:#dc2626" onclick="showGuide('euets',this)">⚖️ EU ETS & Compliance</button>
+      <button class="filter-btn" style="background:#991b1b;color:#fff;border-color:#991b1b" onclick="showGuide('fueleu_pooling',this)">🏊 FuelEU Pooling</button>
       <button class="filter-btn" onclick="showGuide('platform',this)">Η Πλατφόρμα</button>
       <button class="filter-btn" onclick="showGuide('glossary',this)">Γλωσσάριο</button>
     </div>
@@ -894,11 +895,11 @@ platform: `
 <div style="display:grid;gap:20px">
   <div style="background:linear-gradient(135deg,#fef2f2,#fff);border:2px solid #dc2626;border-radius:16px;padding:28px">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="font-size:22px;font-weight:700;color:#dc2626">⚖️ Compliance — EU ETS Calculator</div><span style="background:#dc2626;color:#fff;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700">ΝΕΟ</span></div>
-    <div style="font-size:16px;color:#555;line-height:1.7"><strong>Τι κάνει:</strong> Υπολογίζει αυτόματα τα EUAs, FuelEU penalty, και CII rating για κάθε πλοίο.<br><strong>EUA Calculator:</strong> Fuel consumption ανά πηγή (M/E, A/E, Boiler) × τύπο (HFO, MGO, LFO, MDO) + geographic split → CO₂eq, EUAs, κόστος σε €.<br><strong>FuelEU Penalty:</strong> GHG intensity gap + penalty βάσει FuelEU targets.<br><strong>CII Rating:</strong> Carbon Intensity Indicator (A-E).<br><strong>Fleet Overview:</strong> Συγκεντρωτικό compliance κόστος στόλου.</div>
+    <div style="font-size:16px;color:#555;line-height:1.7"><strong>Τι κάνει:</strong> Υπολογίζει αυτόματα τα EUAs, FuelEU penalty, και CII rating για κάθε πλοίο.<br><strong>EUA Calculator:</strong> Fuel consumption ανά πηγή (M/E, A/E, Boiler) × τύπο (HFO, MGO, LFO, MDO) + geographic split → CO₂eq, EUAs, κόστος σε €.<br><strong>FuelEU Penalty:</strong> GHG intensity gap + penalty βάσει FuelEU targets.<br><strong>CII Rating:</strong> Carbon Intensity Indicator (A-E).<br><strong>Fleet Overview:</strong> Συγκεντρωτικό compliance κόστος στόλου.<br><strong>🏊 Pooling Savings:</strong> Σύγκριση κόστους pooling vs penalty — GreenCreditX, OceanScore, Gasum, STX Group.</div>
   </div>
   <div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;padding:28px">
     <div style="font-size:22px;font-weight:700;color:var(--green-900);margin-bottom:12px">🛒 Marketplace — Αγορά Credits</div>
-    <div style="font-size:16px;color:#555;line-height:1.7"><strong>Τι κάνει:</strong> Αγοράζετε carbon credits + EUA procurement.<br><strong>Πώς αγοράζετε:</strong> Ποσότητα → Buy → Cart → Place Order.<br><strong>Avg Discount 34%:</strong> 34% φθηνότερα από spot.</div>
+    <div style="font-size:16px;color:#555;line-height:1.7"><strong>Τι κάνει:</strong> Αγοράζετε carbon credits + EUA procurement.<br><strong>🏊 FuelEU Pooling:</strong> Toggle σε Pooling mode — δείτε προσφορές από 4 providers, τιμές €200-290/t, αντί €642 penalty.<br><strong>Πώς αγοράζετε:</strong> Ποσότητα → Buy → Cart → Place Order.<br><strong>Avg Discount 34%:</strong> 34% φθηνότερα από spot.</div>
   </div>
   <div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;padding:28px">
     <div style="font-size:22px;font-weight:700;color:var(--green-900);margin-bottom:12px">📈 Invest — Επενδύσεις σε Projects</div>
@@ -947,6 +948,154 @@ euets: `
   <div style="font-size:20px;font-weight:700;color:var(--green-700);margin-bottom:12px">💡 Χρησιμοποιήστε τον Compliance Calculator</div>
   <div style="font-size:16px;line-height:1.7;color:#333">Πατήστε <strong>⚖️ Compliance</strong> για να υπολογίσετε EUAs, FuelEU penalty, CII rating.</div>
 </div>
+<div style="background:linear-gradient(135deg,#fef2f2,#fff);border:2px solid #991b1b;border-radius:16px;padding:28px;margin-top:24px">
+  <div style="font-size:20px;font-weight:700;color:#991b1b;margin-bottom:12px">🏊 FuelEU Maritime — Αποφύγετε το Penalty με Pooling</div>
+  <div style="font-size:16px;line-height:1.7;color:#333">Εκτός από EU ETS, ο κανονισμός <strong>FuelEU Maritime</strong> επιβάλλει penalty <strong>€642/tCO₂e</strong> για πλοία που δεν πληρούν τα GHG intensity targets. Μέσω <strong>pooling</strong> αγοράζετε compliance surplus units στα <strong>€220/t</strong> (GreenCreditX) — εξοικονόμηση <strong>66%</strong>. Πατήστε <strong>🏊 FuelEU Pooling</strong> στη γραμμή πλοήγησης για πλήρη οδηγό.</div>
+</div>
+</div>
+`,
+
+fueleu_pooling: `
+<div style="background:linear-gradient(135deg,#fef2f2,#fff5f5);padding:48px;border-radius:20px;margin-bottom:32px;border:2px solid #991b1b;text-align:center">
+  <div style="font-size:42px;font-weight:800;color:#991b1b">🏊 FuelEU Maritime & Pooling</div>
+  <div style="font-size:18px;color:#dc2626;margin-top:8px;font-weight:600">Πώς λειτουργεί, γιατί πληρώνετε penalty, και πώς το αποφεύγετε</div>
+</div>
+
+<div style="font-size:18px;line-height:1.8;color:#333;margin-bottom:28px">
+  Ο <strong>Κανονισμός FuelEU Maritime</strong> (EU 2023/1805) ισχύει από <strong>1η Ιανουαρίου 2025</strong>. Θέτει <strong>ανώτατα όρια GHG intensity</strong> στα καύσιμα πλοίων. Αν το πλοίο σας υπερβαίνει το όριο → <strong>penalty</strong>. Η λύση: <strong>pooling</strong> — αγοράζετε surplus compliance units από πλοία που χρησιμοποιούν πράσινα καύσιμα.
+</div>
+
+<div style="font-size:24px;font-weight:800;color:#991b1b;margin-bottom:16px">📋 Τι είναι το FuelEU Maritime;</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px">
+    <div style="font-size:18px;font-weight:700;color:#991b1b;margin-bottom:8px">⛽ GHG Intensity Limit</div>
+    <div style="font-size:16px;color:#555;line-height:1.6">Κάθε πλοίο >5.000 GT πρέπει να επιτυγχάνει μέγιστο <strong>GHG intensity</strong> (gCO₂eq/MJ) στα καύσιμα. Η βάση: <strong>91.16 gCO₂eq/MJ</strong>. Targets μείωσης: <strong>-2% (2025)</strong>, -6% (2030), -14.5% (2035), -31% (2040), -80% (2050).</div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px">
+    <div style="font-size:18px;font-weight:700;color:#991b1b;margin-bottom:8px">💸 Penalty Mechanism</div>
+    <div style="font-size:16px;color:#555;line-height:1.6">Αν ξεπεράσετε το όριο: <strong>€2,400 ανά τόνο VLSFO energy equivalent</strong>, δηλαδή <strong>~€642/tCO₂e</strong>. Παράδειγμα: 140t deficit × €642 = <strong>€89,880 penalty</strong> ανά πλοίο ανά έτος.</div>
+  </div>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:#991b1b;margin-bottom:16px">🔢 Targets ανά Έτος</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;overflow:hidden;margin-bottom:28px">
+  <table style="width:100%;border-collapse:collapse">
+    <thead><tr style="background:#991b1b"><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Έτος</th><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Μείωση GHG</th><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Max Intensity</th><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Πλοία που επηρεάζονται</th></tr></thead>
+    <tbody>
+      <tr style="background:#fef2f2"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">2025</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">-2%</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono);border-bottom:1px solid #f3f4f6">89.34 gCO₂eq/MJ</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">~12,000 πλοία</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">2030</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">-6%</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono);border-bottom:1px solid #f3f4f6">85.69 gCO₂eq/MJ</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Αυξημένα</td></tr>
+      <tr style="background:#fef2f2"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">2035</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">-14.5%</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono);border-bottom:1px solid #f3f4f6">77.94 gCO₂eq/MJ</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Σημαντικά</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">2040</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">-31%</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono);border-bottom:1px solid #f3f4f6">62.90 gCO₂eq/MJ</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Πολλά</td></tr>
+      <tr style="background:#fef2f2"><td style="padding:14px 20px;font-size:15px;font-weight:700">2050</td><td style="padding:14px 20px;font-size:15px">-80%</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono)">18.23 gCO₂eq/MJ</td><td style="padding:14px 20px;font-size:15px">Όλα</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">🏊 Τι είναι το Pooling;</div>
+<div style="font-size:17px;line-height:1.8;color:#333;margin-bottom:20px">
+  Το <strong>pooling</strong> είναι ο μηχανισμός που επιτρέπει σε πλοία με <strong>surplus</strong> (χαμηλότερο GHG intensity) να μεταφέρουν compliance units σε πλοία με <strong>deficit</strong> (υψηλότερο intensity). Είναι ο <strong>πιο οικονομικός τρόπος</strong> να αποφύγετε το penalty.
+</div>
+
+<div style="display:grid;gap:12px;margin-bottom:28px">
+  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+    <div style="min-width:44px;height:44px;border-radius:50%;background:#15803d;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">1</div>
+    <div><div style="font-weight:700;font-size:17px;color:var(--green-900)">Πλοία με πράσινα καύσιμα (LNG, bio-LNG, methanol)</div><div style="font-size:15px;color:#555;margin-top:4px">Αυτά τα πλοία έχουν GHG intensity <strong>κάτω</strong> από το όριο → δημιουργούν <strong>compliance surplus</strong>.</div></div>
+  </div>
+  <div style="display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+    <div style="min-width:44px;height:44px;border-radius:50%;background:#dc2626;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px">2</div>
+    <div><div style="font-weight:700;font-size:17px;color:#991b1b">Πλοία με συμβατικά καύσιμα (HFO, MGO)</div><div style="font-size:15px;color:#555;margin-top:4px">Αυτά τα πλοία υπερβαίνουν το όριο → <strong>compliance deficit</strong> → αντιμετωπίζουν penalty.</div></div>
+  </div>
+  <div style="display:flex;gap:16px;align-items:flex-start;background:linear-gradient(135deg,#f0fdf4,#fff);border:2px solid var(--green-300);border-radius:14px;padding:20px">
+    <div style="min-width:44px;height:44px;border-radius:50%;background:var(--green-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px">🏊</div>
+    <div><div style="font-weight:700;font-size:17px;color:var(--green-700)">Pooling = Μεταφορά surplus σε deficit</div><div style="font-size:15px;color:#555;margin-top:4px">Αντί €642/t penalty, αγοράζετε surplus units στα <strong>€200-290/t</strong>. Εξοικονόμηση <strong>55-69%</strong>.</div></div>
+  </div>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">💰 Σύγκριση Κόστους</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px">
+  <div style="background:#fef2f2;border:2px solid #fca5a5;border-radius:14px;padding:24px;text-align:center">
+    <div style="font-size:14px;color:#dc2626;font-weight:600;text-transform:uppercase;margin-bottom:8px">Penalty (χωρίς pooling)</div>
+    <div style="font-size:36px;font-weight:800;color:#991b1b;font-family:var(--mono)">€642</div>
+    <div style="font-size:14px;color:#dc2626">/tCO₂e</div>
+    <div style="font-size:13px;color:#999;margin-top:8px">140t → €89,880</div>
+  </div>
+  <div style="background:#f0fdf4;border:2px solid var(--green-300);border-radius:14px;padding:24px;text-align:center">
+    <div style="font-size:14px;color:var(--green-700);font-weight:600;text-transform:uppercase;margin-bottom:8px">GreenCreditX Pooling</div>
+    <div style="font-size:36px;font-weight:800;color:var(--green-700);font-family:var(--mono)">€220</div>
+    <div style="font-size:14px;color:var(--green-600)">/tCO₂e — Best Value</div>
+    <div style="font-size:13px;color:#999;margin-top:8px">140t → €30,800</div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px;text-align:center">
+    <div style="font-size:14px;color:var(--green-700);font-weight:600;text-transform:uppercase;margin-bottom:8px">Εξοικονόμηση</div>
+    <div style="font-size:36px;font-weight:800;color:#15803d;font-family:var(--mono)">66%</div>
+    <div style="font-size:14px;color:var(--green-600)">vs penalty</div>
+    <div style="font-size:13px;color:#999;margin-top:8px">€59,080 savings</div>
+  </div>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">📊 Πάροχοι Pooling — Σύγκριση Αγοράς</div>
+<div style="background:#fff;border:1px solid var(--gray-200);border-radius:16px;overflow:hidden;margin-bottom:28px">
+  <table style="width:100%;border-collapse:collapse">
+    <thead><tr style="background:var(--green-900)"><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Πάροχος</th><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Τιμή/tCO₂e</th><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Πλατφόρμα</th><th style="padding:14px 20px;color:#fff;font-size:15px;text-align:left">Χαρακτηριστικά</th></tr></thead>
+    <tbody>
+      <tr style="background:#f0fdf4"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;color:var(--green-700)">GreenCreditX 🏆</td><td style="padding:14px 20px;font-size:15px;font-weight:700;font-family:var(--mono);border-bottom:1px solid #f3f4f6;color:var(--green-700)">€220</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">GreenCreditX Platform</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Χαμηλότερη τιμή, full compliance guarantee, 20+ shipowner clients</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">OceanScore</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono);border-bottom:1px solid #f3f4f6">€200</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">OPX Index</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Πρώτος FuelEU price index, Hamburg-based</td></tr>
+      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">Gasum</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono);border-bottom:1px solid #f3f4f6">€235</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Direct</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Φινλανδική κρατική, 18 biogas plants, end-to-end bio-LNG</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700">STX Group</td><td style="padding:14px 20px;font-size:15px;font-family:var(--mono)">€253</td><td style="padding:14px 20px;font-size:15px">Azolla CASPER™</td><td style="padding:14px 20px;font-size:15px">€290M credit facility, global environmental trader</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">📈 Αγορά & Ζήτηση</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px">
+    <div style="font-size:18px;font-weight:700;color:var(--green-900);margin-bottom:8px">📉 Ανισορροπία Αγοράς</div>
+    <div style="font-size:16px;color:#555;line-height:1.6">Σύμφωνα με τη <strong>DNV</strong>, η ζήτηση (deficit) είναι <strong>7 φορές</strong> μεγαλύτερη από την προσφορά (surplus). Αυτό σημαίνει ότι οι τιμές pooling θα αυξηθούν. Κλείστε τώρα, πληρώστε λιγότερα.</div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:24px">
+    <div style="font-size:18px;font-weight:700;color:var(--green-900);margin-bottom:8px">⏰ Deadlines</div>
+    <div style="font-size:16px;color:#555;line-height:1.6"><strong>30 Απριλίου</strong> κάθε έτους: deadline υποβολής FuelEU compliance. Μετά αυτή την ημερομηνία, αν δεν έχετε pooling agreement → <strong>αυτόματο penalty</strong>. Περίπου <strong>12,000 πλοία</strong> επηρεάζονται.</div>
+  </div>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">🚢 Παράδειγμα: Varship SCIO SPIRIT</div>
+<div style="background:linear-gradient(135deg,#fef2f2,#fff);border:2px solid #fca5a5;border-radius:16px;padding:28px;margin-bottom:28px">
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px">
+    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase">Deficit</div><div style="font-size:24px;font-weight:800;color:#991b1b;font-family:var(--mono)">140 t</div></div>
+    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase">Penalty</div><div style="font-size:24px;font-weight:800;color:#dc2626;font-family:var(--mono);text-decoration:line-through">€89,880</div></div>
+    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase">GCX Pooling</div><div style="font-size:24px;font-weight:800;color:var(--green-700);font-family:var(--mono)">€30,800</div></div>
+    <div style="text-align:center"><div style="font-size:12px;color:#999;text-transform:uppercase">Savings</div><div style="font-size:24px;font-weight:800;color:#15803d;font-family:var(--mono)">€59,080</div></div>
+  </div>
+</div>
+
+<div style="font-size:24px;font-weight:800;color:var(--green-900);margin-bottom:16px">🛡️ 4 Στρατηγικές Compliance</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px">
+  <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:14px;padding:20px">
+    <div style="font-size:16px;font-weight:700;color:#991b1b;margin-bottom:6px">❌ Πληρωμή Penalty</div>
+    <div style="font-size:14px;color:#555;line-height:1.5">€642/tCO₂e. Ακριβή και αρνητική ESG εικόνα. Αποφύγετέ την.</div>
+  </div>
+  <div style="background:#f0fdf4;border:2px solid var(--green-300);border-radius:14px;padding:20px">
+    <div style="font-size:16px;font-weight:700;color:var(--green-700);margin-bottom:6px">🏊 Pooling (Συνιστάται)</div>
+    <div style="font-size:14px;color:#555;line-height:1.5">€200-290/tCO₂e. Αγορά surplus units. Ταχεία λύση, εξοικονόμηση 55-69%.</div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+    <div style="font-size:16px;font-weight:700;color:var(--green-900);margin-bottom:6px">⛽ Εναλλακτικά Καύσιμα</div>
+    <div style="font-size:14px;color:#555;line-height:1.5">LNG, bio-LNG, methanol. Μακροπρόθεσμη λύση αλλά απαιτεί επένδυση σε retrofitting.</div>
+  </div>
+  <div style="background:#fff;border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+    <div style="font-size:16px;font-weight:700;color:var(--green-900);margin-bottom:6px">⚡ Banking/Borrowing</div>
+    <div style="font-size:14px;color:#555;line-height:1.5">Μεταφορά surplus σε επόμενο έτος (+) ή δανεισμός 2% advance (-). Περιορισμένη ευελιξία.</div>
+  </div>
+</div>
+
+<div style="background:#f0fdf4;border:2px solid var(--green-200);border-radius:16px;padding:28px">
+  <div style="font-size:20px;font-weight:700;color:var(--green-700);margin-bottom:12px">💡 Πώς ξεκινάτε με GreenCreditX;</div>
+  <div style="font-size:16px;line-height:1.7;color:#333">
+    <strong>1.</strong> Πατήστε <strong>⚖️ Compliance</strong> → <strong>🏊 Pooling Savings</strong> για να υπολογίσετε την εξοικονόμησή σας.<br>
+    <strong>2.</strong> Πατήστε <strong>🛒 Marketplace</strong> → <strong>🏊 FuelEU Pooling</strong> για να δείτε διαθέσιμες προσφορές.<br>
+    <strong>3.</strong> Επιλέξτε πάροχο και ποσότητα → Place Order → Done!
+  </div>
+</div>
 `,
 
 glossary: `
@@ -965,6 +1114,12 @@ glossary: `
       <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">EUA</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">EU Allowance — δικαίωμα εκπομπής 1 τόνου CO₂ (~€68)</td></tr>
       <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6">IMO</td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Διεθνής Ναυτιλιακός Οργανισμός</td></tr>
       <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">FuelEU Maritime <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Κανονισμός GHG intensity καυσίμων — penalty για μη συμμόρφωση</td></tr>
+      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">FuelEU Pooling <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Μεταφορά compliance surplus μεταξύ πλοίων — αποφυγή penalty €642/t</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">Compliance Surplus <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Πλεόνασμα compliance units — πλοίο κάτω από GHG limit → πωλεί surplus</td></tr>
+      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">Compliance Deficit <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Έλλειμμα compliance — πλοίο πάνω από GHG limit → penalty ή pooling</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">GHG Intensity <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">gCO₂eq/MJ — ένταση εκπομπών ανά μονάδα ενέργειας καυσίμου (well-to-wake)</td></tr>
+      <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">OPX Index <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">OceanScore Pool-Price Index — πρώτος FuelEU Maritime pooling price benchmark</td></tr>
+      <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">CASPER™ <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Πλατφόρμα FuelEU compliance της Azolla/STX Group</td></tr>
       <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">CII Rating <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Carbon Intensity Indicator — αξιολόγηση A (best) έως E (worst)</td></tr>
       <tr><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">THETIS-MRV <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Επίσημη EU πλατφόρμα reporting εκπομπών πλοίων</td></tr>
       <tr style="background:#fafdf9"><td style="padding:14px 20px;font-size:15px;font-weight:700;border-bottom:1px solid #f3f4f6;background:#fef2f2">Phase-in <span style="color:#dc2626;font-size:11px">ΝΕΟ</span></td><td style="padding:14px 20px;font-size:15px;border-bottom:1px solid #f3f4f6">Σταδιακή εφαρμογή EU ETS: 2024=40%, 2025=70%, 2026+=100%</td></tr>
