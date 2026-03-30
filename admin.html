@@ -250,6 +250,152 @@ document.getElementById('bpSec5').textContent=v&&v.bp?id+': 4 risks ✓':id+': E
 document.getElementById('bpSec6').textContent=v&&v.bp?id+': 4 steps ✓':id+': Empty — click to add';document.getElementById('bpSec6').style.color=v&&v.bp?'var(--g600)':'var(--x400)'}
 
 function openBPSection(section){openBPBuilder(bpSelectedProject)}
+
+/* ═══ COMPLIANCE ADMIN FUNCTIONS ═══ */
+function saveEmissionFactors(){
+  alert('✅ Emission Factors saved!\n\nHFO: 3.114 gCO₂/g\nMGO: 3.206 gCO₂/g\nLFO: 3.151 gCO₂/g\nMDO: 3.206 gCO₂/g\nLNG: 2.750 gCO₂/g\nMethanol: 1.375 gCO₂/g\n\nΕνημερώθηκαν:\n• Compliance → EUA Calculator\n• Fleet Monitor → vessel emissions\nSource: EU Reg. 2015/757, Annex I');
+}
+
+function saveEUASettings(){
+  alert('✅ EUA Settings saved!\n\nCurrent EUA Price: €68.00\nPhase-in 2025: 70%\nPhase-in 2026+: 100%\n\nΕνημερώθηκαν:\n• Compliance → EUA Calculator\n• Live Markets → EUA instrument\n• Fleet Monitor → EU ETS Exposure\n• Ticker Tape → EUA price');
+}
+
+function saveFuelEUSettings(){
+  alert('✅ FuelEU Maritime Settings saved!\n\nReference: 91.16 gCO₂eq/MJ\nTarget 2025: -2%\nPenalty Rate: €2,400/GJ\n\nΕνημερώθηκαν:\n• Compliance → FuelEU Penalty Calculator\n• FuelEU Pooling → penalty cap (€642/tCO₂e)\n• Fleet Monitor → Compliance Strategy');
+}
+
+function saveCIIThresholds(){
+  alert('✅ CII Thresholds saved!\n\nBulk Carrier:\nA: ≤3.5 · B: ≤5.0 · C: ≤6.5 · D: ≤8.5 · E: >8.5\n\nΕνημερώθηκαν:\n• Compliance → CII Rating Calculator\n• Fleet Monitor → CII badges per vessel');
+}
+
+function addVerifier(){
+  var mo=document.getElementById('verifierMo');mo.classList.add('show');
+  document.getElementById('ver-name').value='';
+  document.getElementById('ver-location').value='';
+  document.getElementById('ver-accred').value='';
+  document.getElementById('ver-clients').value='';
+}
+function closeVerifier(){document.getElementById('verifierMo').classList.remove('show')}
+function saveVerifier(){
+  var n=document.getElementById('ver-name').value;
+  if(!n){alert('Συμπληρώστε το όνομα verifier');return;}
+  alert('✅ Verifier "'+n+'" saved!\n\nLocation: '+document.getElementById('ver-location').value+'\nAccreditation: '+document.getElementById('ver-accred').value+'\n\nΘα εμφανίζεται στο Compliance panel ως επιλογή verifier.');
+  closeVerifier();
+}
+function editVerifier(name){
+  addVerifier();
+  document.getElementById('ver-name').value=name;
+  if(name.indexOf('ICS')>=0){document.getElementById('ver-location').value='Piraeus, Greece';document.getElementById('ver-accred').value='ESYD 1101-3';document.getElementById('ver-clients').value='Varship';}
+  else if(name.indexOf('DNV')>=0){document.getElementById('ver-location').value='Piraeus, Greece';document.getElementById('ver-accred').value='UKAS 123';document.getElementById('ver-clients').value='Multiple';}
+  else if(name.indexOf('RINA')>=0){document.getElementById('ver-location').value='Piraeus, Greece';document.getElementById('ver-accred').value='ACCREDIA';document.getElementById('ver-clients').value='Multiple';}
+}
+
+/* ═══ FUELEU POOLING ADMIN FUNCTIONS ═══ */
+function saveGCXPricing(){
+  var msg='GCX Pooling Pricing saved!\n\n';
+  msg+='2025: €'+document.querySelector('#p-pooling .fi[value="220"]')?.value+'/tCO₂e\n';
+  msg+='2026: €'+document.querySelector('#p-pooling .fi[value="210"]')?.value+'/tCO₂e\n';
+  msg+='\nΟι τιμές ενημερώθηκαν στο:\n• Marketplace → FuelEU Pooling tab\n• Live Markets → GCX-POOL ticker\n• Fleet Monitor → Compliance Strategy\n• Compliance → Pooling Savings Calculator';
+  alert(msg);
+}
+
+function addCompetitor(){
+  var mo=document.getElementById('poolCompMo');mo.classList.add('show');
+  document.getElementById('poolComp-name').value='';
+  document.getElementById('poolComp-price').value='';
+  document.getElementById('poolComp-min').value='';
+  document.getElementById('poolComp-src').value='';
+}
+function closePoolComp(){document.getElementById('poolCompMo').classList.remove('show')}
+function savePoolComp(){
+  var n=document.getElementById('poolComp-name').value;
+  var p=document.getElementById('poolComp-price').value;
+  if(!n||!p){alert('Συμπληρώστε Name και Price');return;}
+  alert('Competitor "'+n+'" added @ €'+p+'/tCO₂e\n\nΘα εμφανιστεί στο:\n• Live Markets → FuelEU Pooling instruments\n• Compliance → Pooling Savings Calculator\n• Marketplace → Provider Comparison panel');
+  closePoolComp();
+}
+
+function refreshPoolPrices(){
+  alert('🔄 Refreshing competitor prices...\n\n• OceanScore OPX: Fetching from oceanscore.com...\n• Gasum: Fetching from gasum.com/fueleu...\n• STX Group: Fetching from stxgroup.com...\n\n✅ Prices updated!\n(In production: API calls to live sources)');
+}
+
+function newPoolOffer(){
+  var mo=document.getElementById('poolOfferMo');mo.classList.add('show');
+  document.getElementById('poolOff-provider').value='GreenCreditX';
+  document.getElementById('poolOff-year').value='2026';
+  document.getElementById('poolOff-price').value='';
+  document.getElementById('poolOff-avail').value='';
+  document.getElementById('poolOff-badge').value='';
+  document.getElementById('poolOff-delivery').value='48h';
+  document.getElementById('poolOff-guarantee').value='Full compliance guarantee';
+}
+function closePoolOffer(){document.getElementById('poolOfferMo').classList.remove('show')}
+function savePoolOffer(){
+  var prov=document.getElementById('poolOff-provider').value;
+  var yr=document.getElementById('poolOff-year').value;
+  var pr=document.getElementById('poolOff-price').value;
+  if(!pr){alert('Συμπληρώστε τιμή');return;}
+  alert('Pooling offer created!\n\n'+prov+' '+yr+' @ €'+pr+'/tCO₂e\n\nΘα εμφανιστεί ως card στο:\nMarketplace → 🏊 FuelEU Pooling section');
+  closePoolOffer();
+}
+
+function newPoolContract(){
+  var mo=document.getElementById('poolContractMo');mo.classList.add('show');
+  document.getElementById('poolCon-owner').value='';
+  document.getElementById('poolCon-vessel').value='';
+  document.getElementById('poolCon-year').value='2025';
+  document.getElementById('poolCon-deficit').value='';
+  document.getElementById('poolCon-rate').value='220';
+}
+function closePoolContract(){document.getElementById('poolContractMo').classList.remove('show')}
+function savePoolContract(){
+  var ow=document.getElementById('poolCon-owner').value;
+  var df=document.getElementById('poolCon-deficit').value;
+  var rt=document.getElementById('poolCon-rate').value;
+  if(!ow||!df){alert('Συμπληρώστε shipowner και deficit');return;}
+  var val=parseInt(df)*parseInt(rt);
+  alert('Pooling contract created!\n\n'+ow+'\nDeficit: '+df+' tCO₂e\nRate: €'+rt+'/t\nValue: €'+val.toLocaleString()+'\n\nStatus: Pending → αναμένεται υπογραφή πελάτη');
+  closePoolContract();
+}
+
+function sendPoolOffer(owner,deficit){
+  alert('📧 Pooling Offer sent to '+owner+'!\n\nDeficit: '+deficit+' tCO₂e\nGCX Rate: €220/tCO₂e\nTotal: €'+(deficit*220).toLocaleString()+'\n\nvs Penalty: €'+(deficit*642).toLocaleString()+'\nSavings: €'+((deficit*642)-(deficit*220)).toLocaleString()+' ('+Math.round((1-220/642)*100)+'%)\n\nEmail sent to operations@'+owner.toLowerCase().replace(/\s/g,'-')+'.com');
+}
+
+function offerGCXtoVarship(){
+  alert('📧 GCX Counter-Offer sent to Varship!\n\n🔄 Current: STX Group @ €253/tCO₂e × 140t = €35,420\n✅ GCX Offer: €220/tCO₂e × 140t = €30,800\n\n💰 Client saves: €4,620 (13% cheaper than STX)\n💰 vs Penalty: saves €59,080 (66%)\n\nEmail sent to operations@varship.com\nCC: admin@tpa-services.com');
+}
+
+function prepareVarshipOffer(){offerGCXtoVarship()}
+
+function editPoolCompetitor(name){
+  addCompetitor();
+  document.getElementById('poolComp-name').value=name;
+  if(name.indexOf('OceanScore')>=0){document.getElementById('poolComp-price').value='200';document.getElementById('poolComp-min').value='500';document.getElementById('poolComp-src').value='oceanscore.com';}
+  else if(name.indexOf('Gasum')>=0){document.getElementById('poolComp-price').value='235';document.getElementById('poolComp-min').value='500';document.getElementById('poolComp-src').value='gasum.com/fueleu';}
+  else if(name.indexOf('STX')>=0){document.getElementById('poolComp-price').value='253';document.getElementById('poolComp-min').value='100';document.getElementById('poolComp-src').value='stxgroup.com';}
+}
+
+function editPoolOffer(id){
+  newPoolOffer();
+  var offer=POOLING_OFFERS_ADMIN.find(function(o){return o.id===id});
+  if(offer){
+    document.getElementById('poolOff-provider').value=offer.provider;
+    document.getElementById('poolOff-year').value=offer.year;
+    document.getElementById('poolOff-price').value=offer.price;
+    document.getElementById('poolOff-avail').value=offer.avail;
+    document.getElementById('poolOff-badge').value=offer.badge;
+  }
+}
+
+var POOLING_OFFERS_ADMIN=[
+  {id:'POOL-GCX-25',provider:'GreenCreditX',year:'2025',price:'220',avail:'5000',badge:'BEST VALUE'},
+  {id:'POOL-GCX-26',provider:'GreenCreditX',year:'2026',price:'210',avail:'8000',badge:'EARLY BIRD'},
+  {id:'POOL-OPX-25',provider:'OceanScore',year:'2025',price:'200',avail:'3200',badge:'INDEX'},
+  {id:'POOL-GASUM-25',provider:'Gasum',year:'2025',price:'235',avail:'4500',badge:'VERIFIED'},
+  {id:'POOL-STX-25',provider:'STX Group',year:'2025',price:'253',avail:'6000',badge:''}
+];
+
 document.addEventListener('DOMContentLoaded',initAdmin);
 </script>
 </head>
@@ -707,7 +853,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl tt" title="Liquefied Natural Gas — αν χρησιμοποιείται από LNG-powered πλοία.">LNG (Liquefied Natural Gas)</label><input class="fi" type="number" step="0.001" value="2.750"></div>
             <div class="fgp"><label class="fl tt" title="Methanol — εναλλακτικό καύσιμο, χαμηλότερος EF.">Methanol</label><input class="fi" type="number" step="0.001" value="1.375"></div>
           </div>
-          <div class="fa"><button class="btn bp">Save Emission Factors</button><span style="font-size:12px;color:var(--x400);margin-left:10px">Source: EU Reg. 2015/757, Annex I</span></div>
+          <div class="fa"><button class="btn bp" onclick="saveEmissionFactors()">Save Emission Factors</button><span style="font-size:12px;color:var(--x400);margin-left:10px">Source: EU Reg. 2015/757, Annex I</span></div>
         </div></div>
 
         <!-- EUA Market Settings -->
@@ -719,7 +865,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl tt" title="Phase-in 2025 = 70%. Σημαίνει ότι μόνο το 70% των EU-scope εκπομπών χρεώνεται.">Phase-in 2025 (%)</label><input class="fi" type="number" value="70"></div>
             <div class="fgp"><label class="fl tt" title="Phase-in 2026+ = 100%. Πλήρης χρέωση.">Phase-in 2026+ (%)</label><input class="fi" type="number" value="100"></div>
           </div>
-          <div class="fa"><button class="btn bp">Save EUA Settings</button></div>
+          <div class="fa"><button class="btn bp" onclick="saveEUASettings()">Save EUA Settings</button></div>
         </div></div>
 
         <!-- Geographic Scope -->
@@ -743,7 +889,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl tt" title="Μείωση target: 2035 = -14.5%.">Target 2035</label><input class="fi" value="-14.5%" disabled style="background:#fffbeb"></div>
             <div class="fgp"><label class="fl tt" title="Penalty rate σε €/GJ για deficit.">Penalty Rate (€/GJ)</label><input class="fi" type="number" step="0.01" value="2400"></div>
           </div>
-          <div class="fa"><button class="btn bp">Save FuelEU Settings</button></div>
+          <div class="fa"><button class="btn bp" onclick="saveFuelEUSettings()">Save FuelEU Settings</button></div>
         </div></div>
 
         <!-- CII Thresholds -->
@@ -757,17 +903,17 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl tt" title="C < CII ≤ D = Rating D. Απαιτείται corrective action plan.">D Threshold (≤)</label><input class="fi" type="number" step="0.1" value="8.5"></div>
             <div class="fgp"><label class="fl tt" title="CII > D = Rating E. Κίνδυνος λειτουργικών περιορισμών.">E Threshold (>)</label><input class="fi" value="> 8.5" disabled style="background:#fef2f2;color:#dc2626;font-weight:700"></div>
           </div>
-          <div class="fa"><button class="btn bp">Save CII Thresholds</button></div>
+          <div class="fa"><button class="btn bp" onclick="saveCIIThresholds()">Save CII Thresholds</button></div>
         </div></div>
 
         <!-- Verifiers -->
-        <div class="cd"><div class="ch"><div><div class="ct-t">Accredited Verifiers</div><div class="ct-s tt" title="Οι πιστοποιημένοι verifiers που χρησιμοποιούν οι πελάτες μας. Αυτοί παράγουν τα Emission Reports.">Companies that verify vessel emissions for EU MRV compliance</div></div><button class="btn bp bsm">+ Add Verifier</button></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">Accredited Verifiers</div><div class="ct-s tt" title="Οι πιστοποιημένοι verifiers που χρησιμοποιούν οι πελάτες μας. Αυτοί παράγουν τα Emission Reports.">Companies that verify vessel emissions for EU MRV compliance</div></div><button class="btn bp bsm" onclick="addVerifier()">+ Add Verifier</button></div>
         <div class="cb">
           <table style="width:100%;font-size:13px;border-collapse:collapse">
             <tr style="background:var(--g50)"><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Name</th><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Location</th><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Accreditation</th><th style="text-align:left;padding:10px 12px;font-size:11px;font-weight:700;color:var(--x500)">Clients</th><th style="padding:10px 12px"></th></tr>
-            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">ICS Saraidaris Technical Bureau</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ESYD 1101-3</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Varship</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
-            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">DNV Maritime</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">UKAS 123</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
-            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">RINA Services</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ACCREDIA</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm">Edit</button></td></tr>
+            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">ICS Saraidaris Technical Bureau</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ESYD 1101-3</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Varship</span></td><td style="padding:10px 12px"><button class="btn bs bsm" onclick="editVerifier('ICS Saraidaris Technical Bureau')">Edit</button></td></tr>
+            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">DNV Maritime</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">UKAS 123</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm" onclick="editVerifier('DNV Maritime')">Edit</button></td></tr>
+            <tr style="border-bottom:1px solid var(--g100)"><td style="padding:10px 12px;font-weight:600">RINA Services</td><td style="padding:10px 12px">Piraeus, Greece</td><td style="padding:10px 12px;font-family:var(--mono);font-size:12px">ACCREDIA</td><td style="padding:10px 12px"><span style="background:var(--g100);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">Multiple</span></td><td style="padding:10px 12px"><button class="btn bs bsm" onclick="editVerifier('RINA Services')">Edit</button></td></tr>
           </table>
         </div></div>
 
@@ -797,7 +943,7 @@ document.addEventListener('DOMContentLoaded',initAdmin);
             <div class="fgp"><label class="fl tt" title="Ελάχιστη παραγγελία σε τόνους.">Min Order (tCO₂e)</label><input class="fi" type="number" value="50"></div>
             <div class="fgp"><label class="fl tt" title="Χρόνος delivery μετά την παραγγελία.">Delivery Time</label><input class="fi" value="48h"></div>
           </div>
-          <div class="fa"><button class="btn bp">💾 Save GCX Pricing</button></div>
+          <div class="fa"><button class="btn bp" onclick="saveGCXPricing()">💾 Save GCX Pricing</button></div>
         </div></div>
 
         <!-- Competitor Benchmarks -->
@@ -806,43 +952,43 @@ document.addEventListener('DOMContentLoaded',initAdmin);
           <table style="width:100%">
             <thead><tr><th>Provider</th><th>€/tCO₂e</th><th>Min Order</th><th>Source</th><th>Status</th><th></th></tr></thead>
             <tbody>
-              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#dc2626;margin-right:6px"></span>OceanScore OPX</td><td class="tp">€200</td><td class="tm">500 t</td><td>oceanscore.com</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm">Edit</button></td></tr>
-              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#0ea5e9;margin-right:6px"></span>Gasum Pool</td><td class="tp">€235</td><td class="tm">500 t</td><td>gasum.com/fueleu</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm">Edit</button></td></tr>
-              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#a855f7;margin-right:6px"></span>STX Group</td><td class="tp">€253</td><td class="tm">100 t</td><td>stxgroup.com</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#dc2626;margin-right:6px"></span>OceanScore OPX</td><td class="tp">€200</td><td class="tm">500 t</td><td>oceanscore.com</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm" onclick="editPoolCompetitor('OceanScore OPX')">Edit</button></td></tr>
+              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#0ea5e9;margin-right:6px"></span>Gasum Pool</td><td class="tp">€235</td><td class="tm">500 t</td><td>gasum.com/fueleu</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm" onclick="editPoolCompetitor('Gasum Pool')">Edit</button></td></tr>
+              <tr><td style="font-weight:700"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#a855f7;margin-right:6px"></span>STX Group</td><td class="tp">€253</td><td class="tm">100 t</td><td>stxgroup.com</td><td><span class="sd sl"></span>Live</td><td><button class="btn bs bsm" onclick="editPoolCompetitor('STX Group')">Edit</button></td></tr>
             </tbody>
           </table>
-          <div class="fa"><button class="btn bp bsm">+ Add Competitor</button><button class="btn bs bsm" style="margin-left:8px">↻ Refresh Prices</button></div>
+          <div class="fa"><button class="btn bp bsm" onclick="addCompetitor()">+ Add Competitor</button><button class="btn bs bsm" style="margin-left:8px" onclick="refreshPoolPrices()">↻ Refresh Prices</button></div>
         </div></div>
 
         <!-- Pooling Offers Management -->
-        <div class="cd"><div class="ch"><div><div class="ct-t">🎯 Pooling Offers (Marketplace)</div><div class="ct-s tt" title="Αυτά τα offers εμφανίζονται στο Marketplace → FuelEU Pooling tab. Κάθε card δείχνει τιμή, available volume, delivery, guarantee.">Cards που εμφανίζονται στο Marketplace Pooling section</div></div><button class="btn bp bsm">+ New Offer</button></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">🎯 Pooling Offers (Marketplace)</div><div class="ct-s tt" title="Αυτά τα offers εμφανίζονται στο Marketplace → FuelEU Pooling tab. Κάθε card δείχνει τιμή, available volume, delivery, guarantee.">Cards που εμφανίζονται στο Marketplace Pooling section</div></div><button class="btn bp bsm" onclick="newPoolOffer()">+ New Offer</button></div>
         <div class="cb">
           <table style="width:100%">
             <thead><tr><th>ID</th><th>Provider</th><th>Year</th><th>€/t</th><th>Available</th><th>Badge</th><th>Featured</th><th></th></tr></thead>
             <tbody>
-              <tr><td class="tm">POOL-GCX-25</td><td style="font-weight:700">GreenCreditX</td><td>2025</td><td class="tp">€220</td><td class="tm">5,000 t</td><td><span style="background:var(--g100);color:var(--g700);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">BEST VALUE</span></td><td>⭐ Yes</td><td><button class="btn bs bsm">Edit</button></td></tr>
-              <tr><td class="tm">POOL-GCX-26</td><td style="font-weight:700">GreenCreditX</td><td>2026</td><td class="tp">€210</td><td class="tm">8,000 t</td><td><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">EARLY BIRD</span></td><td>⭐ Yes</td><td><button class="btn bs bsm">Edit</button></td></tr>
-              <tr><td class="tm">POOL-OPX-25</td><td>OceanScore</td><td>2025</td><td class="tp">€200</td><td class="tm">3,200 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">INDEX</span></td><td>No</td><td><button class="btn bs bsm">Edit</button></td></tr>
-              <tr><td class="tm">POOL-GASUM-25</td><td>Gasum</td><td>2025</td><td class="tp">€235</td><td class="tm">4,500 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">VERIFIED</span></td><td>No</td><td><button class="btn bs bsm">Edit</button></td></tr>
-              <tr><td class="tm">POOL-STX-25</td><td>STX Group</td><td>2025</td><td class="tp">€253</td><td class="tm">6,000 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">—</span></td><td>No</td><td><button class="btn bs bsm">Edit</button></td></tr>
+              <tr><td class="tm">POOL-GCX-25</td><td style="font-weight:700">GreenCreditX</td><td>2025</td><td class="tp">€220</td><td class="tm">5,000 t</td><td><span style="background:var(--g100);color:var(--g700);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">BEST VALUE</span></td><td>⭐ Yes</td><td><button class="btn bs bsm" onclick="editPoolOffer('POOL-GCX-25')">Edit</button></td></tr>
+              <tr><td class="tm">POOL-GCX-26</td><td style="font-weight:700">GreenCreditX</td><td>2026</td><td class="tp">€210</td><td class="tm">8,000 t</td><td><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">EARLY BIRD</span></td><td>⭐ Yes</td><td><button class="btn bs bsm" onclick="editPoolOffer('POOL-GCX-26')">Edit</button></td></tr>
+              <tr><td class="tm">POOL-OPX-25</td><td>OceanScore</td><td>2025</td><td class="tp">€200</td><td class="tm">3,200 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">INDEX</span></td><td>No</td><td><button class="btn bs bsm" onclick="editPoolOffer('POOL-OPX-25')">Edit</button></td></tr>
+              <tr><td class="tm">POOL-GASUM-25</td><td>Gasum</td><td>2025</td><td class="tp">€235</td><td class="tm">4,500 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">VERIFIED</span></td><td>No</td><td><button class="btn bs bsm" onclick="editPoolOffer('POOL-GASUM-25')">Edit</button></td></tr>
+              <tr><td class="tm">POOL-STX-25</td><td>STX Group</td><td>2025</td><td class="tp">€253</td><td class="tm">6,000 t</td><td><span style="background:var(--x100);color:var(--x500);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700">—</span></td><td>No</td><td><button class="btn bs bsm" onclick="editPoolOffer('POOL-STX-25')">Edit</button></td></tr>
             </tbody>
           </table>
         </div></div>
 
         <!-- Pooling Contracts -->
-        <div class="cd"><div class="ch"><div><div class="ct-t">📋 Pooling Contracts</div><div class="ct-s tt" title="Ενεργά pooling contracts με πελάτες. Κάθε contract ορίζει: πλοιοκτήτη, volume, τιμή, compliance year.">Active & pending FuelEU pooling agreements with shipowners</div></div><button class="btn bp bsm">+ New Contract</button></div>
+        <div class="cd"><div class="ch"><div><div class="ct-t">📋 Pooling Contracts</div><div class="ct-s tt" title="Ενεργά pooling contracts με πελάτες. Κάθε contract ορίζει: πλοιοκτήτη, volume, τιμή, compliance year.">Active & pending FuelEU pooling agreements with shipowners</div></div><button class="btn bp bsm" onclick="newPoolContract()">+ New Contract</button></div>
         <div class="cb">
           <table style="width:100%">
             <thead><tr><th>Shipowner</th><th>Vessel</th><th>Year</th><th>Deficit (t)</th><th>Rate €/t</th><th>Value</th><th>Status</th><th></th></tr></thead>
             <tbody>
-              <tr><td style="font-weight:700">Varship / SCIO SPIRIT</td><td class="tm">IMO 9502738</td><td>2025</td><td class="tm">140</td><td class="tp">€253</td><td class="tp">€35,420</td><td><span class="sd sl"></span>Active (STX)</td><td><button class="btn bp bsm">Offer GCX @€220</button></td></tr>
-              <tr><td style="font-weight:700">Olympia Maritime</td><td class="tm">8 vessels</td><td>2025</td><td class="tm">890</td><td style="color:var(--x400)">—</td><td style="color:var(--x400)">—</td><td><span class="sd sp"></span>Pending</td><td><button class="btn bp bsm">Send Offer</button></td></tr>
-              <tr><td style="font-weight:700">Aegean Bulk Carriers</td><td class="tm">6 vessels</td><td>2025</td><td class="tm">620</td><td style="color:var(--x400)">—</td><td style="color:var(--x400)">—</td><td><span class="sd sp"></span>Pending</td><td><button class="btn bp bsm">Send Offer</button></td></tr>
+              <tr><td style="font-weight:700">Varship / SCIO SPIRIT</td><td class="tm">IMO 9502738</td><td>2025</td><td class="tm">140</td><td class="tp">€253</td><td class="tp">€35,420</td><td><span class="sd sl"></span>Active (STX)</td><td><button class="btn bp bsm" onclick="offerGCXtoVarship()">Offer GCX @€220</button></td></tr>
+              <tr><td style="font-weight:700">Olympia Maritime</td><td class="tm">8 vessels</td><td>2025</td><td class="tm">890</td><td style="color:var(--x400)">—</td><td style="color:var(--x400)">—</td><td><span class="sd sp"></span>Pending</td><td><button class="btn bp bsm" onclick="sendPoolOffer('Olympia Maritime',890)">Send Offer</button></td></tr>
+              <tr><td style="font-weight:700">Aegean Bulk Carriers</td><td class="tm">6 vessels</td><td>2025</td><td class="tm">620</td><td style="color:var(--x400)">—</td><td style="color:var(--x400)">—</td><td><span class="sd sp"></span>Pending</td><td><button class="btn bp bsm" onclick="sendPoolOffer('Aegean Bulk Carriers',620)">Send Offer</button></td></tr>
             </tbody>
           </table>
           <div style="margin-top:16px;padding:16px;background:linear-gradient(135deg,#14532d,#166534);border-radius:12px;color:#fff;display:flex;justify-content:space-between;align-items:center">
             <div><div style="font-size:16px;font-weight:800">💡 Ευκαιρία: Varship πληρώνει €253/t στην STX</div><div style="font-size:13px;opacity:.8;margin-top:4px">Προσφέρετε €220/t μέσω GCX — εξοικονόμηση €33/t × 140t = €4,620 για τον πελάτη</div></div>
-            <button class="btn" style="background:#4ade80;color:#14532d;font-weight:800;padding:12px 24px;border-radius:10px;border:none;font-size:14px">📧 Prepare Offer</button>
+            <button class="btn" style="background:#4ade80;color:#14532d;font-weight:800;padding:12px 24px;border-radius:10px;border:none;font-size:14px" onclick="prepareVarshipOffer()">📧 Prepare Offer</button>
           </div>
         </div></div>
 
@@ -1037,6 +1183,56 @@ function closeGE(){document.getElementById('geMo').classList.remove('show')}
   });
 })();
 </script>
+
+<!-- ═══ VERIFIER MODAL ═══ -->
+<div class="mo" id="verifierMo"><div class="md" style="max-width:600px"><div class="mh"><div class="mt">Add/Edit Verifier</div><button class="mc" onclick="closeVerifier()">×</button></div>
+<div class="mb"><div class="fg">
+  <div class="fgp"><label class="fl">Verifier Name</label><input class="fi" id="ver-name" placeholder="π.χ. Bureau Veritas"></div>
+  <div class="fgp"><label class="fl">Location</label><input class="fi" id="ver-location" placeholder="π.χ. Piraeus, Greece"></div>
+  <div class="fgp"><label class="fl">Accreditation</label><input class="fi" id="ver-accred" placeholder="π.χ. ESYD 1101-3"></div>
+  <div class="fgp"><label class="fl">Clients</label><input class="fi" id="ver-clients" placeholder="π.χ. Varship, Olympia"></div>
+</div></div>
+<div class="mf"><button class="btn bs" onclick="closeVerifier()">Cancel</button><button class="btn bp" onclick="saveVerifier()">💾 Save Verifier</button></div>
+</div></div>
+
+<!-- ═══ POOLING MODALS ═══ -->
+<div class="mo" id="poolCompMo"><div class="md" style="max-width:600px"><div class="mh"><div class="mt">Add/Edit Competitor</div><button class="mc" onclick="closePoolComp()">×</button></div>
+<div class="mb"><div class="fg">
+  <div class="fgp"><label class="fl">Provider Name</label><input class="fi" id="poolComp-name" placeholder="π.χ. FincoEnergies"></div>
+  <div class="fgp"><label class="fl">Price (€/tCO₂e)</label><input class="fi" id="poolComp-price" type="number" placeholder="250"></div>
+  <div class="fgp"><label class="fl">Min Order (tCO₂e)</label><input class="fi" id="poolComp-min" type="number" placeholder="500"></div>
+  <div class="fgp"><label class="fl">Source URL</label><input class="fi" id="poolComp-src" placeholder="example.com"></div>
+</div></div>
+<div class="mf"><button class="btn bs" onclick="closePoolComp()">Cancel</button><button class="btn bp" onclick="savePoolComp()">💾 Save Competitor</button></div>
+</div></div>
+
+<div class="mo" id="poolOfferMo"><div class="md" style="max-width:700px"><div class="mh"><div class="mt">Add/Edit Pooling Offer</div><button class="mc" onclick="closePoolOffer()">×</button></div>
+<div class="mb"><div class="fg">
+  <div class="fgp"><label class="fl">Provider</label><select class="fi" id="poolOff-provider"><option>GreenCreditX</option><option>OceanScore</option><option>Gasum</option><option>STX Group</option><option>Other</option></select></div>
+  <div class="fgp"><label class="fl">Compliance Year</label><select class="fi" id="poolOff-year"><option>2025</option><option>2026</option><option>2027</option><option>2028</option></select></div>
+  <div class="fgp"><label class="fl">Price (€/tCO₂e)</label><input class="fi" id="poolOff-price" type="number" placeholder="220"></div>
+  <div class="fgp"><label class="fl">Available Volume (tCO₂e)</label><input class="fi" id="poolOff-avail" type="number" placeholder="5000"></div>
+  <div class="fgp"><label class="fl">Badge</label><input class="fi" id="poolOff-badge" placeholder="BEST VALUE, EARLY BIRD, INDEX..."></div>
+  <div class="fgp"><label class="fl">Delivery</label><input class="fi" id="poolOff-delivery" value="48h"></div>
+  <div class="fgp full"><label class="fl">Guarantee</label><input class="fi" id="poolOff-guarantee" value="Full compliance guarantee"></div>
+  <div class="fgp"><label class="fl">Featured (⭐)</label><select class="fi" id="poolOff-featured"><option>Yes</option><option>No</option></select></div>
+</div></div>
+<div class="mf"><button class="btn bs" onclick="closePoolOffer()">Cancel</button><button class="btn bp" onclick="savePoolOffer()">💾 Save Offer</button></div>
+</div></div>
+
+<div class="mo" id="poolContractMo"><div class="md" style="max-width:700px"><div class="mh"><div class="mt">New Pooling Contract</div><button class="mc" onclick="closePoolContract()">×</button></div>
+<div class="mb"><div class="fg">
+  <div class="fgp"><label class="fl">Shipowner</label><input class="fi" id="poolCon-owner" placeholder="π.χ. Olympia Maritime Corp."></div>
+  <div class="fgp"><label class="fl">Vessel(s)</label><input class="fi" id="poolCon-vessel" placeholder="IMO or fleet description"></div>
+  <div class="fgp"><label class="fl">Compliance Year</label><select class="fi" id="poolCon-year"><option>2025</option><option>2026</option><option>2027</option></select></div>
+  <div class="fgp"><label class="fl">FuelEU Deficit (tCO₂e)</label><input class="fi" id="poolCon-deficit" type="number" placeholder="140"></div>
+  <div class="fgp"><label class="fl">GCX Rate (€/tCO₂e)</label><input class="fi" id="poolCon-rate" type="number" value="220"></div>
+  <div class="fgp"><label class="fl">Estimated Value</label><div class="fi" style="background:var(--g50);color:var(--g700);font-weight:700" id="poolCon-value">—</div></div>
+</div>
+<div style="margin-top:14px;padding:14px;background:#fef2f2;border-radius:10px;font-size:13px;color:#991b1b"><strong>⚠️ Reminder:</strong> FuelEU pooling window closes 30 April each year. Contracts must be registered in THETIS-MRV before deadline.</div>
+</div>
+<div class="mf"><button class="btn bs" onclick="closePoolContract()">Cancel</button><button class="btn bp" onclick="savePoolContract()">📋 Create Contract</button></div>
+</div></div>
 
 </body>
 </html>
